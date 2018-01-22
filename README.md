@@ -1,14 +1,13 @@
 # Perfect Strangers
 
-Back end for Perfect Strangers project.
+Back end for Perfect Strangers project. For front end go to https://github.com/kasparsuvi1/psfront
 
 ## Prerequisites
 
 This project uses maven dependency management and build automation tool. Version control is done with git.
 
-[Maven installation](https://maven.apache.org/install.html)
-
-[Git installation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+* [Maven installation](https://maven.apache.org/install.html)
+* [Git installation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 ## Main building blocks
 * Spring Boot 1.5.3.RELEASE - go to http://docs.spring.io/spring-boot/docs/1.5.3.RELEASE/reference/htmlsingle/ to learn more about spring boot
@@ -18,7 +17,7 @@ This project uses maven dependency management and build automation tool. Version
  
 ## Editors
 
-Project is developed in IntellJ IDEA 2017 but any other IDE should also work just fine. Once maven is installed, proceed with the installation instructions.
+Project is developed in IntellJ IDEA 2017 but any other IDE should also work just fine. Once maven and git is installed, proceed with the installation instructions.
 
 ## Installing
 
