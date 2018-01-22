@@ -29,7 +29,7 @@ public class SwaggerConfig {
                 "Perfect Strangers API",
                 "Endpoints for Perfect Strangers. \n" +
                         "Front end: https://github.com/kasparsuvi1/psfront \n" +
-                        "Back end: https://github.com/reneesaks/<project-name-here> \n",
+                        "Back end: https://github.com/reneesaks/psback \n",
                 "0.1",
                 "https://www.apache.org/licenses/LICENSE-2.0",
                 new Contact(
