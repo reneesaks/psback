@@ -3,6 +3,7 @@ package com.perfectstrangers.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,9 +17,11 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 @Configuration
 @EnableResourceServer
 @EnableWebSecurity
+@Profile("production")
 public class ResourceServerConfig {
 
     @Configuration
+    @Profile("production")
     @Order(1)
     public static class ResourceConfig extends ResourceServerConfigurerAdapter {
         @Autowired
@@ -44,6 +47,7 @@ public class ResourceServerConfig {
     }
 
     @Configuration
+    @Profile("production")
     @Order(2)
     public static class SwaggerSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
