@@ -6,7 +6,7 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 
 This project requires the following prerequisites:
 * Maven - dependency management and build automation tool. Install [Maven](https://maven.apache.org/install.html).
-* Git - version control. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+* Git - version control. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 * MySQL - production database. Install [XAMPP](https://www.apachefriends.org/download.html) for Windows. For other systems visit MySQL official [installing guide](https://dev.mysql.com/doc/refman/5.6/en/installing.html).
 
 
@@ -15,6 +15,7 @@ This project requires the following prerequisites:
 * JSON Web Token - go to https://jwt.io/ to decode your generated token and learn more.
 * H2 Database Engine in development environment - used for rapid prototyping and development, but not suitable for production at least in most cases. Go to http://www.h2database.com/ to learn more.
 * MySQL Database in production environment - MySQL is an open-source relational database management system. Go to https://www.mysql.com/ to learn more.
+* Flyway - database version control. Go to https://flywaydb.org/ for more information.
 * Swagger 2.0 - used for API documentation. Go to https://swagger.io/ to learn more.
  
 ## Editors
@@ -74,7 +75,22 @@ To access to H2 database in development environment visit `http://localhost:8080
 * User Name - `sa`
 * Password - leave empty
 
-## To test the endpoints
+## Flyway
+
+> Flyway works by checking the current version of the database and by applying new migrations automatically before the rest of the application starts. Whenever a developer needs to change the schema of a database, or to issue some changes to the data residing on it they need to create a SQL script, following a name convention in the directory read by Flyway. The directory is located in `classpath:db/migration`. 
+
+For more info visit https://auth0.com/blog/incrementally-changing-your-database-with-java-and-flyway/
+
+### Naming convention
+* Prefix - **V**
+* Version - **1.0000**
+* Seperator - **__**
+* Description - **some_description**
+* Suffix - **.sql**
+
+Example: `V1.0124__seperated_users_contacts.sql`
+
+## To test the endpoints in production environment
 
 ### First you will need the following basic pieces of information:
 
@@ -131,6 +147,7 @@ You can also use Postman for endpoint testing. Import endpoints using this link:
 * Change security settings in `application-production.properties` for production.
 * Change to a real database in `application-production.properties` and establish connection with it.
 * Remove `import.sql` from production environment or change it.
+* Generate database schema from `resources/create.sql` when initial database model is ready in JPA (new database changes will be handled with Flyway from this point on).
 
 ## Authors
 

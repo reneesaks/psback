@@ -1,0 +1,2 @@
+-- https://auth0.com/blog/incrementally-changing-your-database-with-java-and-flyway/
+-- This is for versioning. In production you should always create new scripts instead of editing.
