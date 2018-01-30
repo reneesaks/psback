@@ -31,13 +31,13 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
         String recipientAddress = user.getEmail();
         String subject = "Registration Confirmation";
-        String confirmationUrl = event.getAppUrl() + "/api/public/register/registrationConfirm.html?token=" + token;
+        String confirmationUrl = event.getAppUrl() + "api/public/register/registrationConfirm.html?token=" + token;
         String message = "Here is your activation URL: ";
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message + "http://localhost:8080" + confirmationUrl);
+        email.setText(message + confirmationUrl);
         mailSender.send(email);
     }
 }

@@ -9,7 +9,9 @@ import com.perfectstrangers.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,12 @@ public class RegistrationController {
     @Autowired
     ApplicationEventPublisher eventPublisher;
 
+    @Autowired
+    Environment environment;
+
+    @Value("${serverAddress}")
+    String serverAddress;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
 
     @RequestMapping(value = "/new-user", method = RequestMethod.POST)
@@ -49,7 +57,7 @@ public class RegistrationController {
 
         try {
             // Trigger the event listener
-            String appUrl = request.getContextPath(); // Get home URL
+            String appUrl = serverAddress;
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
             LOGGER.info("User with email " + userDTO.getEmail() + " is registered. Waiting for activation.");
         } catch (Exception e) {

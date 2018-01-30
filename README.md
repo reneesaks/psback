@@ -2,6 +2,8 @@
 
 Back end for Perfect Strangers project. For front end go to https://github.com/kasparsuvi1/psfront
 
+* Live version of this project: http://138.68.71.15:8080/perfectstrangers/
+
 **[Table of Contents]**
 - [Prerequisites](#prerequisites)
 - [Main building blocks](#main-building-blocks)
@@ -37,7 +39,7 @@ This project requires the following prerequisites:
 * Maven - dependency management and build automation tool. Install [Maven](https://maven.apache.org/install.html).
 * Git - version control. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 * MySQL - production database. Install [XAMPP](https://www.apachefriends.org/download.html) for Windows. For other systems visit MySQL official [installing guide](https://dev.mysql.com/doc/refman/5.6/en/installing.html).
-* SMTP server - mail service. Registering a new user requires SMTP server as it sends an activation link. Use [MailSlurper](http://mailslurper.com/) in Windows.
+* SMTP server - production mail service. Registering a new user requires SMTP server as it sends an activation link. Use [MailSlurper](http://mailslurper.com/) in Windows.
 
 # Main building blocks
 * Spring Boot 1.5.3.RELEASE - go to http://docs.spring.io/spring-boot/docs/1.5.3.RELEASE/reference/htmlsingle/ to learn more about Spring Boot.
@@ -94,7 +96,7 @@ Open your Run/Debug Configurations and add a new Spring Boot configuration by cl
 
 # Deployment
 
-Use `mvn clean package -P deployment` to create a deployable `.war` file in `/target` directory.
+Use `mvn clean package -P deployment` to create a deployable `.war` file in `/target` directory for Tomcat server.
 
 # API Documentation (Swagger)
 
