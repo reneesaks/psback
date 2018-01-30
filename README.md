@@ -12,6 +12,7 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
   - [Running as a packaged application](#running-as-a-packaged-application)
   - [Running using the Maven plugin](#running-using-the-maven-plugin)
   - [Running with IntellJ IDEA 2017](#running-with-intellj-idea-2017)
+- [Deployment](#deployment)
 - [API Documentation (Swagger)](#api-documentation-swagger)
 - [Accessing H2 database](#accessing-h2-database)
 - [Flyway](#flyway)
@@ -36,7 +37,7 @@ This project requires the following prerequisites:
 * Maven - dependency management and build automation tool. Install [Maven](https://maven.apache.org/install.html).
 * Git - version control. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 * MySQL - production database. Install [XAMPP](https://www.apachefriends.org/download.html) for Windows. For other systems visit MySQL official [installing guide](https://dev.mysql.com/doc/refman/5.6/en/installing.html).
-* SMTP server - mail service. Registering new user requires SMTP server as it sends an activation link. Use [MailSlurper](http://mailslurper.com/) in Windows.
+* SMTP server - mail service. Registering a new user requires SMTP server as it sends an activation link. Use [MailSlurper](http://mailslurper.com/) in Windows.
 
 # Main building blocks
 * Spring Boot 1.5.3.RELEASE - go to http://docs.spring.io/spring-boot/docs/1.5.3.RELEASE/reference/htmlsingle/ to learn more about Spring Boot.
@@ -59,9 +60,10 @@ git clone https://github.com/reneesaks/psback
 ```
 # Running
 
-This project has two Spring Boot profiles:
+This project has three Spring Boot profiles:
 * Development environment called `dev`
 * Production environment called `production` 
+* Deployment environment called `development`
 
 By default development environment is used in packaged application build process. Test data is loaded in via `import.sql` file in resources folder.
 
@@ -89,6 +91,10 @@ mvn spring-boot:run -Drun.jvmArguments="-Dspring.profiles.active=<choose-your-en
 ## Running with IntellJ IDEA 2017
 
 Open your Run/Debug Configurations and add a new Spring Boot configuration by clicking `+`. Main class is `com.perfectstrangers.PerfectStrangersApplication`, specify the Active Profile you want to use and name it conveniently. You can have as many configurations as you want. When you run the program you can choose which one to use.
+
+# Deployment
+
+Use `mvn clean package -P deployment` to create a deployable `.war` file in `/target` directory.
 
 # API Documentation (Swagger)
 
@@ -213,7 +219,6 @@ You can also use Postman for endpoint testing. Import endpoints using this link:
 
 # TODO
 
-* Deployment
 * Tests
 * Disallow all origins, headers and methods in AdditionalWebConfig class later on (CSRF).
 * Change DEVELOPER username and password for API documentation for production (ResourceServerConfig).

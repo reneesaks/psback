@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.perfectstrangers.service</groupId>
-	<artifactId>springboot-jwt</artifactId>
+	<artifactId>PerfectStrangers</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
-	<name>springboot-jwt</name>
-	<description>Demo project for Spring Boot</description>
+	<name>PerfectStrangers</name>
+	<description>Back end for Perfect Strangers.</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -115,21 +115,41 @@
 	</dependencies>
 
     <profiles>
+
         <profile>
             <id>dev</id>
             <properties>
                 <activatedProperties>dev</activatedProperties>
+                <start-class>com.perfectstrangers.PerfectStrangersApplication</start-class>
             </properties>
         </profile>
+
         <profile>
             <id>production</id>
             <properties>
                 <activatedProperties>production</activatedProperties>
+                <start-class>com.perfectstrangers.PerfectStrangersApplication</start-class>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+
+        <profile>
+            <id>deployment</id>
+            <properties>
+                <activatedProperties>deployment</activatedProperties>
+                <start-class>com.perfectstrangers.PerfectStrangersApplicationWAR</start-class>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
     </profiles>
 
 	<build>

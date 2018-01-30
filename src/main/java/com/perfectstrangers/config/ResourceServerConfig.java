@@ -17,11 +17,11 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 @Configuration
 @EnableResourceServer
 @EnableWebSecurity
-@Profile("production")
+@Profile({"production", "deployment"})
 public class ResourceServerConfig {
 
     @Configuration
-    @Profile("production")
+    @Profile({"production", "deployment"})
     @Order(1)
     public static class ResourceConfig extends ResourceServerConfigurerAdapter {
         @Autowired
@@ -47,7 +47,7 @@ public class ResourceServerConfig {
     }
 
     @Configuration
-    @Profile("production")
+    @Profile({"production", "deployment"})
     @Order(2)
     public static class SwaggerSecurityConfiguration extends WebSecurityConfigurerAdapter {
 

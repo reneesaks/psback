@@ -9,7 +9,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@Profile("production")
+@Profile({"production", "deployment"})
 public class AdditionalWebConfig {
     /**
      * Allowing all origins, headers and methods here is only intended to keep this example simple.

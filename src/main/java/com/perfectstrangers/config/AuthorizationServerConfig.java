@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableAuthorizationServer
-@Profile("production")
+@Profile({"production", "deployment"})
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	@Value("${security.jwt.client-id}")
