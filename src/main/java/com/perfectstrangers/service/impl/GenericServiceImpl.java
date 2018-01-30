@@ -18,11 +18,6 @@ public class GenericServiceImpl implements GenericService {
     private HotelRepository hotelRepository;
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
     public List<User> findAllUsers() {
         return (List<User>)userRepository.findAll();
     }

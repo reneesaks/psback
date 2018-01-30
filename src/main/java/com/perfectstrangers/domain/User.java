@@ -8,23 +8,30 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @Column(name = "username")
-    private String username;
-
-    @Column(name = "password")
-    @JsonIgnore
-    private String password;
 
     @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "alias")
+    private String alias;
+
+    @Column(name = "password")
+    @JsonIgnore
+    private String password;
+
+    @Column(name = "activated")
+    private boolean activated;
 
     /**
      * Roles are being eagerly loaded here because
@@ -38,6 +45,11 @@ public class User {
                     referencedColumnName = "id"))
     private List<Role> roles;
 
+    public User() {
+        super();
+        this.activated =false;
+    }
+
     public Long getId() {
         return id;
     }
@@ -46,12 +58,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAlias() {
+        return alias;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getPassword() {
@@ -84,6 +96,22 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
 

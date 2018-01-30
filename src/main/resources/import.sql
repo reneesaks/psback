@@ -3,8 +3,8 @@ INSERT INTO role (id, role_name, description) VALUES (2, 'ADMIN_USER', 'Admin Us
 
 -- USER
 -- non-encrypted password: jwtpass
-INSERT INTO user (id, first_name, last_name, password, username) VALUES (1, 'Standard', 'User', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user');
-INSERT INTO user (id, first_name, last_name, password, username) VALUES (2, 'Super', 'User', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'admin');
+INSERT INTO user (id, first_name, last_name, email, alias, password, activated) VALUES (1, 'Standard', 'User', 'standard@user.com', 'Alias1', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1);
+INSERT INTO user (id, first_name, last_name, email, alias, password, activated) VALUES (2, 'Admin', 'User', 'admin@user.com', 'Alias2', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1);
 
 
 INSERT INTO user_role(user_id, role_id) VALUES(1,1);
