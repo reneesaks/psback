@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GenericService {
 
-    List<User> findAllUsers();
+    List<User> getAllUsers();
 
-    List<Hotel> findAllHotels();
+    List<Hotel> getAllHotels();
 }

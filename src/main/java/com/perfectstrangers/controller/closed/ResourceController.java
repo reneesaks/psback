@@ -20,13 +20,13 @@ public class ResourceController {
     @RequestMapping(value ="hotels", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
     public List<Hotel> getHotels(){
-        return userService.findAllHotels();
+        return userService.getAllHotels();
     }
 
     @RequestMapping(value ="users", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     public List<User> getUsers(){
-        return userService.findAllUsers();
+        return userService.getAllUsers();
     }
 
 }

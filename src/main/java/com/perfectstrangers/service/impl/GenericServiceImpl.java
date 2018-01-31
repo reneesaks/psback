@@ -18,12 +18,12 @@ public class GenericServiceImpl implements GenericService {
     private HotelRepository hotelRepository;
 
     @Override
-    public List<User> findAllUsers() {
+    public List<User> getAllUsers() {
         return (List<User>)userRepository.findAll();
     }
 
     @Override
-    public List<Hotel> findAllHotels() {
+    public List<Hotel> getAllHotels() {
         return (List<Hotel>) hotelRepository.findAll();
     }
 }

@@ -19,6 +19,7 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 - [Accessing H2 database](#accessing-h2-database)
 - [Flyway](#flyway)
   - [Naming convention](#naming-convention)
+- [Running tests](#running-tests)
 - [Testing endpoints in production environment](#testing-endpoints-in-production-environment)
   - [Basic information for testing](#basic-information-for-testing)
     - [1. Generate an access token](#1-generate-an-access-token)
@@ -82,6 +83,8 @@ Linux based systems commands should be somewhat similar if not the same. The dev
 1. Build using maven goal: `mvn clean package -P <choose-your-environment-here>` and execute the resulting artifact in target folder as follows `java -jar <filename>.jar` or
 2. On Unix/Linux based systems: run `mvn clean package -P <choose-your-environment-here>` then run the resulting jar in target folder as any other executable `./<filename>.jar`
 
+To skip tests specify `-DskipTests` in command line.
+
 ## Running using the Maven plugin
 
 The Spring Boot Maven plugin includes a run goal which can be used to quickly compile and run your application. Applications run in an exploded form just like in your IDE.
@@ -96,7 +99,7 @@ Open your Run/Debug Configurations and add a new Spring Boot configuration by cl
 
 # Deployment
 
-Use `mvn clean package -P deployment` to create a deployable `.war` file in `/target` directory for Tomcat server.
+Use `mvn clean package -P deployment` to create a deployable `.war` file in `/target` directory for Tomcat server. To skip tests specify `-DskipTests` in command line.
 
 # API Documentation (Swagger)
 
@@ -117,7 +120,17 @@ To access to H2 database in development environment visit `http://localhost:8080
 
 For more info visit https://auth0.com/blog/incrementally-changing-your-database-with-java-and-flyway/
 
+# Running tests
+
+When you build a packaged application, tests are executed automatically. To skip tests specify `-DskipTests` in command line.
+
+* To run all tests use `mvn test`
+* To run a specific test use `mvn -Dtest=<test-name> test`
+
+By default, right now, production environment is being loaded in as it is activated by default in `pom.xml`. To mock an user use `@WithMockUser(username="admin",roles={"USER","ADMIN"})` annotation.
+
 ## Naming convention
+
 * Prefix - **V**
 * Version - **1.0000**
 * Seperator - **__**
@@ -221,7 +234,6 @@ You can also use Postman for endpoint testing. Import endpoints using this link:
 
 # TODO
 
-* Tests
 * Disallow all origins, headers and methods in AdditionalWebConfig class later on (CSRF).
 * Change DEVELOPER username and password for API documentation for production (ResourceServerConfig).
 * Change security settings in `application-production.properties` for production.

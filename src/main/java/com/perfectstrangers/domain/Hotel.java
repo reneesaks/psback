@@ -13,6 +13,12 @@ public class Hotel {
     @Column(name = "name")
     private String name;
 
+    public Hotel() {}
+
+    public Hotel(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
