@@ -24,7 +24,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private VerificationTokenRepository tokenRepository;
 
-    @Autowired RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public User registerNewUserAccount(User userDTO) {
@@ -79,4 +80,5 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
 }

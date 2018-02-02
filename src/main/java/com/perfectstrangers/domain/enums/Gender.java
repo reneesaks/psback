@@ -2,29 +2,27 @@ package com.perfectstrangers.domain.enums;
 
 public enum Gender {
 
-    PENDING("P"),
-    ACTIVE("A"),
-    INACTIVE("I"),
-    DELETED("D");
+    MALE("M"),
+    FEMALE("F");
 
-    private String code;
+    private String value;
 
-    Status(String code) {
-        this.code = code;
+    Gender(String value) {
+        this.value = value;
     }
 
-    public String getCode() {
-        return code;
+    public String getValue() {
+        return value;
     }
 
-    public static Gender fromCode(String code) {
+    public static Gender fromValue(String value) {
         for (Gender status :Gender.values()){
-            if (status.getCode().equals(code)){
+            if (status.getValue().equals(value)){
                 return status;
             }
         }
         throw new UnsupportedOperationException(
-                "The code " + code + " is not supported!");
+                "Value " + value + " is not supported!");
     }
 
 }

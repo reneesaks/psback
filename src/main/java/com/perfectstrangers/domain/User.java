@@ -1,6 +1,7 @@
 package com.perfectstrangers.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.perfectstrangers.domain.enums.Gender;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,21 +34,46 @@ public class User {
     @Column(name = "activated")
     private boolean activated;
 
-    /**
-     * Roles are being eagerly loaded here because
-     * they are a fairly small collection of items for this example.
-     */
+    @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Column(name = "age")
+    private String age;
+
+    @Column(name = "reg_date")
+    private String regDate;
+
+    @Column(name = "lastVisit")
+    private String lastVisit;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_degree",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "degree_id")
+    )
+    private List<Degree> degree;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_occupation",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "occupation_id")
+    )
+    private List<Occupation> occupation;
+
+    // Roles are being eagerly loaded here because they are a fairly small collection of items for this example.
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns
-            = @JoinColumn(name = "user_id",
-            referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id",
-                    referencedColumnName = "id"))
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
     public User() {
         super();
-        this.activated =false;
+        this.activated = false;
     }
 
     public Long getId() {
@@ -56,22 +82,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {
@@ -90,12 +100,28 @@ public class User {
         this.lastName = lastName;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isActivated() {
@@ -106,12 +132,60 @@ public class User {
         this.activated = activated;
     }
 
-    public String getEmail() {
-        return email;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getRegDate() {
+        return regDate;
+    }
+
+    public void setRegDate(String regDate) {
+        this.regDate = regDate;
+    }
+
+    public String getLastVisit() {
+        return lastVisit;
+    }
+
+    public void setLastVisit(String lastVisit) {
+        this.lastVisit = lastVisit;
+    }
+
+    public List<Degree> getDegree() {
+        return degree;
+    }
+
+    public void setDegrees(List<Degree> degree) {
+        this.degree = degree;
+    }
+
+    public List<Occupation> getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupations(List<Occupation> occupation) {
+        this.occupation = occupation;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
 

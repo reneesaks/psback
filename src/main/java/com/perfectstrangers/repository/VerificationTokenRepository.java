@@ -8,10 +8,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Repository
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
+
+    List<VerificationToken> findAll();
+
+    VerificationToken findById(Long id);
 
     VerificationToken findByToken(String token);
 

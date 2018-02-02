@@ -43,9 +43,13 @@ public class RegistrationController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
 
-    @RequestMapping(value = "/new-user", method = RequestMethod.POST)
+    @RequestMapping(
+            value = "/new-user",
+            params = {"email", "password"},
+            produces = "application/json",
+            method = RequestMethod.POST)
     @ResponseBody
-    @Transactional(rollbackFor = Exception.class) // If any exception is thrown, roll back db changes
+    @Transactional(rollbackFor = Exception.class) // If any exception is thrown, roll back db
     public ResponseEntity<HashMap<String, String>> registerNewUser(@Valid UserDTO userDTO, WebRequest request) {
 
         // Create new user and hash password with SHA256

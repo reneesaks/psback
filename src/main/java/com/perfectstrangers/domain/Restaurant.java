@@ -1,13 +1,12 @@
 package com.perfectstrangers.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "hotel")
-public class Hotel {
+@Table(name = "restaurant")
+public class Restaurant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,14 +34,15 @@ public class Hotel {
     @Column(name = "zipCode")
     private String zipCode;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")
-    @JsonManagedReference
-    private List<Restaurant> restaurants;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
+    @JsonBackReference
+    private Hotel hotel;
 
-    public Hotel() {
+    public Restaurant() {
     }
 
-    public Hotel(String name) {
+    public Restaurant(String name) {
         this.name = name;
     }
 
@@ -110,12 +110,21 @@ public class Hotel {
         this.zipCode = zipCode;
     }
 
-    public List<Restaurant> getRestaurants() {
-        return restaurants;
+    public Hotel getHotel() {
+        return hotel;
     }
 
-    public void setRestaurants(List<Restaurant> restaurants) {
-        this.restaurants = restaurants;
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
     }
+
+    // Get hotel id to return with JSON
+    // Ignoring now as it creates a duplicate hotel_id in restaurant entity when getting hotels
+    /*
+    @JsonProperty
+    public Long getHotelId() {
+        return hotel == null ? null : hotel.getId();
+    }
+    */
 
 }

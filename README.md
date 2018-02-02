@@ -124,8 +124,8 @@ For more info visit https://auth0.com/blog/incrementally-changing-your-database-
 
 When you build a packaged application, tests are executed automatically. To skip tests specify `-DskipTests` in command line.
 
-* To run all tests use `mvn test`
-* To run a specific test use `mvn -Dtest=<test-name> test`
+* To run all tests use `mvn clean test`
+* To run a specific test use `mvn clean -Dtest=<test-name> test`
 
 By default, right now, production environment is being loaded in as it is activated by default in `pom.xml`. To mock an user use `@WithMockUser(username="admin",roles={"USER","ADMIN"})` annotation.
 

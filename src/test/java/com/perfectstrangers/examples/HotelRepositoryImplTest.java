@@ -3,8 +3,8 @@ package com.perfectstrangers.examples;
 import com.perfectstrangers.PerfectStrangersApplication;
 import com.perfectstrangers.domain.Hotel;
 import com.perfectstrangers.repository.HotelRepository;
-import com.perfectstrangers.service.HotelService;
-import com.perfectstrangers.service.impl.HotelServiceImpl;
+import com.perfectstrangers.service.GenericService;
+import com.perfectstrangers.service.impl.GenericServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HotelRepositoryImplTest {
 
     @Autowired
-    private HotelService hotelService;
+    private GenericService genericService;
 
     @MockBean
     private HotelRepository hotelRepository;
@@ -33,8 +33,8 @@ public class HotelRepositoryImplTest {
     static class EmployeeServiceImplTestContextConfiguration {
 
         @Bean
-        public HotelService hotelService() {
-            return new HotelServiceImpl();
+        public GenericService hotelService() {
+            return new GenericServiceImpl();
         }
     }
 
@@ -52,7 +52,7 @@ public class HotelRepositoryImplTest {
     public void whenValidName_thenHotelShouldBeFound() {
 
         String name = "Glamour Hotel";
-        Hotel found = hotelService.getHotelByName(name);
+        Hotel found = genericService.getHotelByName(name);
 
         assertThat(found.getName()).isEqualTo(name);
 

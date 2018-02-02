@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = PerfectStrangersApplication.class)
 @WebMvcTest(ResourceController.class)
-public class HotelRestControllerTest {
+public class GenericRestControllerTest {
 
     @Autowired
     private MockMvc mvc;
