@@ -4,6 +4,7 @@ import com.perfectstrangers.domain.User;
 import com.perfectstrangers.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
+@Profile({"production", "deployment"})
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
     @Autowired
@@ -40,4 +42,5 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         email.setText(message + confirmationUrl);
         mailSender.send(email);
     }
+
 }

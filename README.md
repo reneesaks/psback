@@ -30,6 +30,7 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 - [Using Postman for testing](#using-postman-for-testing)
 - [Integration with Angular](#integration-with-angular)
 - [TODO](#todo)
+- [Known issues](#known-issues)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgments)
 
@@ -99,7 +100,7 @@ Open your Run/Debug Configurations and add a new Spring Boot configuration by cl
 
 # Deployment
 
-Use `mvn clean package -P deployment` to create a deployable `.war` file in `/target` directory for Tomcat server. To skip tests specify `-DskipTests` in command line.
+Use `mvn clean package -P deployment -DskipTests` to create a deployable `.war` file in `/target` directory for Tomcat server. To skip tests specify `-DskipTests` in command line.
 
 # API Documentation (Swagger)
 
@@ -241,6 +242,10 @@ You can also use Postman for endpoint testing. Import endpoints using this link:
 * Remove `import.sql` from production environment or change it.
 * Generate database schema from `resources/create.sql` when initial database model is ready in JPA (new database changes will be handled with Flyway from this point on).
 
+# Known issues
+
+* When running in production environment (in IntelliJ) without any tables in your database you get restriction errors. Just restart the run and the errors are gone.
+* `create.sql` schema code is created without delimiters.
 # Authors
 
 * **Renee Säks** - *Back end development* - [reneesaks](https://github.com/reneesaks/)

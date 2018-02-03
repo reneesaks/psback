@@ -24,6 +24,7 @@ public class ResourceServerConfig {
     @Profile({"production", "deployment"})
     @Order(1)
     public static class ResourceConfig extends ResourceServerConfigurerAdapter {
+
         @Autowired
         private ResourceServerTokenServices tokenServices;
 

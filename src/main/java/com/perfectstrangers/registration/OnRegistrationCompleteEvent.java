@@ -2,10 +2,13 @@ package com.perfectstrangers.registration;
 
 import com.perfectstrangers.domain.User;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.annotation.Profile;
 
 import java.util.Locale;
 
+@Profile({"production", "deployment"})
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
+
     private String appUrl;
     private Locale locale;
     private User user;
@@ -40,4 +43,5 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
     public void setUser(User user) {
         this.user = user;
     }
+
 }
