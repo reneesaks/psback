@@ -241,11 +241,14 @@ You can also use Postman for endpoint testing. Import endpoints using this link:
 * Change to a real database in `application-production.properties` and establish connection with it.
 * Remove `import.sql` from production environment or change it.
 * Generate database schema from `resources/create.sql` when initial database model is ready in JPA (new database changes will be handled with Flyway from this point on).
+* Field injections should be replaced for constructor based dependency injections in the future.
 
 # Known issues
 
 * When running in production environment (in IntelliJ) without any tables in your database you get restriction errors. Just restart the run and the errors are gone.
 * `create.sql` schema code is created without delimiters.
+* IntelliJ shows `Could not autowire. No beans of 'ResourceServerTokenServices' type found.` in `ResourceConfig`. This does not affect running or building.
+
 # Authors
 
 * **Renee Säks** - *Back end development* - [reneesaks](https://github.com/reneesaks/)
