@@ -1,6 +1,5 @@
 package com.perfectstrangers.config;
 
-import com.perfectstrangers.service.UserService;
 import com.perfectstrangers.service.impl.AppUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +26,14 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Profile({"production", "deployment"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private AppUserDetailsServiceImpl appUserDetailsServiceImpl;
+
+    @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    public SecurityConfig(AppUserDetailsServiceImpl appUserDetailsServiceImpl) {
+        this.appUserDetailsServiceImpl = appUserDetailsServiceImpl;
+    }
+
 	@Value("${security.signing-key}")
 	private String signingKey;
 
@@ -35,12 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Value("${security.security-realm}")
 	private String securityRealm;
-
-	@Autowired
-	private AppUserDetailsServiceImpl appUserDetailsServiceImpl;
-
-	@Autowired
-    private UserService userService;
 
 	@Bean
 	@Override

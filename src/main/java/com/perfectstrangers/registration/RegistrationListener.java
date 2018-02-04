@@ -15,11 +15,15 @@ import java.util.UUID;
 @Profile({"production", "deployment"})
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
-    @Autowired
     private UserService service;
 
-    @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    public RegistrationListener(UserService service, JavaMailSender mailSender) {
+        this.service = service;
+        this.mailSender = mailSender;
+    }
 
     @Override
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {

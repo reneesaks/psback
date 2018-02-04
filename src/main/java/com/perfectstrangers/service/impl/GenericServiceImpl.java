@@ -12,20 +12,31 @@ import java.util.List;
 public class GenericServiceImpl implements GenericService {
 
     // Repositories
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private OccupationRepository occupationRepository;
 
-    @Autowired
     private DegreeRepository degreeRepository;
 
-    @Autowired
     private HotelRepository hotelRepository;
 
-    @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    public GenericServiceImpl(UserRepository userRepository,
+                              OccupationRepository occupationRepository,
+                              DegreeRepository degreeRepository,
+                              HotelRepository hotelRepository,
+                              RestaurantRepository restaurantRepository) {
+        this.userRepository = userRepository;
+        this.occupationRepository = occupationRepository;
+        this.degreeRepository = degreeRepository;
+        this.hotelRepository = hotelRepository;
+        this.restaurantRepository = restaurantRepository;
+    }
+
+    public GenericServiceImpl() {
+    }
 
     // Users
     @Override

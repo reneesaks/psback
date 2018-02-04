@@ -18,8 +18,12 @@ import java.util.Map;
 @RequestMapping("api/private")
 public class ResourceController {
 
-    @Autowired
     private GenericService genericService;
+
+    @Autowired
+    public ResourceController(GenericService genericService) {
+        this.genericService = genericService;
+    }
 
     @RequestMapping(value ="hotels", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")

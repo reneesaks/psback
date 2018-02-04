@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +30,15 @@ import java.util.HashMap;
 @Profile({"production", "deployment"})
 public class RegistrationController {
 
-    @Autowired
     private UserService userService;
 
-    @Autowired
-    ApplicationEventPublisher eventPublisher;
+    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    Environment environment;
+    public RegistrationController(UserService userService, ApplicationEventPublisher eventPublisher) {
+        this.userService = userService;
+        this.eventPublisher = eventPublisher;
+    }
 
     @Value("${serverAddress}")
     String serverAddress;
@@ -106,4 +106,5 @@ public class RegistrationController {
         return "Registration successful!";
 
     }
+
 }

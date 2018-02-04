@@ -25,15 +25,20 @@ public class ResourceServerConfig {
     @Order(1)
     public static class ResourceConfig extends ResourceServerConfigurerAdapter {
 
+        private ResourceServerTokenServices resourceServerTokenServices;
+
         @Autowired
-        private ResourceServerTokenServices tokenServices;
+        @SuppressWarnings("SpringJavaAutowiringInspection")
+        public ResourceConfig(ResourceServerTokenServices resourceServerTokenServices) {
+            this.resourceServerTokenServices = resourceServerTokenServices;
+        }
 
         @Value("${security.jwt.resource-ids}")
         private String resourceIds;
 
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-            resources.resourceId(resourceIds).tokenServices(tokenServices);
+            resources.resourceId(resourceIds).tokenServices(resourceServerTokenServices);
         }
 
         @Override

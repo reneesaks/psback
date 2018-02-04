@@ -17,8 +17,12 @@ import java.util.stream.Collectors;
 @Service
 public class AppUserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public AppUserDetailsServiceImpl(UserService userService) {
+        this.userService = userService;
+    }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 

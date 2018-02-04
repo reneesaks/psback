@@ -18,14 +18,18 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private VerificationTokenRepository tokenRepository;
 
-    @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, VerificationTokenRepository tokenRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.tokenRepository = tokenRepository;
+        this.roleRepository = roleRepository;
+    }
 
     @Override
     public User registerNewUserAccount(User userDTO) {
@@ -47,17 +51,13 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByEmail(email);
 
-        if (user != null) {
-            return true;
-        }
+        return user != null;
 
-        return false;
     }
 
     @Override
     public User getUser(String verificationToken) {
-        User user = tokenRepository.findByToken(verificationToken).getUser();
-        return user;
+        return tokenRepository.findByToken(verificationToken).getUser();
     }
 
     @Override

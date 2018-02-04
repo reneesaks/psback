@@ -235,19 +235,21 @@ You can also use Postman for endpoint testing. Import endpoints using this link:
 
 # TODO
 
+* ~~Deployment configuration~~
+* ~~Testing configuration~~
 * Disallow all origins, headers and methods in AdditionalWebConfig class later on (CSRF).
 * Change DEVELOPER username and password for API documentation for production (ResourceServerConfig).
 * Change security settings in `application-production.properties` for production.
 * Change to a real database in `application-production.properties` and establish connection with it.
 * Remove `import.sql` from production environment or change it.
 * Generate database schema from `resources/create.sql` when initial database model is ready in JPA (new database changes will be handled with Flyway from this point on).
-* Field injections should be replaced for constructor based dependency injections in the future.
+* ~~Field injections should be replaced for constructor based dependency injections in the future.~~
 
 # Known issues
 
 * When running in production environment (in IntelliJ) without any tables in your database you get restriction errors. Just restart the run and the errors are gone.
 * `create.sql` schema code is created without delimiters.
-* IntelliJ shows `Could not autowire. No beans of 'ResourceServerTokenServices' type found.` in `ResourceConfig`. This does not affect running or building.
+* It seems the Intellij cannot verify if the class implementation is a @Service or @Component. Using `@SuppressWarnings("SpringJavaAutowiringInspection")` on those.
 
 # Authors
 
