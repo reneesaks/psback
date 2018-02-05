@@ -1,4 +1,4 @@
-package com.perfectstrangers.controller.open;
+package com.perfectstrangers.controller.pub;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

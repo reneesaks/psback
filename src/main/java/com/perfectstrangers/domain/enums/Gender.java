@@ -7,6 +7,10 @@ public enum Gender {
 
     private String value;
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     Gender(String value) {
         this.value = value;
     }
@@ -16,9 +20,9 @@ public enum Gender {
     }
 
     public static Gender fromValue(String value) {
-        for (Gender status :Gender.values()){
-            if (status.getValue().equals(value)){
-                return status;
+        for (Gender gender :Gender.values()){
+            if (gender.getValue().equals(value)){
+                return gender;
             }
         }
         throw new UnsupportedOperationException(

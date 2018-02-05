@@ -215,7 +215,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Will use this later
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
@@ -229,7 +228,6 @@
                     </schemas>
                 </configuration>
             </plugin>
-            -->
 
         </plugins>
 

@@ -20,19 +20,27 @@ public class GenericServiceImpl implements GenericService {
 
     private HotelRepository hotelRepository;
 
-    private RestaurantRepository restaurantRepository;
+    private RestoRepository restoRepository;
+
+    private AdvertRepository advertRepository;
+
+    private ResponseRepository responseRepository;
 
     @Autowired
     public GenericServiceImpl(UserRepository userRepository,
                               OccupationRepository occupationRepository,
                               DegreeRepository degreeRepository,
                               HotelRepository hotelRepository,
-                              RestaurantRepository restaurantRepository) {
+                              RestoRepository restoRepository,
+                              AdvertRepository advertRepository,
+                              ResponseRepository responseRepository) {
         this.userRepository = userRepository;
         this.occupationRepository = occupationRepository;
         this.degreeRepository = degreeRepository;
         this.hotelRepository = hotelRepository;
-        this.restaurantRepository = restaurantRepository;
+        this.restoRepository = restoRepository;
+        this.advertRepository = advertRepository;
+        this.responseRepository = responseRepository;
     }
 
     public GenericServiceImpl() {
@@ -102,20 +110,42 @@ public class GenericServiceImpl implements GenericService {
         return hotelRepository.findById(id);
     }
 
-    // Restaurants
+    // Restos
     @Override
-    public List<Restaurant> getAllRestaurants() {
-        return restaurantRepository.findAll();
+    public List<Resto> getAllRestos() {
+        return restoRepository.findAll();
     }
 
     @Override
-    public Restaurant getRestaurantByName(String name) {
-        return restaurantRepository.findByName(name);
+    public Resto getRestoByName(String name) {
+        return restoRepository.findByName(name);
     }
 
     @Override
-    public Restaurant getRestaurantById(Long id) {
-        return restaurantRepository.findById(id);
+    public Resto getRestoById(Long id) {
+        return restoRepository.findById(id);
+    }
+
+    // Adverts
+    @Override
+    public List<Advert> getAllAdverts() {
+        return advertRepository.findAll();
+    }
+
+    @Override
+    public Advert getAdvertById(Long id) {
+        return advertRepository.findById(id);
+    }
+
+    // Responses
+    @Override
+    public List<Response> getAllResponses() {
+        return responseRepository.findAll();
+    }
+
+    @Override
+    public Response getResponseById(Long id) {
+        return responseRepository.findById(id);
     }
 
 }

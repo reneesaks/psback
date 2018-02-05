@@ -1,7 +1,7 @@
 package com.perfectstrangers.examples;
 
 import com.perfectstrangers.PerfectStrangersApplication;
-import com.perfectstrangers.controller.closed.ResourceController;
+import com.perfectstrangers.controller.priv.ResourceController;
 import com.perfectstrangers.domain.Hotel;
 import com.perfectstrangers.service.GenericService;
 import org.junit.Test;

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "restaurant")
-public class Restaurant {
+@Table(name = "resto")
+public class Resto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,10 +39,10 @@ public class Restaurant {
     @JsonBackReference
     private Hotel hotel;
 
-    public Restaurant() {
+    public Resto() {
     }
 
-    public Restaurant(String name) {
+    public Resto(String name) {
         this.name = name;
     }
 
@@ -119,7 +119,7 @@ public class Restaurant {
     }
 
     // Get hotel id to return with JSON
-    // Ignoring now as it creates a duplicate hotel_id in restaurant entity when getting hotels
+    // Ignoring now as it creates a duplicate hotel_id in resto entity when getting hotels
     /*
     @JsonProperty
     public Long getHotelId() {

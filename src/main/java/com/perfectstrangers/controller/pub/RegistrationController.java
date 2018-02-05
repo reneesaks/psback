@@ -1,4 +1,4 @@
-package com.perfectstrangers.controller.open;
+package com.perfectstrangers.controller.pub;
 
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.VerificationToken;

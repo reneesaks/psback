@@ -34,8 +34,8 @@ public class User {
     @Column(name = "activated")
     private boolean activated;
 
-    @Column(name = "gender")
     @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
     private Gender gender;
 
     @Column(name = "age")
@@ -48,6 +48,7 @@ public class User {
     private String lastVisit;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinTable(
             name = "user_degree",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -56,6 +57,7 @@ public class User {
     private List<Degree> degree;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinTable(
             name = "user_occupation",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -65,11 +67,30 @@ public class User {
 
     // Roles are being eagerly loaded here because they are a fairly small collection of items for this example.
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinTable(
+            name = "user_advert",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "advert_id")
+    )
+    private List<Advert> adverts;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinTable(
+            name = "user_response",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "response_id")
+    )
+    private List<Response> responses;
 
     public User() {
         super();
@@ -168,7 +189,7 @@ public class User {
         return degree;
     }
 
-    public void setDegrees(List<Degree> degree) {
+    public void setDegree(List<Degree> degree) {
         this.degree = degree;
     }
 
@@ -176,7 +197,7 @@ public class User {
         return occupation;
     }
 
-    public void setOccupations(List<Occupation> occupation) {
+    public void setOccupation(List<Occupation> occupation) {
         this.occupation = occupation;
     }
 
@@ -187,5 +208,22 @@ public class User {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
+    public List<Advert> getAdverts() {
+        return adverts;
+    }
+
+    public void setAdverts(List<Advert> adverts) {
+        this.adverts = adverts;
+    }
+
+    public List<Response> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(List<Response> responses) {
+        this.responses = responses;
+    }
+
 }
 

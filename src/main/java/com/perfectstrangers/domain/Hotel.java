@@ -37,7 +37,7 @@ public class Hotel {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "hotel")
     @JsonManagedReference
-    private List<Restaurant> restaurants;
+    private List<Resto> restos;
 
     public Hotel() {
     }
@@ -110,12 +110,12 @@ public class Hotel {
         this.zipCode = zipCode;
     }
 
-    public List<Restaurant> getRestaurants() {
-        return restaurants;
+    public List<Resto> getRestos() {
+        return restos;
     }
 
-    public void setRestaurants(List<Restaurant> restaurants) {
-        this.restaurants = restaurants;
+    public void setRestos(List<Resto> restos) {
+        this.restos = restos;
     }
 
 }

@@ -35,11 +35,21 @@ public interface GenericService {
 
     Hotel getHotelById(Long id);
 
-    // Restaurants
-    List<Restaurant> getAllRestaurants();
+    // Restos
+    List<Resto> getAllRestos();
 
-    Restaurant getRestaurantByName(String name);
+    Resto getRestoByName(String name);
 
-    Restaurant getRestaurantById(Long id);
+    Resto getRestoById(Long id);
+
+    // Adverts
+    List<Advert> getAllAdverts();
+
+    Advert getAdvertById(Long id);
+
+    // Response
+    List<Response> getAllResponses();
+
+    Response getResponseById(Long id);
 
 }

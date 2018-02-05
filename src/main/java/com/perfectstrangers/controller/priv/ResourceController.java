@@ -1,7 +1,8 @@
-package com.perfectstrangers.controller.closed;
+package com.perfectstrangers.controller.priv;
 
 import com.perfectstrangers.domain.Hotel;
-import com.perfectstrangers.domain.Restaurant;
+import com.perfectstrangers.domain.Response;
+import com.perfectstrangers.domain.Resto;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,15 +53,24 @@ public class ResourceController {
 
     }
 
-    // Getting a restaurant with hotel test
+    // Getting a resto with hotel test
     @RequestMapping(value = "test2", method = RequestMethod.GET)
-    public Restaurant getRestaraunt() {
+    public Resto getResto() {
 
-        Restaurant restaurant = genericService.getRestaurantByName("FancyResto");
-        // System.out.println(restaurant.getHotel().getName());
+        Resto resto = genericService.getRestoByName("FancyResto");
+        // System.out.println(resto.getHotel().getName());
 
-        return restaurant;
+        return resto;
 
     }
+
+    // Getting a resto with hotel test
+    @RequestMapping(value = "test3", method = RequestMethod.GET)
+    public List<Response> testing() {
+
+        return genericService.getUserById(2L).getResponses();
+
+    }
+
 
 }
