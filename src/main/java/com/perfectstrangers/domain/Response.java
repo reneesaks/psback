@@ -3,7 +3,7 @@ package com.perfectstrangers.domain;
 import com.perfectstrangers.domain.enums.ResponseStatus;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "response")
@@ -17,8 +17,8 @@ public class Response {
     @Column(name = "response_text")
     private String responseText;
 
-    @Column(name = "proposed_time")
-    private Timestamp proposedTime;
+    @Column(name = "proposed_time", columnDefinition = "DATETIME")
+    private Instant proposedTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "response_status")
@@ -40,11 +40,11 @@ public class Response {
         this.responseText = responseText;
     }
 
-    public Timestamp getProposedTime() {
+    public Instant getProposedTime() {
         return proposedTime;
     }
 
-    public void setProposedTime(Timestamp proposedTime) {
+    public void setProposedTime(Instant proposedTime) {
         this.proposedTime = proposedTime;
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.perfectstrangers.domain.enums.Gender;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -41,8 +42,8 @@ public class User {
     @Column(name = "age")
     private String age;
 
-    @Column(name = "reg_date")
-    private String regDate;
+    @Column(name = "reg_date", columnDefinition = "DATETIME")
+    private Instant regDate;
 
     @Column(name = "lastVisit")
     private String lastVisit;
@@ -169,11 +170,11 @@ public class User {
         this.age = age;
     }
 
-    public String getRegDate() {
+    public Instant getRegDate() {
         return regDate;
     }
 
-    public void setRegDate(String regDate) {
+    public void setRegDate(Instant regDate) {
         this.regDate = regDate;
     }
 

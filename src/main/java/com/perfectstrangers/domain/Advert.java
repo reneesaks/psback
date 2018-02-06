@@ -20,7 +20,7 @@ public class Advert {
     @Column(name = "advert_status")
     private AdvertStatus advertStatus;
 
-    @Column(name = "created_date")
+    @Column(name = "created_date", columnDefinition = "DATETIME")
     private Instant createdDate; // Timestamp is outdated
 
     @Lob
@@ -31,13 +31,13 @@ public class Advert {
     @Column(name = "meal_type")
     private MealType mealType;
 
-    @Column(name = "preferred_start")
+    @Column(name = "preferred_start", columnDefinition = "DATETIME")
     private Instant preferredStart;
 
-    @Column(name = "preferred_end")
+    @Column(name = "preferred_end", columnDefinition = "DATETIME")
     private Instant preferredEnd;
 
-    @Column(name = "accepted_time")
+    @Column(name = "accepted_time", columnDefinition = "DATETIME")
     private Instant acceptedTime;
 
     @OneToMany(cascade = CascadeType.ALL)
