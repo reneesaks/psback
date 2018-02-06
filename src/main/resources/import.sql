@@ -23,6 +23,10 @@ INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) V
 INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) VALUES (4, 'Tartu Hotell', 'www.tartu.com', 'Estonia', 'Tartumaa', 'Tartu', 'Soola 2', '54287');
 INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) VALUES (5, 'StarEst Motel', 'www.starest.com', 'Estonia', 'Tartumaa', 'Tartu', 'Mõisavahe 102', '59348');
 INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) VALUES (6, 'KHK Hotell', 'www.khk.com', 'Estonia', 'Tartumaa', 'Tartu', 'Kopli 9', '57787');
+INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) VALUES (7, 'Umaga', 'www.umaga.com', 'Estonia', 'Tartumaa', 'Elva', 'Metsavahe tee 3', '45789');
+INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) VALUES (8, 'Omega', 'www.omega.com', 'Estonia', 'Võrumaa', 'Võru', 'Võro 9', '27787');
+INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) VALUES (9, 'Ruupus', 'www.ruupus.com', 'Estonia', 'Harjumaa', 'Keila', 'Keila tee 22', '12379');
+INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) VALUES (10, 'Vene', 'www.vene.com', 'Estonia', 'Ida-Virumaa', 'Narva', 'Vene tee 15', '85345');
 
 -- Populate random restos
 INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (1, 'FancyResto', 'www.fancyresto.com', 'Estonia', 'Harjumaa', 'Tallinn', 'Järvevana tee 5', '87987', 1);

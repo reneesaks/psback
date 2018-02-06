@@ -2,10 +2,11 @@ package com.perfectstrangers.controller.priv;
 
 import com.perfectstrangers.domain.Hotel;
 import com.perfectstrangers.domain.Response;
-import com.perfectstrangers.domain.Resto;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,20 +27,20 @@ public class ResourceController {
         this.genericService = genericService;
     }
 
-    @RequestMapping(value ="hotels", method = RequestMethod.GET)
+    @RequestMapping(value = "hotels", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-    public List<Hotel> getHotels(){
+    public List<Hotel> getHotels() {
         return genericService.getAllHotels();
     }
 
-    @RequestMapping(value ="users", method = RequestMethod.GET)
+    @RequestMapping(value = "users", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ADMIN_USER')")
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return genericService.getAllUsers();
     }
 
     // Custom endpoints testing (giving away only some information)
-    @RequestMapping(value ="test1", method = RequestMethod.GET)
+    @RequestMapping(value = "test1", method = RequestMethod.GET)
     public Map<String, Object> getUserByEmail() {
 
         User user = genericService.getUserByEmail("standard@user.com");
@@ -53,20 +54,17 @@ public class ResourceController {
 
     }
 
-    // Getting a resto with hotel test
+    // Getting hotels with pages (?page=0&size=1) https://docs.spring.io/spring-data/rest/docs/current/reference/html/#paging-and-sorting
     @RequestMapping(value = "test2", method = RequestMethod.GET)
-    public Resto getResto() {
+    public Page<Hotel> getHotelsPagination(Pageable pageable) {
 
-        Resto resto = genericService.getRestoByName("FancyResto");
-        // System.out.println(resto.getHotel().getName());
-
-        return resto;
+        return genericService.getAllHotelsByPage(pageable);
 
     }
 
-    // Getting a resto with hotel test
+    // Getting user responses test
     @RequestMapping(value = "test3", method = RequestMethod.GET)
-    public List<Response> testing() {
+    public List<Response> getUserResponses() {
 
         return genericService.getUserById(2L).getResponses();
 

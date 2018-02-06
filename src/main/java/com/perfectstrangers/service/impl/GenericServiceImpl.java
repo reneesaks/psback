@@ -4,6 +4,8 @@ import com.perfectstrangers.domain.*;
 import com.perfectstrangers.repository.*;
 import com.perfectstrangers.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,7 +51,12 @@ public class GenericServiceImpl implements GenericService {
     // Users
     @Override
     public List<User> getAllUsers() {
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Page<User> getAllUsersByPage(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override
@@ -97,7 +104,12 @@ public class GenericServiceImpl implements GenericService {
     // Hotels
     @Override
     public List<Hotel> getAllHotels() {
-        return (List<Hotel>) hotelRepository.findAll();
+        return hotelRepository.findAll();
+    }
+
+    @Override
+    public Page<Hotel> getAllHotelsByPage(Pageable pageable) {
+        return hotelRepository.findAll(pageable);
     }
 
     @Override
@@ -117,6 +129,11 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
+    public Page<Resto> getAllRestosByPage(Pageable pageable) {
+        return restoRepository.findAll(pageable);
+    }
+
+    @Override
     public Resto getRestoByName(String name) {
         return restoRepository.findByName(name);
     }
@@ -133,6 +150,11 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
+    public Page<Advert> getAllAdvertsByPage(Pageable pageable) {
+        return advertRepository.findAll(pageable);
+    }
+
+    @Override
     public Advert getAdvertById(Long id) {
         return advertRepository.findById(id);
     }
@@ -141,6 +163,11 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public List<Response> getAllResponses() {
         return responseRepository.findAll();
+    }
+
+    @Override
+    public Page<Response> getAllResponsesByPage(Pageable pageable) {
+        return responseRepository.findAll(pageable);
     }
 
     @Override

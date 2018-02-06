@@ -1,6 +1,8 @@
 package com.perfectstrangers.service;
 
 import com.perfectstrangers.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -9,6 +11,8 @@ public interface GenericService {
 
     // Users
     List<User> getAllUsers();
+
+    Page<User> getAllUsersByPage(Pageable pageable);
 
     User getUserByEmail(String email);
 
@@ -31,12 +35,16 @@ public interface GenericService {
     // Hotels
     List<Hotel> getAllHotels();
 
+    Page<Hotel> getAllHotelsByPage(Pageable pageable);
+
     Hotel getHotelByName(String name);
 
     Hotel getHotelById(Long id);
 
     // Restos
     List<Resto> getAllRestos();
+
+    Page<Resto> getAllRestosByPage(Pageable pageable);
 
     Resto getRestoByName(String name);
 
@@ -45,10 +53,14 @@ public interface GenericService {
     // Adverts
     List<Advert> getAllAdverts();
 
+    Page<Advert> getAllAdvertsByPage(Pageable pageable);
+
     Advert getAdvertById(Long id);
 
     // Response
     List<Response> getAllResponses();
+
+    Page<Response> getAllResponsesByPage(Pageable pageable);
 
     Response getResponseById(Long id);
 
