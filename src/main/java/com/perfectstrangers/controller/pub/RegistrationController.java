@@ -4,7 +4,7 @@ import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.VerificationToken;
 import com.perfectstrangers.dto.UserDTO;
 import com.perfectstrangers.error.CustomRuntimeException;
-import com.perfectstrangers.registration.OnRegistrationCompleteEvent;
+import com.perfectstrangers.event.OnRegistrationCompleteEvent;
 import com.perfectstrangers.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

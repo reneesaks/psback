@@ -1,4 +1,4 @@
-package com.perfectstrangers.registration;
+package com.perfectstrangers.event;
 
 import com.perfectstrangers.domain.User;
 import org.springframework.context.ApplicationEvent;

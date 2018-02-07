@@ -1,6 +1,7 @@
-package com.perfectstrangers.registration;
+package com.perfectstrangers.listener;
 
 import com.perfectstrangers.domain.User;
+import com.perfectstrangers.event.OnRegistrationCompleteEvent;
 import com.perfectstrangers.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

@@ -1,12 +1,13 @@
 package com.perfectstrangers.config;
 
-import com.perfectstrangers.service.impl.AppUserDetailsServiceImpl;
+import com.perfectstrangers.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,12 +27,15 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Profile({"production", "deployment"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private AppUserDetailsServiceImpl appUserDetailsServiceImpl;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
+
+    private AuthenticationEventPublisher authenticationEventPublisher;
 
     @Autowired
     @SuppressWarnings("SpringJavaAutowiringInspection")
-    public SecurityConfig(AppUserDetailsServiceImpl appUserDetailsServiceImpl) {
-        this.appUserDetailsServiceImpl = appUserDetailsServiceImpl;
+    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, AuthenticationEventPublisher authenticationEventPublisher) {
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.authenticationEventPublisher = authenticationEventPublisher;
     }
 
 	@Value("${security.signing-key}")
@@ -51,7 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.userDetailsService(appUserDetailsServiceImpl).passwordEncoder(new ShaPasswordEncoder(encodingStrength));
+            auth
+                    .authenticationEventPublisher(authenticationEventPublisher) // Allows to publish auth events
+                    .userDetailsService(userDetailsServiceImpl)
+                    .passwordEncoder(new ShaPasswordEncoder(encodingStrength));
 	}
 
 	@Override

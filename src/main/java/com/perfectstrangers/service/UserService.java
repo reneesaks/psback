@@ -16,4 +16,5 @@ public interface UserService {
     VerificationToken getVerificationToken(String VerificationToken);
 
     User findByEmail(String email);
+
 }
