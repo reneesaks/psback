@@ -22,11 +22,7 @@ public class TokensPurgeTask {
 
     @Scheduled(cron = "${purge.cron.expression}")
     public void purgeExpired() {
-
         Date now = Date.from(Instant.now());
-
         verificationTokenRepository.deleteAllExpiredSince(now);
-
     }
-
 }

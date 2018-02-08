@@ -22,5 +22,4 @@ public interface AuthenticationAttemptService {
     int getUSERNAME_BLOCK();
 
     int getREMOTE_ADDRESS_BLOCK();
-
 }

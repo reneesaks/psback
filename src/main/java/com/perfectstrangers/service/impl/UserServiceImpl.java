@@ -20,15 +20,14 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-
     private VerificationTokenRepository verificationTokenRepository;
-
     private RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository,
-                          VerificationTokenRepository verificationTokenRepository,
-                           RoleRepository roleRepository) {
+    public UserServiceImpl(
+            UserRepository userRepository,
+            VerificationTokenRepository verificationTokenRepository,
+            RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.roleRepository = roleRepository;
@@ -43,7 +42,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerNewUserAccount(User userDTO) {
         if (emailExist(userDTO.getEmail())) {
-            throw new CustomRuntimeException("There is an account with that email address: " + userDTO.getEmail());
+            throw new CustomRuntimeException(
+                    "There is an account with that email address: " + userDTO.getEmail());
         }
         User user = new User();
         List<Role> role = roleRepository.findByRoleName("STANDARD_USER");
@@ -66,7 +66,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public VerificationToken createNewVerificationToken(String existingVerificationToken) {
-        VerificationToken verificationToken = verificationTokenRepository.findByToken(existingVerificationToken);
+        VerificationToken verificationToken = verificationTokenRepository
+                .findByToken(existingVerificationToken);
         verificationToken.updateToken(UUID.randomUUID().toString());
         verificationToken = verificationTokenRepository.save(verificationToken);
         return verificationToken;
@@ -91,5 +92,4 @@ public class UserServiceImpl implements UserService {
     public VerificationToken getVerificationTokenByUser(User user) {
         return verificationTokenRepository.findByUser(user);
     }
-
 }

@@ -28,71 +28,72 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsServiceImpl userDetailsServiceImpl;
-
     private AuthenticationEventPublisher authenticationEventPublisher;
+
+    @Value("${security.signing-key}")
+    private String signingKey;
+
+    @Value("${security.encoding-strength}")
+    private Integer encodingStrength;
+
+    @Value("${security.security-realm}")
+    private String securityRealm;
 
     @Autowired
     @SuppressWarnings("SpringJavaAutowiringInspection")
-    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, AuthenticationEventPublisher authenticationEventPublisher) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl,
+            AuthenticationEventPublisher authenticationEventPublisher) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.authenticationEventPublisher = authenticationEventPublisher;
     }
 
-	@Value("${security.signing-key}")
-	private String signingKey;
+    @Bean
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
 
-	@Value("${security.encoding-strength}")
-	private Integer encodingStrength;
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .authenticationEventPublisher(authenticationEventPublisher) // Allows to publish auth events
+                .userDetailsService(userDetailsServiceImpl)
+                .passwordEncoder(new ShaPasswordEncoder(encodingStrength));
+    }
 
-	@Value("${security.security-realm}")
-	private String securityRealm;
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .httpBasic()
+                .realmName(securityRealm)
+                .and()
+                .csrf()
+                .disable();
 
-	@Bean
-	@Override
-	protected AuthenticationManager authenticationManager() throws Exception {
-		return super.authenticationManager();
-	}
+    }
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth
-                    .authenticationEventPublisher(authenticationEventPublisher) // Allows to publish auth events
-                    .userDetailsService(userDetailsServiceImpl)
-                    .passwordEncoder(new ShaPasswordEncoder(encodingStrength));
-	}
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setSigningKey(signingKey);
+        return converter;
+    }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-		        .sessionManagement()
-		        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		        .and()
-		        .httpBasic()
-		        .realmName(securityRealm)
-		        .and()
-		        .csrf()
-		        .disable();
+    @Bean
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(accessTokenConverter());
+    }
 
-	}
-
-	@Bean
-	public JwtAccessTokenConverter accessTokenConverter() {
-		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setSigningKey(signingKey);
-		return converter;
-	}
-
-	@Bean
-	public TokenStore tokenStore() {
-		return new JwtTokenStore(accessTokenConverter());
-	}
-
-	@Bean
-	@Primary //Making this primary to avoid any accidental duplication with another token service instance of the same name
-	public DefaultTokenServices tokenServices() {
-		DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-		defaultTokenServices.setTokenStore(tokenStore());
-		defaultTokenServices.setSupportRefreshToken(true);
-		return defaultTokenServices;
-	}
+    @Bean
+    @Primary
+    //Making this primary to avoid any accidental duplication with another token service instance of the same name
+    public DefaultTokenServices tokenServices() {
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
+        return defaultTokenServices;
+    }
 }

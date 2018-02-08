@@ -18,5 +18,4 @@ public class PerfectStrangersApplicationWAR extends SpringBootServletInitializer
     public static void main(String[] args) throws Exception {
         SpringApplication.run(PerfectStrangersApplicationWAR.class, args);
     }
-
 }

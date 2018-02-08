@@ -17,5 +17,4 @@ public final class CustomRuntimeException extends RuntimeException {
     public CustomRuntimeException(final Throwable cause) {
         super(cause);
     }
-
 }

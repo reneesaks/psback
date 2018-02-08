@@ -22,5 +22,4 @@ public interface UserService {
     VerificationToken getVerificationToken(String VerificationToken);
 
     VerificationToken getVerificationTokenByUser(User user);
-
 }

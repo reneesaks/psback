@@ -25,7 +25,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        ApiInfo apiInfo = new ApiInfo(
+        return new ApiInfo(
                 "Perfect Strangers API",
                 "Endpoints for Perfect Strangers. \n" +
                         "Front end: https://github.com/kasparsuvi1/psfront \n" +
@@ -39,6 +39,5 @@ public class SwaggerConfig {
                 "Swagger license",
                 "https://swagger.io/license/",
                 Collections.emptyList());
-        return apiInfo;
     }
 }

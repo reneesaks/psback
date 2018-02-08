@@ -14,33 +14,29 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthenticationFailureEventListener {
 
     private AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl;
-
     private HttpServletRequest httpServletRequest;
 
-    @Autowired AuthenticationFailureEventListener(AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl,
-                                                  HttpServletRequest httpServletRequest) {
+    @Autowired
+    AuthenticationFailureEventListener(
+            AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl,
+            HttpServletRequest httpServletRequest) {
         this.authenticationAttemptServiceImpl = authenticationAttemptServiceImpl;
         this.httpServletRequest = httpServletRequest;
     }
 
     @EventListener
-    public void handleBadCredentialsEvent(AuthenticationFailureBadCredentialsEvent authenticationFailureBadCredentialsEvent) {
-
+    public void handleBadCredentialsEvent(
+            AuthenticationFailureBadCredentialsEvent authenticationFailureBadCredentialsEvent) {
         String username = authenticationFailureBadCredentialsEvent.getAuthentication().getName();
         String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
-
         authenticationAttemptServiceImpl.authenticationFailed(username, remoteAddress);
 
     }
 
     @EventListener
     public void handleUsernameLockedEvent(UsernameLockedEvent usernameLockedEvent) {
-
         String username = usernameLockedEvent.getUsername();
         String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
-
         authenticationAttemptServiceImpl.authenticationFailed(username, remoteAddress);
-
     }
-
 }

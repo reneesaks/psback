@@ -14,5 +14,4 @@ public interface AdvertRepository extends PagingAndSortingRepository<Advert, Lon
     Page<Advert> findAll(Pageable pageable);
 
     Advert findById(Long id);
-
 }

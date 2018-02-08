@@ -14,5 +14,4 @@ public interface ResponseRepository extends PagingAndSortingRepository<Response,
     Page<Response> findAll(Pageable pageable);
 
     Response findById(Long id);
-
 }

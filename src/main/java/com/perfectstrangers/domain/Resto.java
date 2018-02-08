@@ -1,8 +1,15 @@
 package com.perfectstrangers.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "resto")
@@ -126,5 +133,4 @@ public class Resto {
         return hotel == null ? null : hotel.getId();
     }
     */
-
 }

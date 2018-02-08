@@ -22,15 +22,14 @@ import java.util.stream.Collectors;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private UserService userService;
-
     private HttpServletRequest httpServletRequest;
-
     private AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl;
 
     @Autowired
-    public UserDetailsServiceImpl(UserService userService,
-                                  HttpServletRequest httpServletRequest,
-                                  AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl) {
+    public UserDetailsServiceImpl(
+            UserService userService,
+            HttpServletRequest httpServletRequest,
+            AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl) {
         this.userService = userService;
         this.httpServletRequest = httpServletRequest;
         this.authenticationAttemptServiceImpl = authenticationAttemptServiceImpl;
@@ -39,17 +38,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
-
         if (authenticationAttemptServiceImpl.isRemoteAddressBlocked(remoteAddress)) {
-            throw new InvalidGrantException("This IP address has been blocked for " + authenticationAttemptServiceImpl.getREMOTE_ADDRESS_BLOCK() + " minutes because it exceeded the maximum allowed attempts.");
+            throw new InvalidGrantException("This IP address has been blocked for " +
+                    authenticationAttemptServiceImpl.getREMOTE_ADDRESS_BLOCK()
+                    + " minutes because it exceeded the maximum allowed attempts.");
         }
 
         if (authenticationAttemptServiceImpl.isUsernameBlocked(username)) {
-            throw new InvalidGrantException("This username has been blocked for " + authenticationAttemptServiceImpl.getUSERNAME_BLOCK() + " minutes because it exceeded the maximum allowed attempts.");
+            throw new InvalidGrantException("This username has been blocked for " +
+                    authenticationAttemptServiceImpl.getUSERNAME_BLOCK()
+                    + " minutes because it exceeded the maximum allowed attempts.");
         }
 
         User user = userService.getUserByEmail(username);
-
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
@@ -61,8 +62,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 true,
                 true,
                 true,
-                user.getRoles().stream().map(Role::getRoleName).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
-
+                user.getRoles().stream().map(Role::getRoleName).map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList()));
     }
-
 }

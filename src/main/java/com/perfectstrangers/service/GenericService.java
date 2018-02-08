@@ -1,15 +1,20 @@
 package com.perfectstrangers.service;
 
-import com.perfectstrangers.domain.*;
+import com.perfectstrangers.domain.Advert;
+import com.perfectstrangers.domain.Degree;
+import com.perfectstrangers.domain.Hotel;
+import com.perfectstrangers.domain.Occupation;
+import com.perfectstrangers.domain.Response;
+import com.perfectstrangers.domain.Resto;
+import com.perfectstrangers.domain.User;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 
 public interface GenericService {
 
-    // Users
+    // ============== USERS ============
     List<User> getAllUsers();
 
     Page<User> getAllUsersByPage(Pageable pageable);
@@ -18,21 +23,21 @@ public interface GenericService {
 
     User getUserById(Long id);
 
-    // Occupations
+    // ============== OCCUPATIONS ============
     List<Occupation> getAllOccupations();
 
     Occupation getOccupationByName(String name);
 
     Occupation getOccupationById(Long id);
 
-    // Degrees
+    // ============== DEGREES ============
     List<Degree> getAllDegrees();
 
     Degree getDegreeByName(String name);
 
     Degree getDegreeById(Long id);
 
-    // Hotels
+    // ============== HOTELS ============
     List<Hotel> getAllHotels();
 
     Page<Hotel> getAllHotelsByPage(Pageable pageable);
@@ -41,7 +46,7 @@ public interface GenericService {
 
     Hotel getHotelById(Long id);
 
-    // Restos
+    // ============== RESTOS ============
     List<Resto> getAllRestos();
 
     Page<Resto> getAllRestosByPage(Pageable pageable);
@@ -50,18 +55,17 @@ public interface GenericService {
 
     Resto getRestoById(Long id);
 
-    // Adverts
+    // ============== ADVERTS ============
     List<Advert> getAllAdverts();
 
     Page<Advert> getAllAdvertsByPage(Pageable pageable);
 
     Advert getAdvertById(Long id);
 
-    // Response
+    // ============== RESPONSES ============
     List<Response> getAllResponses();
 
     Page<Response> getAllResponsesByPage(Pageable pageable);
 
     Response getResponseById(Long id);
-
 }

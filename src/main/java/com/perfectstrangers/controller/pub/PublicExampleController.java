@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/public")
 public class PublicExampleController {
 
-    @RequestMapping(value ="/hello", method = RequestMethod.GET)
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public String sayHello() {
         return "Hello!";
     }

@@ -27,14 +27,14 @@ public class ResourceServerConfig {
 
         private ResourceServerTokenServices resourceServerTokenServices;
 
+        @Value("${security.jwt.resource-ids}")
+        private String resourceIds;
+
         @Autowired
         @SuppressWarnings("SpringJavaAutowiringInspection")
         public ResourceConfig(ResourceServerTokenServices resourceServerTokenServices) {
             this.resourceServerTokenServices = resourceServerTokenServices;
         }
-
-        @Value("${security.jwt.resource-ids}")
-        private String resourceIds;
 
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -47,8 +47,10 @@ public class ResourceServerConfig {
                     .requestMatchers()
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/api/public/**").permitAll()
-                    .antMatchers("/api/private/**" ).authenticated();
+                    .antMatchers("/api/public/**")
+                    .permitAll()
+                    .antMatchers("/api/private/**")
+                    .authenticated();
         }
     }
 
@@ -78,5 +80,4 @@ public class ResourceServerConfig {
                     .roles("DEVELOPER");
         }
     }
-
 }

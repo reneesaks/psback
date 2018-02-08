@@ -1,5 +1,6 @@
 package com.perfectstrangers.config;
 
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -13,28 +14,14 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
-import java.util.Arrays;
-
 @Configuration
 @EnableAuthorizationServer
 @Profile({"production", "deployment"})
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     private TokenStore tokenStore;
-
     private JwtAccessTokenConverter accessTokenConverter;
-
     private AuthenticationManager authenticationManager;
-
-    @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
-    public AuthorizationServerConfig(TokenStore tokenStore,
-                                     JwtAccessTokenConverter accessTokenConverter,
-                                     AuthenticationManager authenticationManager) {
-        this.tokenStore = tokenStore;
-        this.accessTokenConverter = accessTokenConverter;
-        this.authenticationManager = authenticationManager;
-    }
 
     @Value("${security.jwt.client-id}")
     private String clientId;
@@ -54,6 +41,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Value("${security.jwt.resource-ids}")
     private String resourceIds;
 
+    @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    public AuthorizationServerConfig(
+            TokenStore tokenStore,
+            JwtAccessTokenConverter accessTokenConverter,
+            AuthenticationManager authenticationManager) {
+        this.tokenStore = tokenStore;
+        this.accessTokenConverter = accessTokenConverter;
+        this.authenticationManager = authenticationManager;
+    }
+
     @Override
     public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
         configurer
@@ -69,10 +67,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
         enhancerChain.setTokenEnhancers(Arrays.asList(accessTokenConverter));
-        endpoints.tokenStore(tokenStore)
+        endpoints
+                .tokenStore(tokenStore)
                 .accessTokenConverter(accessTokenConverter)
                 .tokenEnhancer(enhancerChain)
                 .authenticationManager(authenticationManager);
     }
-
 }

@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Profile;
 @Profile({"dev", "production"})
 public class PerfectStrangersApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PerfectStrangersApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(PerfectStrangersApplication.class, args);
+    }
 }

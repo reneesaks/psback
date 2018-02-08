@@ -18,5 +18,4 @@ public interface RestoRepository extends PagingAndSortingRepository<Resto, Long>
     Resto findByName(String name);
 
     Resto findById(Long id);
-
 }

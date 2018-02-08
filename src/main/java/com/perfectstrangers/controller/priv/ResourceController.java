@@ -42,33 +42,23 @@ public class ResourceController {
     // Custom endpoints testing (giving away only some information)
     @RequestMapping(value = "test1", method = RequestMethod.GET)
     public Map<String, Object> getUserByEmail() {
-
         User user = genericService.getUserByEmail("standard@user.com");
         Map<String, Object> testMap = new HashMap<>();
-
         testMap.put("id", user.getId());
         testMap.put("firstname", user.getFirstName());
         testMap.put("gender", user.getGender());
-
         return testMap;
-
     }
 
     // Getting hotels with pages (?page=0&size=1) https://docs.spring.io/spring-data/rest/docs/current/reference/html/#paging-and-sorting
     @RequestMapping(value = "test2", method = RequestMethod.GET)
     public Page<Hotel> getHotelsPagination(Pageable pageable) {
-
         return genericService.getAllHotelsByPage(pageable);
-
     }
 
     // Getting user responses test
     @RequestMapping(value = "test3", method = RequestMethod.GET)
     public List<Response> getUserResponses() {
-
         return genericService.getUserById(2L).getResponses();
-
     }
-
-
 }

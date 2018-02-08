@@ -21,13 +21,12 @@ public enum MealType {
     }
 
     public static MealType fromValue(String value) {
-        for (MealType mealType :MealType.values()){
-            if (mealType.getValue().equals(value)){
+
+        for (MealType mealType : MealType.values()) {
+            if (mealType.getValue().equals(value)) {
                 return mealType;
             }
         }
-        throw new UnsupportedOperationException(
-                "Value " + value + " is not supported!");
+        throw new UnsupportedOperationException("Value " + value + " is not supported!");
     }
-
 }

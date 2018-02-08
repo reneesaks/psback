@@ -1,8 +1,15 @@
 package com.perfectstrangers.domain;
 
-import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class VerificationToken {
@@ -27,14 +34,12 @@ public class VerificationToken {
 
     public VerificationToken(final String token) {
         super();
-
         this.token = token;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
     public VerificationToken(final String token, final User user) {
         super();
-
         this.token = token;
         this.user = user;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
@@ -79,8 +84,6 @@ public class VerificationToken {
         this.token = token;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
-
-    //
 
     @Override
     public int hashCode() {
@@ -130,9 +133,6 @@ public class VerificationToken {
 
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("Token [String=").append(token).append("]").append("[Expires").append(expiryDate).append("]");
-        return builder.toString();
+        return "Token [String=" + token + "]" + "[Expires" + expiryDate + "]";
     }
-
 }

@@ -20,13 +20,12 @@ public enum Gender {
     }
 
     public static Gender fromValue(String value) {
-        for (Gender gender :Gender.values()){
-            if (gender.getValue().equals(value)){
+
+        for (Gender gender : Gender.values()) {
+            if (gender.getValue().equals(value)) {
                 return gender;
             }
         }
-        throw new UnsupportedOperationException(
-                "Value " + value + " is not supported!");
+        throw new UnsupportedOperationException("Value " + value + " is not supported!");
     }
-
 }

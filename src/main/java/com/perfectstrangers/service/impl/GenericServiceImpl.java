@@ -1,41 +1,46 @@
 package com.perfectstrangers.service.impl;
 
-import com.perfectstrangers.domain.*;
-import com.perfectstrangers.repository.*;
+import com.perfectstrangers.domain.Advert;
+import com.perfectstrangers.domain.Degree;
+import com.perfectstrangers.domain.Hotel;
+import com.perfectstrangers.domain.Occupation;
+import com.perfectstrangers.domain.Response;
+import com.perfectstrangers.domain.Resto;
+import com.perfectstrangers.domain.User;
+import com.perfectstrangers.repository.AdvertRepository;
+import com.perfectstrangers.repository.DegreeRepository;
+import com.perfectstrangers.repository.HotelRepository;
+import com.perfectstrangers.repository.OccupationRepository;
+import com.perfectstrangers.repository.ResponseRepository;
+import com.perfectstrangers.repository.RestoRepository;
+import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.service.GenericService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class GenericServiceImpl implements GenericService {
 
-    // Repositories
+    // ============== REPOSITORIES ============
     private UserRepository userRepository;
-
     private OccupationRepository occupationRepository;
-
     private DegreeRepository degreeRepository;
-
     private HotelRepository hotelRepository;
-
     private RestoRepository restoRepository;
-
     private AdvertRepository advertRepository;
-
     private ResponseRepository responseRepository;
 
     @Autowired
     public GenericServiceImpl(UserRepository userRepository,
-                              OccupationRepository occupationRepository,
-                              DegreeRepository degreeRepository,
-                              HotelRepository hotelRepository,
-                              RestoRepository restoRepository,
-                              AdvertRepository advertRepository,
-                              ResponseRepository responseRepository) {
+            OccupationRepository occupationRepository,
+            DegreeRepository degreeRepository,
+            HotelRepository hotelRepository,
+            RestoRepository restoRepository,
+            AdvertRepository advertRepository,
+            ResponseRepository responseRepository) {
         this.userRepository = userRepository;
         this.occupationRepository = occupationRepository;
         this.degreeRepository = degreeRepository;
@@ -48,7 +53,7 @@ public class GenericServiceImpl implements GenericService {
     public GenericServiceImpl() {
     }
 
-    // Users
+    // ============== USERS ============
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -69,7 +74,7 @@ public class GenericServiceImpl implements GenericService {
         return userRepository.findById(id);
     }
 
-    // Occupations
+    // ============== OCCUPATIONS ============
     @Override
     public List<Occupation> getAllOccupations() {
         return occupationRepository.findAll();
@@ -85,7 +90,7 @@ public class GenericServiceImpl implements GenericService {
         return occupationRepository.findById(id);
     }
 
-    // Degrees
+    // ============== DEGREES ============
     @Override
     public List<Degree> getAllDegrees() {
         return degreeRepository.findAll();
@@ -101,7 +106,7 @@ public class GenericServiceImpl implements GenericService {
         return degreeRepository.findById(id);
     }
 
-    // Hotels
+    // ============== HOTELS ============
     @Override
     public List<Hotel> getAllHotels() {
         return hotelRepository.findAll();
@@ -122,7 +127,7 @@ public class GenericServiceImpl implements GenericService {
         return hotelRepository.findById(id);
     }
 
-    // Restos
+    // ============== RESTOS ============
     @Override
     public List<Resto> getAllRestos() {
         return restoRepository.findAll();
@@ -143,7 +148,7 @@ public class GenericServiceImpl implements GenericService {
         return restoRepository.findById(id);
     }
 
-    // Adverts
+    // ============== ADVERTS ============
     @Override
     public List<Advert> getAllAdverts() {
         return advertRepository.findAll();
@@ -159,7 +164,7 @@ public class GenericServiceImpl implements GenericService {
         return advertRepository.findById(id);
     }
 
-    // Responses
+    // ============== RESPONSES ============
     @Override
     public List<Response> getAllResponses() {
         return responseRepository.findAll();

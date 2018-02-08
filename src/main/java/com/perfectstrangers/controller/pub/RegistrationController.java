@@ -1,5 +1,7 @@
 package com.perfectstrangers.controller.pub;
 
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.VerificationToken;
 import com.perfectstrangers.dto.UserDTO;
@@ -37,49 +39,54 @@ import org.springframework.web.context.request.WebRequest;
 @Profile({"production", "deployment"})
 public class RegistrationController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
+
     private UserService userService;
     private ApplicationEventPublisher eventPublisher;
     private MailSender mailSender;
-    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
+
     @Value("${serverAddress}")
     String serverAddress;
 
     @Autowired
-    public RegistrationController(UserService userService,
-        ApplicationEventPublisher eventPublisher,
-        MailSender mailSender) {
+    public RegistrationController(
+            UserService userService,
+            ApplicationEventPublisher eventPublisher,
+            MailSender mailSender) {
         this.userService = userService;
         this.eventPublisher = eventPublisher;
         this.mailSender = mailSender;
     }
 
     @RequestMapping(
-        value = "/new-user",
-        params = {"email", "password"},
-        produces = "application/json",
-        method = RequestMethod.POST)
+            value = "/new-user",
+            params = {"email", "password"},
+            produces = "application/json",
+            method = RequestMethod.POST)
     @ResponseBody
-    @Transactional(rollbackFor = Exception.class) // If any exception is thrown, roll back db
-    public ResponseEntity<HashMap<String, String>> registerNewUser(@Valid UserDTO userDTO,
-        WebRequest request) {
+    @Transactional(rollbackFor = Exception.class) // If any exception is thrown, roll back db changes
+    public ResponseEntity<HashMap<String, String>> registerNewUser(
+            @Valid UserDTO userDTO,
+            WebRequest request) {
+
         // Create new user and hash password with SHA256
         User user = new User();
-        String sha256 = org.apache.commons.codec.digest.DigestUtils
-            .sha256Hex(userDTO.getPassword());
+        String sha256 = sha256Hex(userDTO.getPassword());
         user.setPassword(sha256);
         user.setEmail(userDTO.getEmail());
         User registered = userService.registerNewUserAccount(user);
+
         try {
             // Trigger the event listener
             String appUrl = serverAddress;
-            eventPublisher.publishEvent(
-                new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
-            LOGGER.info("User with email " + userDTO.getEmail()
-                + " is registered. Waiting for activation.");
+            eventPublisher
+                    .publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
+            LOGGER.info("User with email " + userDTO.getEmail() + " is registered. Waiting for activation.");
         } catch (Exception e) {
             LOGGER.error("Error creating user with email: " + userDTO.getEmail() + ". ", e);
             throw new CustomRuntimeException("There was an unexpected error with email service.");
         }
+
         // Return JSON response
         HashMap<String, String> map = new HashMap<>();
         map.put("email", userDTO.getEmail());
@@ -89,18 +96,22 @@ public class RegistrationController {
 
     @RequestMapping(value = "/registration-confirm", method = RequestMethod.GET)
     public String confirmRegistration(@RequestParam("token") String token,
-        HttpServletResponse httpServletResponse) {
+            HttpServletResponse httpServletResponse) {
+
         VerificationToken verificationToken = userService.getVerificationToken(token);
         if (verificationToken == null) {
             return "Invalid token!";
         }
-        User user = verificationToken.getUser();
+
         Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             return "Verification link has expired!";
         }
+
+        User user = verificationToken.getUser();
         user.setActivated(true);
         userService.saveRegisteredUser(user);
+
         try {
             httpServletResponse.sendRedirect("https://www.google.com");
         } catch (IOException e) {
@@ -112,19 +123,19 @@ public class RegistrationController {
     @RequestMapping(value = "/resend-registration-token", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<HashMap<String, String>> resendRegistrationToken(
-        @RequestParam("username") String username)
-        throws UsernameNotFoundException {
+            @RequestParam("username") String username) throws UsernameNotFoundException {
+
         User user = userService.getUserByEmail(username);
         if (user == null) {
             throw new UsernameNotFoundException("Username not found: " + username);
         }
+
         HashMap<String, String> map = new HashMap<>();
         if (!user.isActivated()) {
             VerificationToken oldToken = userService.getVerificationTokenByUser(user);
-            VerificationToken newToken = userService
-                .createNewVerificationToken(oldToken.getToken());
+            VerificationToken newToken = userService.createNewVerificationToken(oldToken.getToken());
             SimpleMailMessage email = new EmailConstructor()
-                .constructResendConfirmationEmail(serverAddress, newToken.getToken(), user);
+                    .constructResendConfirmationEmail(serverAddress, newToken.getToken(), user);
             mailSender.send(email);
             map.put("email", username);
         } else {
@@ -132,5 +143,4 @@ public class RegistrationController {
         }
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_PLAIN).body(map);
     }
-
 }
