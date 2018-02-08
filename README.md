@@ -27,6 +27,7 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 - [Testing registration](#testing-registration)
   - [Setting up MailSlurper](#setting-up-mailslurper)
   - [Registration endpoint](#registration-endpoint)
+  - [Resend registration confirmation](#resend-registration-confirmation)
 - [Using Postman for testing](#using-postman-for-testing)
 - [Integration with Angular](#integration-with-angular)
 - [TODO](#todo)
@@ -225,6 +226,17 @@ curl -X POST \
 
 If successful it will send your e-mail back in JSON format with response status 200. You can now check your inbox on your SMTP server for the activation link. Upon succesful activation you will be redirected to Google (changed later) and your account is activated. You can now request an access token. 
 
+## Resend registration confirmation
+
+You can request new confirmation mail if you did not get one and the user is not activated. Make the following curl request:
+
+```
+curl -X POST \
+  http://localhost:8080/api/public/register/resend-registration-token \
+  -H 'content-type: application/x-www-form-urlencoded' \
+  -d username=new@40user.com
+```
+
 # Using Postman for testing
 
 You can also use Postman for endpoint testing. Import endpoints using this link: https://www.getpostman.com/collections/67dd25c1fbcf149438c3
@@ -244,6 +256,7 @@ You can also use Postman for endpoint testing. Import endpoints using this link:
 * Remove `import.sql` from production environment or change it.
 * Generate database schema from `resources/create.sql` when initial database model is ready in JPA (new database changes will be handled with Flyway from this point on).
 * ~~Field injections should be replaced for constructor based dependency injections in the future.~~
+* Error handling
 
 # Known issues
 

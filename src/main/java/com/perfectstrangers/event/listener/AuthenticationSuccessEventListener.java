@@ -1,4 +1,4 @@
-package com.perfectstrangers.listener;
+package com.perfectstrangers.event.listener;
 
 import com.perfectstrangers.service.impl.AuthenticationAttemptServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

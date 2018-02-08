@@ -1,8 +1,9 @@
-package com.perfectstrangers.listener;
+package com.perfectstrangers.event.listener;
 
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.event.OnRegistrationCompleteEvent;
 import com.perfectstrangers.service.UserService;
+import com.perfectstrangers.util.EmailConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
@@ -17,7 +18,6 @@ import java.util.UUID;
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
     private UserService service;
-
     private JavaMailSender mailSender;
 
     @Autowired
@@ -35,16 +35,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         User user = event.getUser();
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(user, token);
-
-        String recipientAddress = user.getEmail();
-        String subject = "Registration Confirmation";
-        String confirmationUrl = event.getAppUrl() + "api/public/register/registrationConfirm.html?token=" + token;
-        String message = "Here is your activation URL: ";
-
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message + confirmationUrl);
+        SimpleMailMessage email = new EmailConstructor()
+            .constructConfirmationEmail(event.getAppUrl(), token, user);
         mailSender.send(email);
     }
 

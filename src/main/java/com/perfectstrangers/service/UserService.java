@@ -5,16 +5,22 @@ import com.perfectstrangers.domain.VerificationToken;
 
 public interface UserService {
 
-    User registerNewUserAccount(User user);
+    boolean emailExist(String email);
 
-    User getUser(String verificationToken);
+    User registerNewUserAccount(User user);
 
     void saveRegisteredUser(User user);
 
     void createVerificationToken(User user, String token);
 
+    VerificationToken createNewVerificationToken(String existingVerificationToken);
+
+    User getUserByEmail(String email);
+
+    User getUserByVerificationToken(String verificationToken);
+
     VerificationToken getVerificationToken(String VerificationToken);
 
-    User findByEmail(String email);
+    VerificationToken getVerificationTokenByUser(User user);
 
 }

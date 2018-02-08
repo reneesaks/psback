@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -20,49 +21,36 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private VerificationTokenRepository tokenRepository;
+    private VerificationTokenRepository verificationTokenRepository;
 
     private RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, VerificationTokenRepository tokenRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                          VerificationTokenRepository verificationTokenRepository,
+                           RoleRepository roleRepository) {
         this.userRepository = userRepository;
-        this.tokenRepository = tokenRepository;
+        this.verificationTokenRepository = verificationTokenRepository;
         this.roleRepository = roleRepository;
     }
 
     @Override
-    public User registerNewUserAccount(User userDTO) {
+    public boolean emailExist(String email) {
+        User user = userRepository.findByEmail(email);
+        return user != null;
+    }
 
+    @Override
+    public User registerNewUserAccount(User userDTO) {
         if (emailExist(userDTO.getEmail())) {
             throw new CustomRuntimeException("There is an account with that email address: " + userDTO.getEmail());
         }
-
         User user = new User();
         List<Role> role = roleRepository.findByRoleName("STANDARD_USER");
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
         user.setRoles(role);
-
         return userRepository.save(user);
-    }
-
-    private boolean emailExist(String email) {
-
-        User user = userRepository.findByEmail(email);
-
-        return user != null;
-
-    }
-
-    @Override
-    public User getUser(String verificationToken) {
-        return tokenRepository.findByToken(verificationToken).getUser();
-    }
-
-    @Override
-    public VerificationToken getVerificationToken(String VerificationToken) {
-        return tokenRepository.findByToken(VerificationToken);
     }
 
     @Override
@@ -73,12 +61,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createVerificationToken(User user, String token) {
         VerificationToken myToken = new VerificationToken(token, user);
-        tokenRepository.save(myToken);
+        verificationTokenRepository.save(myToken);
     }
 
     @Override
-    public User findByEmail(String email) {
+    public VerificationToken createNewVerificationToken(String existingVerificationToken) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(existingVerificationToken);
+        verificationToken.updateToken(UUID.randomUUID().toString());
+        verificationToken = verificationTokenRepository.save(verificationToken);
+        return verificationToken;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public User getUserByVerificationToken(String verificationToken) {
+        return verificationTokenRepository.findByToken(verificationToken).getUser();
+    }
+
+    @Override
+    public VerificationToken getVerificationToken(String VerificationToken) {
+        return verificationTokenRepository.findByToken(VerificationToken);
+    }
+
+    @Override
+    public VerificationToken getVerificationTokenByUser(User user) {
+        return verificationTokenRepository.findByUser(user);
     }
 
 }

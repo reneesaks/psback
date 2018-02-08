@@ -48,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new InvalidGrantException("This username has been blocked for " + authenticationAttemptServiceImpl.getUSERNAME_BLOCK() + " minutes because it exceeded the maximum allowed attempts.");
         }
 
-        User user = userService.findByEmail(username);
+        User user = userService.getUserByEmail(username);
 
         if (user == null) {
             throw new UsernameNotFoundException(username);
