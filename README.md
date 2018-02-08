@@ -2,7 +2,7 @@
 
 Back end for Perfect Strangers project. For front end go to https://github.com/kasparsuvi1/psfront
 
-* Live version of this project: http://138.68.71.15:8080/perfectstrangers/
+* Live version of this project: http://138.68.71.15:8080/
 
 **[Table of Contents]**
 - [Prerequisites](#prerequisites)
@@ -20,8 +20,8 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 - [Flyway](#flyway)
   - [Naming convention](#naming-convention)
 - [Running tests](#running-tests)
-- [Testing endpoints in production environment](#testing-endpoints-in-production-environment)
-  - [Basic information for testing](#basic-information-for-testing)
+- [Authentication](#authentication)
+  - [Basic information](#basic-information)
     - [1. Generate an access token](#1-generate-an-access-token)
     - [2. Use the token to access resources through your RESTful API](#2-use-the-token-to-access-resources-through-your-restful-api)
 - [Testing registration](#testing-registration)
@@ -140,11 +140,11 @@ By default, right now, production environment is being loaded in as it is activa
 
 Example: `V1.0124__seperated_users_contacts.sql`
 
-# Testing endpoints in production environment
+# Authentication
 
-Testing endpoints with JWT can only be done in production environment.
+Testing endpoints with JWT can only be done in production environment. Authentication attempts are limited by username and IP address because an attacker could reset the remote address counter by logging in to a valid account.
 
-## Basic information for testing
+## Basic information
 
 * client: testjwtclientid
 * secret: XY7kmzoNzl100

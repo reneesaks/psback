@@ -1,31 +1,33 @@
 package com.perfectstrangers.listener;
 
-import com.perfectstrangers.service.impl.LoginAttemptServiceImpl;
-import com.perfectstrangers.util.HttpServletRequestUtil;
+import com.perfectstrangers.service.impl.AuthenticationAttemptServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class AuthenticationSuccessEventListener implements ApplicationListener<AuthenticationSuccessEvent> {
+public class AuthenticationSuccessEventListener {
 
-    private LoginAttemptServiceImpl loginAttemptServiceImpl;
+    private AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl;
 
     private HttpServletRequest httpServletRequest;
 
-    @Autowired AuthenticationSuccessEventListener(LoginAttemptServiceImpl loginAttemptServiceImpl, HttpServletRequest httpServletRequest) {
-        this.loginAttemptServiceImpl = loginAttemptServiceImpl;
+    @Autowired AuthenticationSuccessEventListener(AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl, HttpServletRequest httpServletRequest) {
+        this.authenticationAttemptServiceImpl = authenticationAttemptServiceImpl;
         this.httpServletRequest = httpServletRequest;
     }
 
-    public void onApplicationEvent(AuthenticationSuccessEvent e) {
+    @EventListener
+    public void handleAuthenticationSuccessEvent(AuthenticationSuccessEvent authenticationSuccessEvent) {
 
-        String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
+        String username = authenticationSuccessEvent.getAuthentication().getName();
 
-        loginAttemptServiceImpl.loginSucceeded(remoteAddress);
+        System.out.println(username);
+
+        authenticationAttemptServiceImpl.authenticationSucceeded(username);
 
     }
 

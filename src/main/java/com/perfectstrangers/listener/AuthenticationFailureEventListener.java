@@ -1,34 +1,46 @@
 package com.perfectstrangers.listener;
 
-import com.perfectstrangers.service.impl.LoginAttemptServiceImpl;
+import com.perfectstrangers.event.UsernameLockedEvent;
+import com.perfectstrangers.service.impl.AuthenticationAttemptServiceImpl;
 import com.perfectstrangers.util.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class AuthenticationFailureEventListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
+public class AuthenticationFailureEventListener {
 
-    private LoginAttemptServiceImpl loginAttemptServiceImpl;
+    private AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl;
 
     private HttpServletRequest httpServletRequest;
 
-    @Autowired AuthenticationFailureEventListener(LoginAttemptServiceImpl loginAttemptServiceImpl, HttpServletRequest httpServletRequest) {
-        this.loginAttemptServiceImpl = loginAttemptServiceImpl;
+    @Autowired AuthenticationFailureEventListener(AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl,
+                                                  HttpServletRequest httpServletRequest) {
+        this.authenticationAttemptServiceImpl = authenticationAttemptServiceImpl;
         this.httpServletRequest = httpServletRequest;
     }
 
-    @Override
-    public void onApplicationEvent(final AuthenticationFailureBadCredentialsEvent e) {
+    @EventListener
+    public void handleBadCredentialsEvent(AuthenticationFailureBadCredentialsEvent authenticationFailureBadCredentialsEvent) {
 
+        String username = authenticationFailureBadCredentialsEvent.getAuthentication().getName();
         String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
 
-        loginAttemptServiceImpl.loginFailed(remoteAddress);
+        authenticationAttemptServiceImpl.authenticationFailed(username, remoteAddress);
 
     }
 
+    @EventListener
+    public void handleUsernameLockedEvent(UsernameLockedEvent usernameLockedEvent) {
+
+        String username = usernameLockedEvent.getUsername();
+        String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
+
+        authenticationAttemptServiceImpl.authenticationFailed(username, remoteAddress);
+
+    }
 
 }

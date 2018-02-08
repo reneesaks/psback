@@ -2,7 +2,6 @@ package com.perfectstrangers.service.impl;
 
 import com.perfectstrangers.domain.Role;
 import com.perfectstrangers.domain.User;
-import com.perfectstrangers.error.CustomRuntimeException;
 import com.perfectstrangers.service.UserService;
 import com.perfectstrangers.util.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,23 +25,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private HttpServletRequest httpServletRequest;
 
-    private LoginAttemptServiceImpl loginAttemptServiceImpl;
+    private AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl;
 
     @Autowired
     public UserDetailsServiceImpl(UserService userService,
                                   HttpServletRequest httpServletRequest,
-                                  LoginAttemptServiceImpl loginAttemptServiceImpl) {
+                                  AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl) {
         this.userService = userService;
         this.httpServletRequest = httpServletRequest;
-        this.loginAttemptServiceImpl = loginAttemptServiceImpl;
+        this.authenticationAttemptServiceImpl = authenticationAttemptServiceImpl;
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
 
-        if (loginAttemptServiceImpl.isBlocked(remoteAddress)) {
-            throw new CustomRuntimeException("This IP has been blocked for 24 hours because it exceeded the maximum allowed wrong authentication attempts.");
+        if (authenticationAttemptServiceImpl.isRemoteAddressBlocked(remoteAddress)) {
+            throw new InvalidGrantException("This IP address has been blocked for " + authenticationAttemptServiceImpl.getREMOTE_ADDRESS_BLOCK() + " minutes because it exceeded the maximum allowed attempts.");
+        }
+
+        if (authenticationAttemptServiceImpl.isUsernameBlocked(username)) {
+            throw new InvalidGrantException("This username has been blocked for " + authenticationAttemptServiceImpl.getUSERNAME_BLOCK() + " minutes because it exceeded the maximum allowed attempts.");
         }
 
         User user = userService.findByEmail(username);
@@ -59,14 +63,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 true,
                 user.getRoles().stream().map(Role::getRoleName).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 
-    }
-
-    private String getClientIP() {
-        String xfHeader = httpServletRequest.getHeader("X-Forwarded-For");
-        if (xfHeader == null) {
-            return httpServletRequest.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0];
     }
 
 }
