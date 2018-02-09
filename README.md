@@ -215,13 +215,16 @@ To run the server just run the executable `mailslurper.exe`. To see the inbox vi
 
 ## Registration endpoint
 
-Registration endpoint is public. Every user is made as a standard user by default. For registration make the following curl request:
+Registration endpoint is public. Every user is made as a standard user by default. Values must be sent in the POST body in JSON format. For registration make the following curl request:
 
 ```
 curl -X POST \
   http://localhost:8080/api/public/register/new-user \
-  -H 'content-type: application/x-www-form-urlencoded' \
-  -d 'email=new@user.com&password=Password2142!'
+  -H 'content-type: application/json' \
+  -d '{
+	"email": "new@user.com",
+	"password": "1dseAdg!!f54ga"
+}'
 ```
 
 If successful it will send your e-mail back in JSON format with response status 200. You can now check your inbox on your SMTP server for the activation link. Upon succesful activation you will be redirected to Google (changed later) and your account is activated. You can now request an access token. 
@@ -232,9 +235,11 @@ You can request new confirmation mail if you did not get one and the user is not
 
 ```
 curl -X POST \
-  http://localhost:8080/api/public/register/resend-registration-token \
-  -H 'content-type: application/x-www-form-urlencoded' \
-  -d username=new@40user.com
+  http://localhost:8080/api/public/register/resend-registration-confirmation \
+  -H 'content-type: application/json' \
+  -d '{
+	"email": "new@user.com"
+}'
 ```
 
 # Using Postman for testing
@@ -256,7 +261,7 @@ You can also use Postman for endpoint testing. Import endpoints using this link:
 * Remove `import.sql` from production environment or change it.
 * Generate database schema from `resources/create.sql` when initial database model is ready in JPA (new database changes will be handled with Flyway from this point on).
 * ~~Field injections should be replaced for constructor based dependency injections in the future.~~
-* Error handling
+* ~~Error handling~~
 
 # Known issues
 

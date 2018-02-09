@@ -15,11 +15,17 @@ import org.passay.WhitespaceRule;
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
     @Override
-    public void initialize(ValidPassword arg0) {
+    public void initialize(ValidPassword validPassword) {
     }
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
+
+        // Return true because this is handled by @NotNull annotation in UserDTO
+        if (password == null) {
+            return true;
+        }
+
         PasswordValidator validator = new PasswordValidator(Arrays.asList(
                 new LengthRule(8, 255),
                 new CharacterRule(EnglishCharacterData.UpperCase, 1),

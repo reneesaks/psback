@@ -1,6 +1,7 @@
 package com.perfectstrangers.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.perfectstrangers.domain.enums.Gender;
 import java.time.Instant;
 import java.util.List;
@@ -18,6 +19,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+/**
+ * JsonIgnore must be set on the password and getter. Setter must have JsonProperty in order to
+ * ignore it only on get methods.
+ */
 
 @Entity
 @Table(name = "user")
@@ -34,18 +41,20 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @NotNull
     @Column(name = "email")
     private String email;
 
     @Column(name = "alias")
     private String alias;
 
-    @Column(name = "password")
+    @NotNull
     @JsonIgnore
+    @Column(name = "password")
     private String password;
 
     @Column(name = "activated")
-    private boolean activated;
+    private boolean activated = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
@@ -105,11 +114,6 @@ public class User {
     )
     private List<Response> responses;
 
-    public User() {
-        super();
-        this.activated = false;
-    }
-
     public Long getId() {
         return id;
     }
@@ -150,10 +154,12 @@ public class User {
         this.alias = alias;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }

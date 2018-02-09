@@ -3,17 +3,17 @@ package com.perfectstrangers.service.impl;
 import com.perfectstrangers.domain.Role;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.VerificationToken;
-import com.perfectstrangers.error.CustomRuntimeException;
+import com.perfectstrangers.error.EntityNotFoundException;
+import com.perfectstrangers.error.UsernameExistsException;
 import com.perfectstrangers.repository.RoleRepository;
 import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.repository.VerificationTokenRepository;
 import com.perfectstrangers.service.UserService;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -34,16 +34,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean emailExist(String email) {
+    public boolean emailExists(String email) {
         User user = userRepository.findByEmail(email);
         return user != null;
     }
 
     @Override
-    public User registerNewUserAccount(User userDTO) {
-        if (emailExist(userDTO.getEmail())) {
-            throw new CustomRuntimeException(
-                    "There is an account with that email address: " + userDTO.getEmail());
+    public User registerNewUserAccount(User userDTO) throws UsernameExistsException {
+        if (emailExists(userDTO.getEmail())) {
+            throw new UsernameExistsException();
         }
         User user = new User();
         List<Role> role = roleRepository.findByRoleName("STANDARD_USER");
@@ -74,7 +73,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws EntityNotFoundException {
+        if (userRepository.findByEmail(email) == null) {
+            throw new EntityNotFoundException(User.class, "username", email);
+        }
         return userRepository.findByEmail(email);
     }
 

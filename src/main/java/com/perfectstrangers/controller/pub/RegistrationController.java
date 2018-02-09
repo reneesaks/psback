@@ -5,13 +5,16 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.VerificationToken;
 import com.perfectstrangers.dto.UserDTO;
-import com.perfectstrangers.error.CustomRuntimeException;
+import com.perfectstrangers.dto.UsernameDTO;
+import com.perfectstrangers.error.EntityNotFoundException;
+import com.perfectstrangers.error.MailServiceNoConnectionException;
+import com.perfectstrangers.error.UsernameExistsException;
+import com.perfectstrangers.error.UsernameIsActivatedException;
 import com.perfectstrangers.event.OnRegistrationCompleteEvent;
 import com.perfectstrangers.service.UserService;
 import com.perfectstrangers.util.EmailConstructor;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.HashMap;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -21,18 +24,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+
+
+/**
+ * Should the resend registration confirmation only respond with HttpStatus.OK? Potential security problem.
+ * This endpoint could be used to fish out valid emails because the response differs when the email is already
+ * activated, thus giving away the email.
+ */
 
 @RestController
 @RequestMapping("/api/public/register")
@@ -58,16 +68,11 @@ public class RegistrationController {
         this.mailSender = mailSender;
     }
 
-    @RequestMapping(
-            value = "/new-user",
-            params = {"email", "password"},
-            produces = "application/json",
-            method = RequestMethod.POST)
-    @ResponseBody
+    @PostMapping(value = "/new-user")
+    @ResponseStatus(HttpStatus.OK)
     @Transactional(rollbackFor = Exception.class) // If any exception is thrown, roll back db changes
-    public ResponseEntity<HashMap<String, String>> registerNewUser(
-            @Valid UserDTO userDTO,
-            WebRequest request) {
+    public User registerNewUser(@RequestBody UserDTO userDTO, WebRequest request)
+            throws MailServiceNoConnectionException, UsernameExistsException {
 
         // Create new user and hash password with SHA256
         User user = new User();
@@ -81,20 +86,17 @@ public class RegistrationController {
             String appUrl = serverAddress;
             eventPublisher
                     .publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
-            LOGGER.info("User with email " + userDTO.getEmail() + " is registered. Waiting for activation.");
-        } catch (Exception e) {
-            LOGGER.error("Error creating user with email: " + userDTO.getEmail() + ". ", e);
-            throw new CustomRuntimeException("There was an unexpected error with email service.");
+            LOGGER.info("User with email " + user.getEmail() + " is registered. Waiting for activation.");
+        } catch (MailSendException e) {
+            LOGGER.error("Error creating user with email: " + user.getEmail() + ". "
+                    + "Message: " + e.getFailedMessages());
+            throw new MailServiceNoConnectionException();
         }
-
-        // Return JSON response
-        HashMap<String, String> map = new HashMap<>();
-        map.put("email", userDTO.getEmail());
-
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_PLAIN).body(map);
+        return user;
     }
 
-    @RequestMapping(value = "/registration-confirm", method = RequestMethod.GET)
+    @GetMapping(value = "/registration-confirm")
+    @ResponseStatus(HttpStatus.OK)
     public String confirmRegistration(@RequestParam("token") String token,
             HttpServletResponse httpServletResponse) {
 
@@ -120,27 +122,22 @@ public class RegistrationController {
         return "Registration successful!";
     }
 
-    @RequestMapping(value = "/resend-registration-token", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<HashMap<String, String>> resendRegistrationToken(
-            @RequestParam("username") String username) throws UsernameNotFoundException {
+    @PostMapping(value = "/resend-registration-confirmation")
+    @ResponseStatus(HttpStatus.OK)
+    public UsernameDTO resendRegistrationToken(
+            @RequestBody @Valid UsernameDTO usernameDTO)
+            throws EntityNotFoundException, UsernameIsActivatedException {
 
-        User user = userService.getUserByEmail(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("Username not found: " + username);
-        }
-
-        HashMap<String, String> map = new HashMap<>();
+        User user = userService.getUserByEmail(usernameDTO.getEmail());
         if (!user.isActivated()) {
             VerificationToken oldToken = userService.getVerificationTokenByUser(user);
             VerificationToken newToken = userService.createNewVerificationToken(oldToken.getToken());
             SimpleMailMessage email = new EmailConstructor()
                     .constructResendConfirmationEmail(serverAddress, newToken.getToken(), user);
             mailSender.send(email);
-            map.put("email", username);
         } else {
-            map.put("error", "This username is already activated");
+            throw new UsernameIsActivatedException();
         }
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_PLAIN).body(map);
+        return usernameDTO;
     }
 }

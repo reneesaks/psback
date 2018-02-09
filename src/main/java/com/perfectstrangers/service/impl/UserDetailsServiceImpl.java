@@ -2,8 +2,10 @@ package com.perfectstrangers.service.impl;
 
 import com.perfectstrangers.domain.Role;
 import com.perfectstrangers.domain.User;
-import com.perfectstrangers.service.UserService;
+import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.util.HttpServletRequestUtil;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,29 +14,27 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.stream.Collectors;
-
 /**
  * User authorization.
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserService userService;
+    private UserRepository userRepository;
     private HttpServletRequest httpServletRequest;
     private AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl;
 
     @Autowired
     public UserDetailsServiceImpl(
-            UserService userService,
+            UserRepository userRepository,
             HttpServletRequest httpServletRequest,
             AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl) {
-        this.userService = userService;
         this.httpServletRequest = httpServletRequest;
         this.authenticationAttemptServiceImpl = authenticationAttemptServiceImpl;
+        this.userRepository = userRepository;
     }
 
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
@@ -50,9 +50,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     + " minutes because it exceeded the maximum allowed attempts.");
         }
 
-        User user = userService.getUserByEmail(username);
+        // Overriding methods cannot throw exceptions broader than overridden method
+        // Hence the repository use instead of service (service throws EntityNotFoundException)
+        User user = userRepository.findByEmail(username);
+
         if (user == null) {
-            throw new UsernameNotFoundException(username);
+            // Give the same message as if the password was wrong
+            // This will not give away which one was wrong
+            throw new InvalidGrantException("Bad credentials");
         }
 
         return new org.springframework.security.core.userdetails.User(
