@@ -3,12 +3,11 @@ package com.perfectstrangers.service.impl;
 import com.perfectstrangers.domain.Role;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.VerificationToken;
-import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.error.UsernameExistsException;
 import com.perfectstrangers.repository.RoleRepository;
 import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.repository.VerificationTokenRepository;
-import com.perfectstrangers.service.UserService;
+import com.perfectstrangers.service.RegistrationService;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class RegistrationServiceImpl implements RegistrationService {
 
     private UserRepository userRepository;
     private VerificationTokenRepository verificationTokenRepository;
     private RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImpl(
+    public RegistrationServiceImpl(
             UserRepository userRepository,
             VerificationTokenRepository verificationTokenRepository,
             RoleRepository roleRepository) {
@@ -70,14 +69,6 @@ public class UserServiceImpl implements UserService {
         verificationToken.updateToken(UUID.randomUUID().toString());
         verificationToken = verificationTokenRepository.save(verificationToken);
         return verificationToken;
-    }
-
-    @Override
-    public User getUserByEmail(String email) throws EntityNotFoundException {
-        if (userRepository.findByEmail(email) == null) {
-            throw new EntityNotFoundException(User.class, "username", email);
-        }
-        return userRepository.findByEmail(email);
     }
 
     @Override

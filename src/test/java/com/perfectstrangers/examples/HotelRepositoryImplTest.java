@@ -1,7 +1,10 @@
 package com.perfectstrangers.examples;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.perfectstrangers.PerfectStrangersApplication;
 import com.perfectstrangers.domain.Hotel;
+import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.repository.HotelRepository;
 import com.perfectstrangers.service.GenericService;
 import com.perfectstrangers.service.impl.GenericServiceImpl;
@@ -15,8 +18,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PerfectStrangersApplication.class)
@@ -49,7 +50,7 @@ public class HotelRepositoryImplTest {
 
     // Write test cases here
     @Test
-    public void whenValidName_thenHotelShouldBeFound() {
+    public void whenValidName_thenHotelShouldBeFound() throws EntityNotFoundException {
 
         String name = "Glamour Hotel";
         Hotel found = genericService.getHotelByName(name);

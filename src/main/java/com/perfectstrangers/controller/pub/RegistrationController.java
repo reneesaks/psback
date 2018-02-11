@@ -11,7 +11,8 @@ import com.perfectstrangers.error.MailServiceNoConnectionException;
 import com.perfectstrangers.error.UsernameExistsException;
 import com.perfectstrangers.error.UsernameIsActivatedException;
 import com.perfectstrangers.event.OnRegistrationCompleteEvent;
-import com.perfectstrangers.service.UserService;
+import com.perfectstrangers.service.GenericService;
+import com.perfectstrangers.service.RegistrationService;
 import com.perfectstrangers.util.EmailConstructor;
 import java.io.IOException;
 import java.util.Calendar;
@@ -51,7 +52,8 @@ public class RegistrationController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
 
-    private UserService userService;
+    private RegistrationService registrationService;
+    private GenericService genericService;
     private ApplicationEventPublisher eventPublisher;
     private MailSender mailSender;
 
@@ -60,10 +62,12 @@ public class RegistrationController {
 
     @Autowired
     public RegistrationController(
-            UserService userService,
+            RegistrationService registrationService,
+            GenericService genericService,
             ApplicationEventPublisher eventPublisher,
             MailSender mailSender) {
-        this.userService = userService;
+        this.registrationService = registrationService;
+        this.genericService = genericService;
         this.eventPublisher = eventPublisher;
         this.mailSender = mailSender;
     }
@@ -71,7 +75,7 @@ public class RegistrationController {
     @PostMapping(value = "/new-user")
     @ResponseStatus(HttpStatus.OK)
     @Transactional(rollbackFor = Exception.class) // If any exception is thrown, roll back db changes
-    public User registerNewUser(@RequestBody UserDTO userDTO, WebRequest request)
+    public User registerNewUser(@RequestBody @Valid UserDTO userDTO, WebRequest request)
             throws MailServiceNoConnectionException, UsernameExistsException {
 
         // Create new user and hash password with SHA256
@@ -79,7 +83,7 @@ public class RegistrationController {
         String sha256 = sha256Hex(userDTO.getPassword());
         user.setPassword(sha256);
         user.setEmail(userDTO.getEmail());
-        User registered = userService.registerNewUserAccount(user);
+        User registered = registrationService.registerNewUserAccount(user);
 
         try {
             // Trigger the event listener
@@ -100,7 +104,7 @@ public class RegistrationController {
     public String confirmRegistration(@RequestParam("token") String token,
             HttpServletResponse httpServletResponse) {
 
-        VerificationToken verificationToken = userService.getVerificationToken(token);
+        VerificationToken verificationToken = registrationService.getVerificationToken(token);
         if (verificationToken == null) {
             return "Invalid token!";
         }
@@ -112,7 +116,7 @@ public class RegistrationController {
 
         User user = verificationToken.getUser();
         user.setActivated(true);
-        userService.saveRegisteredUser(user);
+        registrationService.saveRegisteredUser(user);
 
         try {
             httpServletResponse.sendRedirect("https://www.google.com");
@@ -124,14 +128,13 @@ public class RegistrationController {
 
     @PostMapping(value = "/resend-registration-confirmation")
     @ResponseStatus(HttpStatus.OK)
-    public UsernameDTO resendRegistrationToken(
-            @RequestBody @Valid UsernameDTO usernameDTO)
+    public UsernameDTO resendRegistrationToken(@RequestBody @Valid UsernameDTO usernameDTO)
             throws EntityNotFoundException, UsernameIsActivatedException {
 
-        User user = userService.getUserByEmail(usernameDTO.getEmail());
+        User user = genericService.getUserByEmail(usernameDTO.getEmail());
         if (!user.isActivated()) {
-            VerificationToken oldToken = userService.getVerificationTokenByUser(user);
-            VerificationToken newToken = userService.createNewVerificationToken(oldToken.getToken());
+            VerificationToken oldToken = registrationService.getVerificationTokenByUser(user);
+            VerificationToken newToken = registrationService.createNewVerificationToken(oldToken.getToken());
             SimpleMailMessage email = new EmailConstructor()
                     .constructResendConfirmationEmail(serverAddress, newToken.getToken(), user);
             mailSender.send(email);

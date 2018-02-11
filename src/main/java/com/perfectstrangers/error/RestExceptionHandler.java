@@ -3,7 +3,6 @@ package com.perfectstrangers.error;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -25,7 +24,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-@Slf4j
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**

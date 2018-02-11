@@ -136,13 +136,6 @@
             <version>2.9.4</version>
         </dependency>
 
-        <!-- https://projectlombok.org/ -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Database version control -->
         <dependency>
             <groupId>org.flywaydb</groupId>

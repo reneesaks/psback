@@ -8,14 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-@Data
+// @Data
 class ApiError {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -108,13 +106,78 @@ class ApiError {
         constraintViolations.forEach(this::addValidationError);
     }
 
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setStatus(HttpStatus status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public List<ApiSubError> getSubErrors() {
+        return subErrors;
+    }
+
+    public void setSubErrors(List<ApiSubError> subErrors) {
+        this.subErrors = subErrors;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ApiError apiError = (ApiError) o;
+
+        if (timestamp != null ? !timestamp.equals(apiError.timestamp) : apiError.timestamp != null) {
+            return false;
+        }
+        if (status != apiError.status) {
+            return false;
+        }
+        if (message != null ? !message.equals(apiError.message) : apiError.message != null) {
+            return false;
+        }
+        return subErrors != null ? subErrors.equals(apiError.subErrors) : apiError.subErrors == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = timestamp != null ? timestamp.hashCode() : 0;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (subErrors != null ? subErrors.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ApiError{" +
+                "timestamp=" + timestamp +
+                ", status=" + status +
+                ", message='" + message + '\'' +
+                ", subErrors=" + subErrors +
+                '}';
+    }
 
     abstract class ApiSubError {
 
     }
 
-    @Data
-    @EqualsAndHashCode(callSuper = false)
+    /*@Data
+    @EqualsAndHashCode(callSuper = false)*/
     class ApiValidationError extends ApiSubError {
 
         private String object;
@@ -132,6 +195,81 @@ class ApiError {
             this.field = field;
             this.rejectedValue = rejectedValue;
             this.message = message;
+        }
+
+        public String getObject() {
+            return object;
+        }
+
+        public void setObject(String object) {
+            this.object = object;
+        }
+
+        public String getField() {
+            return field;
+        }
+
+        public void setField(String field) {
+            this.field = field;
+        }
+
+        public Object getRejectedValue() {
+            return rejectedValue;
+        }
+
+        public void setRejectedValue(Object rejectedValue) {
+            this.rejectedValue = rejectedValue;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof ApiValidationError)) {
+                return false;
+            }
+
+            ApiValidationError that = (ApiValidationError) o;
+
+            if (object != null ? !object.equals(that.object) : that.object != null) {
+                return false;
+            }
+            if (field != null ? !field.equals(that.field) : that.field != null) {
+                return false;
+            }
+            if (rejectedValue != null ? !rejectedValue.equals(that.rejectedValue)
+                    : that.rejectedValue != null) {
+                return false;
+            }
+            return message != null ? message.equals(that.message) : that.message == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = object != null ? object.hashCode() : 0;
+            result = 31 * result + (field != null ? field.hashCode() : 0);
+            result = 31 * result + (rejectedValue != null ? rejectedValue.hashCode() : 0);
+            result = 31 * result + (message != null ? message.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "ApiValidationError{" +
+                    "object='" + object + '\'' +
+                    ", field='" + field + '\'' +
+                    ", rejectedValue=" + rejectedValue +
+                    ", message='" + message + '\'' +
+                    '}';
         }
     }
 }

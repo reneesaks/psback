@@ -2,7 +2,7 @@ package com.perfectstrangers.event.listener;
 
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.event.OnRegistrationCompleteEvent;
-import com.perfectstrangers.service.UserService;
+import com.perfectstrangers.service.RegistrationService;
 import com.perfectstrangers.util.EmailConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -17,11 +17,11 @@ import java.util.UUID;
 @Profile({"production", "deployment"})
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
-    private UserService service;
+    private RegistrationService service;
     private JavaMailSender mailSender;
 
     @Autowired
-    public RegistrationListener(UserService service, JavaMailSender mailSender) {
+    public RegistrationListener(RegistrationService service, JavaMailSender mailSender) {
         this.service = service;
         this.mailSender = mailSender;
     }

@@ -3,6 +3,7 @@ package com.perfectstrangers.controller.priv;
 import com.perfectstrangers.domain.Hotel;
 import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.User;
+import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.service.GenericService;
 import java.util.HashMap;
 import java.util.List;
@@ -40,8 +41,8 @@ public class ResourceController {
 
     // Custom endpoints testing (giving away only some information)
     @GetMapping(value = "test1")
-    public Map<String, Object> getUserByEmail() {
-        User user = genericService.getUserByEmail("standard@user.com");
+    public Map<String, Object> getUserByEmail() throws EntityNotFoundException {
+        User user = genericService.getUserByEmail("standarddd@user.com");
         Map<String, Object> testMap = new HashMap<>();
         testMap.put("id", user.getId());
         testMap.put("firstname", user.getFirstName());
@@ -57,7 +58,7 @@ public class ResourceController {
 
     // Getting user responses test
     @GetMapping(value = "test3")
-    public List<Response> getUserResponses() {
-        return genericService.getUserById(2L).getResponses();
+    public List<Response> getUserResponses() throws EntityNotFoundException {
+        return genericService.getUserById(66L).getResponses();
     }
 }

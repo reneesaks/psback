@@ -7,6 +7,7 @@ import com.perfectstrangers.domain.Occupation;
 import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.Resto;
 import com.perfectstrangers.domain.User;
+import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.repository.AdvertRepository;
 import com.perfectstrangers.repository.DegreeRepository;
 import com.perfectstrangers.repository.HotelRepository;
@@ -65,13 +66,21 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User getUserByEmail(String email) throws EntityNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new EntityNotFoundException(User.class, "email", email);
+        }
+        return user;
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id);
+    public User getUserById(Long id) throws EntityNotFoundException {
+        User user = userRepository.findById(id);
+        if (user == null) {
+            throw new EntityNotFoundException(User.class, "id", id.toString());
+        }
+        return user;
     }
 
     // ============== OCCUPATIONS ============
@@ -81,13 +90,21 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public Occupation getOccupationByName(String name) {
-        return occupationRepository.findByName(name);
+    public Occupation getOccupationByName(String name) throws EntityNotFoundException {
+        Occupation occupation = occupationRepository.findByName(name);
+        if (occupation == null) {
+            throw new EntityNotFoundException(Occupation.class, "name", name);
+        }
+        return occupation;
     }
 
     @Override
-    public Occupation getOccupationById(Long id) {
-        return occupationRepository.findById(id);
+    public Occupation getOccupationById(Long id) throws EntityNotFoundException {
+        Occupation occupation = occupationRepository.findById(id);
+        if (occupation == null) {
+            throw new EntityNotFoundException(Occupation.class, "id", id.toString());
+        }
+        return occupation;
     }
 
     // ============== DEGREES ============
@@ -97,13 +114,21 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public Degree getDegreeByName(String name) {
-        return degreeRepository.findByName(name);
+    public Degree getDegreeByName(String name) throws EntityNotFoundException {
+        Degree degree = degreeRepository.findByName(name);
+        if (degree == null) {
+            throw new EntityNotFoundException(Degree.class, "name", name);
+        }
+        return degree;
     }
 
     @Override
-    public Degree getDegreeById(Long id) {
-        return degreeRepository.findById(id);
+    public Degree getDegreeById(Long id) throws EntityNotFoundException {
+        Degree degree = degreeRepository.findById(id);
+        if (degree == null) {
+            throw new EntityNotFoundException(Degree.class, "id", id.toString());
+        }
+        return degree;
     }
 
     // ============== HOTELS ============
@@ -118,13 +143,21 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public Hotel getHotelByName(String name) {
-        return hotelRepository.findByName(name);
+    public Hotel getHotelByName(String name) throws EntityNotFoundException {
+        Hotel hotel = hotelRepository.findByName(name);
+        if (hotel == null) {
+            throw new EntityNotFoundException(Hotel.class, "name", name);
+        }
+        return hotel;
     }
 
     @Override
-    public Hotel getHotelById(Long id) {
-        return hotelRepository.findById(id);
+    public Hotel getHotelById(Long id) throws EntityNotFoundException {
+        Hotel hotel = hotelRepository.findById(id);
+        if (hotel == null) {
+            throw new EntityNotFoundException(Hotel.class, "id", id.toString());
+        }
+        return hotel;
     }
 
     // ============== RESTOS ============
@@ -139,13 +172,21 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public Resto getRestoByName(String name) {
-        return restoRepository.findByName(name);
+    public Resto getRestoByName(String name) throws EntityNotFoundException {
+        Resto resto = restoRepository.findByName(name);
+        if (resto == null) {
+            throw new EntityNotFoundException(Resto.class, "name", name);
+        }
+        return resto;
     }
 
     @Override
-    public Resto getRestoById(Long id) {
-        return restoRepository.findById(id);
+    public Resto getRestoById(Long id) throws EntityNotFoundException {
+        Resto resto = restoRepository.findById(id);
+        if (resto == null) {
+            throw new EntityNotFoundException(Resto.class, "id", id.toString());
+        }
+        return resto;
     }
 
     // ============== ADVERTS ============
@@ -160,8 +201,12 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public Advert getAdvertById(Long id) {
-        return advertRepository.findById(id);
+    public Advert getAdvertById(Long id) throws EntityNotFoundException {
+        Advert advert = advertRepository.findById(id);
+        if (advert == null) {
+            throw new EntityNotFoundException(Advert.class, "id", id.toString());
+        }
+        return advert;
     }
 
     // ============== RESPONSES ============
@@ -176,8 +221,11 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public Response getResponseById(Long id) {
-        return responseRepository.findById(id);
+    public Response getResponseById(Long id) throws EntityNotFoundException {
+        Response response = responseRepository.findById(id);
+        if (response == null) {
+            throw new EntityNotFoundException(Response.class, "id", id.toString());
+        }
+        return response;
     }
-
 }
