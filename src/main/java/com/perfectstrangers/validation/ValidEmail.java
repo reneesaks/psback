@@ -11,6 +11,10 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+/**
+ * Makes EmailValidator accessible with annotation.
+ * @see com.perfectstrangers.validation.EmailValidator
+ */
 @Documented
 @Constraint(validatedBy = EmailValidator.class)
 @Target({TYPE, FIELD, ANNOTATION_TYPE})

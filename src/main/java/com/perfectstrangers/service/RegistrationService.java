@@ -12,9 +12,9 @@ public interface RegistrationService {
 
     void saveRegisteredUser(User user);
 
-    void createVerificationToken(User user, String token);
+    void createVerificationToken(User user);
 
-    VerificationToken createNewVerificationToken(String existingVerificationToken);
+    VerificationToken createNewVerificationToken(User user);
 
     User getUserByVerificationToken(String verificationToken);
 

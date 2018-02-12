@@ -12,16 +12,23 @@ import org.passay.PasswordValidator;
 import org.passay.RuleResult;
 import org.passay.WhitespaceRule;
 
+/**
+ * Validates passwords. Passwords need to have certain rules to be considered strong and valid passwords.
+ *
+ * @see com.perfectstrangers.validation.PasswordConstraintValidator
+ */
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
     @Override
     public void initialize(ValidPassword validPassword) {
     }
 
+    /**
+     * @param password if null it will return true because this needs to be handled with @NotNull annotation
+     * in DTO classes
+     */
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
-
-        // Return true because this is handled by @NotNull annotation in UserDTO
         if (password == null) {
             return true;
         }

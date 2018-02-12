@@ -4,6 +4,9 @@ import com.perfectstrangers.validation.ValidEmail;
 import com.perfectstrangers.validation.ValidPassword;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Used to validate new users.
+ */
 public class UserDTO {
 
     @NotNull

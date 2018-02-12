@@ -13,8 +13,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Username attempts are also cached here because an attacker could reset the remote address counter by
- * logging in to a valid account.
+ * Registers authentication events cached by event listeners. Blocks username and IP address if they exceed
+ * the maximum failure count. Username attempts are also cached here because an attacker could reset the
+ * remote address counter by logging in to a valid account.
+ *
+ * @see com.perfectstrangers.event.listener.AuthenticationFailureEventListener
+ * @see com.perfectstrangers.event.listener.AuthenticationSuccessEventListener
  */
 @Service
 public class AuthenticationAttemptServiceImpl implements AuthenticationAttemptService {
@@ -23,6 +27,11 @@ public class AuthenticationAttemptServiceImpl implements AuthenticationAttemptSe
     private LoadingCache<String, Integer> usernameAttemptsCache;
     private ApplicationEventPublisher applicationEventPublisher;
 
+    /**
+     * Builds the caches for storing failed authentication attempts.
+     *
+     * @param applicationEventPublisher ApplicationEventPublisher
+     */
     @Autowired
     public AuthenticationAttemptServiceImpl(ApplicationEventPublisher applicationEventPublisher) {
         super();
@@ -45,11 +54,22 @@ public class AuthenticationAttemptServiceImpl implements AuthenticationAttemptSe
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
+    /**
+     * Resets the username attempts cache.
+     *
+     * @param username username(email)
+     */
     @Override
     public void authenticationSucceeded(String username) {
         usernameAttemptsCache.invalidate(username);
     }
 
+    /**
+     * Counts authentication attempts per username and per IP.
+     *
+     * @param username username(email)
+     * @param remoteAddress IP address
+     */
     @Override
     public void authenticationFailed(String username, String remoteAddress) {
         int usernameAttempts, remoteAddressAttempts;
@@ -68,6 +88,12 @@ public class AuthenticationAttemptServiceImpl implements AuthenticationAttemptSe
         remoteAddressAttemptsCache.put(remoteAddress, ++remoteAddressAttempts);
     }
 
+    /**
+     * Checks if the IP address is blocked.
+     *
+     * @param remoteAddress IP address
+     * @return true if IP address is blocked.
+     */
     @Override
     public boolean isRemoteAddressBlocked(String remoteAddress) {
         try {
@@ -77,11 +103,17 @@ public class AuthenticationAttemptServiceImpl implements AuthenticationAttemptSe
         }
     }
 
+    /**
+     * Checks if the username is blocked.BadCredentials event stops firing after username attempt limit has
+     * been reached so the UsernameLockedEvent will start firing after that.
+     *
+     * @param username username(email)
+     * @return true if username is blocked.
+     */
     @Override
     public boolean isUsernameBlocked(String username) {
         try {
             boolean isUsernameBlocked = usernameAttemptsCache.get(username) >= USERNAME_MAX_ATTEMPT;
-            // BadCredentials event stops firing after username attempt limit has been reached
             if (isUsernameBlocked) {
                 applicationEventPublisher.publishEvent(new UsernameLockedEvent(this, username));
             }

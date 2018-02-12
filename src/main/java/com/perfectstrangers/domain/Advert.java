@@ -32,7 +32,7 @@ public class Advert {
     private AdvertStatus advertStatus;
 
     @Column(name = "created_date", columnDefinition = "DATETIME")
-    private Instant createdDate; // Timestamp is outdated
+    private Instant createdDate;
 
     @Lob
     @Column(name = "advert_text")

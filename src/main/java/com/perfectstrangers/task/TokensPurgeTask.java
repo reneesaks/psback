@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.Date;
 
+/**
+ * Scheduled check for any tokens that have expired. Deletes expired tokens.
+ */
 @Service
 @Transactional
 public class TokensPurgeTask {

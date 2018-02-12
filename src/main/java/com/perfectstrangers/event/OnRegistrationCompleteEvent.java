@@ -6,6 +6,12 @@ import org.springframework.context.annotation.Profile;
 
 import java.util.Locale;
 
+/**
+ * Holds necessary info to handle registration event.
+ *
+ * @see com.perfectstrangers.event.listener.RegistrationListener
+ * @see com.perfectstrangers.controller.pub.RegistrationController
+ */
 @Profile({"production", "deployment"})
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
 

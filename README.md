@@ -16,6 +16,7 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
   - [Running with IntellJ IDEA 2017](#running-with-intellj-idea-2017)
 - [Deployment](#deployment)
 - [API Documentation (Swagger)](#api-documentation-swagger)
+- [Java Documentation](#java-documentation)
 - [Accessing H2 database](#accessing-h2-database)
 - [Flyway](#flyway)
   - [Naming convention](#naming-convention)
@@ -107,6 +108,10 @@ Use `mvn clean package -P deployment -DskipTests` to create a deployable `.war` 
 
 * To see API documentation with Swagger UI visit `<your-base-bath>/swagger-ui.html`. Use username `dev` and password `password`. 
 * Private endpoints `api/private/*` can not be tested using Swagger UI in production environment as they require a valid token.
+
+# Java Documentation
+
+To create Java documentation with Javadoc run the following maven command `mvn javadoc:javadoc`. Documentation will be created in `/target/site/apidocs/index.html`.
 
 # Accessing H2 database
 

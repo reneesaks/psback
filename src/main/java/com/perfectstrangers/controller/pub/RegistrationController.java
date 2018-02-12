@@ -38,13 +38,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-
-/**
- * Should the resend registration confirmation only respond with HttpStatus.OK? Potential security problem.
+/*
+ * TODO:
+ * Should the resend registration confirmation only respond with "HttpStatus.OK"? Potential security problem.
  * This endpoint could be used to fish out valid emails because the response differs when the email is already
  * activated, thus giving away the email.
  */
 
+/**
+ * Handles all registration associated events that are exposed by an endpoint.
+ */
 @RestController
 @RequestMapping("/api/public/register")
 @Profile({"production", "deployment"})
@@ -72,13 +75,22 @@ public class RegistrationController {
         this.mailSender = mailSender;
     }
 
+    /**
+     * Creates new user and hashes password with SHA256. If any exception is thrown it will roll back any
+     * database changes.
+     *
+     * @param userDTO User object for validation.
+     * @param request WebRequest
+     * @return the newly created user.
+     * @throws MailServiceNoConnectionException when email service is not available.
+     * @throws UsernameExistsException when the username already exists.
+     */
     @PostMapping(value = "/new-user")
     @ResponseStatus(HttpStatus.OK)
-    @Transactional(rollbackFor = Exception.class) // If any exception is thrown, roll back db changes
+    @Transactional(rollbackFor = Exception.class)
     public User registerNewUser(@RequestBody @Valid UserDTO userDTO, WebRequest request)
             throws MailServiceNoConnectionException, UsernameExistsException {
 
-        // Create new user and hash password with SHA256
         User user = new User();
         String sha256 = sha256Hex(userDTO.getPassword());
         user.setPassword(sha256);
@@ -86,10 +98,12 @@ public class RegistrationController {
         User registered = registrationService.registerNewUserAccount(user);
 
         try {
-            // Trigger the event listener
-            String appUrl = serverAddress;
+            // Trigger our registration complete event that will send the activation email
             eventPublisher
-                    .publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
+                    .publishEvent(new OnRegistrationCompleteEvent(
+                            registered,
+                            request.getLocale(),
+                            this.serverAddress));
             LOGGER.info("User with email " + user.getEmail() + " is registered. Waiting for activation.");
         } catch (MailSendException e) {
             LOGGER.error("Error creating user with email: " + user.getEmail() + ". "
@@ -99,6 +113,14 @@ public class RegistrationController {
         return user;
     }
 
+    /**
+     * The activation link sent to user email contains the token. This handles the verification process and
+     * redirects the user to an URL.
+     *
+     * @param token The token that was generated for the activation link.
+     * @param httpServletResponse HttpServletResponse
+     * @return Redirects the user to a specified URL.
+     */
     @GetMapping(value = "/registration-confirm")
     @ResponseStatus(HttpStatus.OK)
     public String confirmRegistration(@RequestParam("token") String token,
@@ -114,6 +136,7 @@ public class RegistrationController {
             return "Verification link has expired!";
         }
 
+        // Activate our user
         User user = verificationToken.getUser();
         user.setActivated(true);
         registrationService.saveRegisteredUser(user);
@@ -126,6 +149,14 @@ public class RegistrationController {
         return "Registration successful!";
     }
 
+    /**
+     * Sends a new activation link for the specified username.
+     *
+     * @param usernameDTO Username in object form.
+     * @return Returns username object.
+     * @throws EntityNotFoundException Occurs when the username doesn't exist.
+     * @throws UsernameIsActivatedException Occurs when the username is already activated.
+     */
     @PostMapping(value = "/resend-registration-confirmation")
     @ResponseStatus(HttpStatus.OK)
     public UsernameDTO resendRegistrationToken(@RequestBody @Valid UsernameDTO usernameDTO)
@@ -133,8 +164,7 @@ public class RegistrationController {
 
         User user = genericService.getUserByEmail(usernameDTO.getEmail());
         if (!user.isActivated()) {
-            VerificationToken oldToken = registrationService.getVerificationTokenByUser(user);
-            VerificationToken newToken = registrationService.createNewVerificationToken(oldToken.getToken());
+            VerificationToken newToken = registrationService.createNewVerificationToken(user);
             SimpleMailMessage email = new EmailConstructor()
                     .constructResendConfirmationEmail(serverAddress, newToken.getToken(), user);
             mailSender.send(email);

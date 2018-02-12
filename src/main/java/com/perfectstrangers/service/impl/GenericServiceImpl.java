@@ -22,6 +22,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+/**
+ * Most repositories are accessible with this service.
+ */
 @Service
 public class GenericServiceImpl implements GenericService {
 

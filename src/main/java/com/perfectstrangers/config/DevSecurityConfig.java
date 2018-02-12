@@ -5,6 +5,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/**
+ * Security configuration for developer profile.
+ *
+ * @see org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+ */
 @Configuration
 @Profile("dev")
 public class DevSecurityConfig extends WebSecurityConfigurerAdapter {

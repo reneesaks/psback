@@ -15,11 +15,16 @@ import org.springframework.security.oauth2.common.exceptions.InvalidGrantExcepti
 import org.springframework.stereotype.Service;
 
 /**
- * User authorization.
+ * User authorization. This additionally checks if the username or IP is not blocked, if the user is activated
+ * and if the username exists.
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    /**
+     * Overriding methods cannot throw exceptions broader than overridden method. Hence the repository use
+     * instead of service (service throws EntityNotFoundException)
+     */
     private UserRepository userRepository;
     private HttpServletRequest httpServletRequest;
     private AuthenticationAttemptServiceImpl authenticationAttemptServiceImpl;
@@ -34,6 +39,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * @param username Username in our case is always email.
+     * @throws UsernameNotFoundException Gives the same message as if the password was wrong. This will not
+     * give away which one was wrong.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -50,13 +60,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     + " minutes because it exceeded the maximum allowed attempts.");
         }
 
-        // Overriding methods cannot throw exceptions broader than overridden method
-        // Hence the repository use instead of service (service throws EntityNotFoundException)
         User user = userRepository.findByEmail(username);
 
         if (user == null) {
-            // Give the same message as if the password was wrong
-            // This will not give away which one was wrong
             throw new InvalidGrantException("Bad credentials");
         }
 

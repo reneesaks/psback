@@ -14,12 +14,20 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 
+/**
+ * Defines security configuration across the platform.
+ *
+ * @see org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter
+ */
 @Configuration
 @EnableResourceServer
 @EnableWebSecurity
 @Profile({"production", "deployment"})
 public class ResourceServerConfig {
 
+    /**
+     * Security configuration for endpoints that are public and private.
+     */
     @Configuration
     @Profile({"production", "deployment"})
     @Order(1)
@@ -54,6 +62,9 @@ public class ResourceServerConfig {
         }
     }
 
+    /**
+     * Security configuration for endpoints that Swagger uses.
+     */
     @Configuration
     @Profile({"production", "deployment"})
     @Order(2)
@@ -71,9 +82,11 @@ public class ResourceServerConfig {
                     .httpBasic();
         }
 
+        /**
+         * Creates a developer account for Swagger
+         */
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            // Create a developer account
             auth.inMemoryAuthentication()
                     .withUser("dev")
                     .password("password")

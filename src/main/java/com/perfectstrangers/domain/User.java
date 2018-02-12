@@ -22,8 +22,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
- * JsonIgnore must be set on the password and getter. Setter must have JsonProperty in order to
- * ignore it only on get methods.
+ * JsonIgnore must be set on the password and getter. Setter must have JsonProperty in order to ignore it only
+ * on get methods.
  */
 
 @Entity
@@ -87,7 +87,10 @@ public class User {
     )
     private List<Occupation> occupation;
 
-    // Roles are being eagerly loaded here because they are a fairly small collection of items for this example.
+    /**
+     * Roles are being eagerly loaded here because they are a fairly small collection of items for this
+     * example.
+     */
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinTable(

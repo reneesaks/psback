@@ -10,6 +10,12 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Listens on any authentication events that results in a failure. Such events are sent by Spring Security and
+ * need to be registered in configuration.
+ *
+ * @see com.perfectstrangers.config.SecurityConfig
+ */
 @Component
 public class AuthenticationFailureEventListener {
 
@@ -24,6 +30,12 @@ public class AuthenticationFailureEventListener {
         this.httpServletRequest = httpServletRequest;
     }
 
+    /**
+     * Sends username and IP address to authentication failed method in authentication attempts service on
+     * BadCredentialsEvent created by Spring Security.
+     *
+     * @param authenticationFailureBadCredentialsEvent event
+     */
     @EventListener
     public void handleBadCredentialsEvent(
             AuthenticationFailureBadCredentialsEvent authenticationFailureBadCredentialsEvent) {
@@ -33,6 +45,12 @@ public class AuthenticationFailureEventListener {
 
     }
 
+    /**
+     * Sends username and IP address to authentication failed method in authentication attempts service on
+     * UsernameLockedEvent when BadCredentialsEvent stop firing.
+     *
+     * @param usernameLockedEvent event
+     */
     @EventListener
     public void handleUsernameLockedEvent(UsernameLockedEvent usernameLockedEvent) {
         String username = usernameLockedEvent.getUsername();

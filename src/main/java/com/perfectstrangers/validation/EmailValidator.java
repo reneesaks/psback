@@ -5,6 +5,10 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Validates emails.
+ * @see com.perfectstrangers.validation.ValidEmail
+ */
 public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
     private static final String EMAIL_PATTERN =
@@ -19,8 +23,11 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
         return (validateEmail(username));
     }
 
+    /**
+     * @param email if null it will return true because this needs to be handled with @NotNull annotation in
+     * DTO classes
+     */
     private boolean validateEmail(String email) {
-        // Return true because this is handled by @NotNull annotation in UserDTO
         if (email == null) {
             return true;
         }

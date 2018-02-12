@@ -15,6 +15,12 @@ import java.util.Collections;
 @EnableSwagger2
 public class SwaggerConfig {
 
+    /**
+     * A builder which is intended to be the primary interface into the swagger-springmvc framework. Provides
+     * sensible defaults and convenience methods for configuration.
+     *
+     * @return Docket
+     */
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -24,6 +30,11 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo());
     }
 
+    /**
+     * Sets API info in Swagger UI.
+     *
+     * @return ApiInfo
+     */
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Perfect Strangers API",

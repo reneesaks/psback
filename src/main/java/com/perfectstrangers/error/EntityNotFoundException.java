@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.stream.IntStream;
 import org.springframework.util.StringUtils;
 
+/**
+ * Throwable exception that can be thrown when an entity doesn't exist.
+ */
 public class EntityNotFoundException extends Exception {
 
     public EntityNotFoundException(Class clazz, String... searchParamsMap) {

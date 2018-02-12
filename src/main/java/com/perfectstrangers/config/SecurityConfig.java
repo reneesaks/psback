@@ -21,6 +21,11 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+/**
+ * Security configuration for JWT.
+ *
+ * @see org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -53,10 +58,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
+    /**
+     * .authenticationEventPublisher(authenticationEventPublisher) required for listening on authentication
+     * events
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .authenticationEventPublisher(authenticationEventPublisher) // Allows to publish auth events
+                .authenticationEventPublisher(authenticationEventPublisher)
                 .userDetailsService(userDetailsServiceImpl)
                 .passwordEncoder(new ShaPasswordEncoder(encodingStrength));
     }
@@ -75,6 +84,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    /**
+     * Sets JwtAccessTokenConverter signing key.
+     *
+     * @return converter
+     */
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -82,14 +96,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return converter;
     }
 
+    /**
+     * A TokenStore implementation that just reads data from the tokens themselves. Not really a store since
+     * it never persists anything, and methods like getAccessToken(OAuth2Authentication) always return null.
+     * But nevertheless a useful tool since it translates access tokens to and from authentications. Use this
+     * wherever a TokenStore is needed, but remember to use the same JwtAccessTokenConverter instance (or one
+     * with the same verifier) as was used when the tokens were minted.
+     *
+     * @return JwtTokenStore
+     */
     @Bean
     public TokenStore tokenStore() {
         return new JwtTokenStore(accessTokenConverter());
     }
 
+    /**
+     * This is et to primary to avoid any accidental duplication with another token service instance of the
+     * same name.
+     *
+     * @return DefaultTokenServices
+     */
     @Bean
     @Primary
-    //Making this primary to avoid any accidental duplication with another token service instance of the same name
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());

@@ -11,18 +11,19 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
+/**
+ * @see com.perfectstrangers.event.OnRegistrationCompleteEvent
+ */
 @Component
 @Profile({"production", "deployment"})
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
-    private RegistrationService service;
+    private RegistrationService registrationService;
     private JavaMailSender mailSender;
 
     @Autowired
-    public RegistrationListener(RegistrationService service, JavaMailSender mailSender) {
-        this.service = service;
+    public RegistrationListener(RegistrationService registrationService, JavaMailSender mailSender) {
+        this.registrationService = registrationService;
         this.mailSender = mailSender;
     }
 
@@ -31,10 +32,15 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         this.confirmRegistration(event);
     }
 
+    /**
+     * Sends the user the confirmation link.
+     *
+     * @param event OnRegistrationCompleteEvent holds the info necessary to create the activation link.
+     */
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
         User user = event.getUser();
-        String token = UUID.randomUUID().toString();
-        service.createVerificationToken(user, token);
+        registrationService.createVerificationToken(user);
+        String token = registrationService.getVerificationTokenByUser(user).getToken();
         SimpleMailMessage email = new EmailConstructor()
                 .constructConfirmationEmail(event.getAppUrl(), token, user);
         mailSender.send(email);

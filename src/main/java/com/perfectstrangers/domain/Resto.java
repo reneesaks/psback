@@ -125,9 +125,9 @@ public class Resto {
         this.hotel = hotel;
     }
 
+    /*
     // Get hotel id to return with JSON
     // Ignoring now as it creates a duplicate hotel_id in resto entity when getting hotels
-    /*
     @JsonProperty
     public Long getHotelId() {
         return hotel == null ? null : hotel.getId();

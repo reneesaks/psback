@@ -13,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-// @Data
+/**
+ * This class is used to construct API errors that will be sent across REST.
+ */
 class ApiError {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -92,7 +94,7 @@ class ApiError {
     /**
      * Utility method for adding error of ConstraintViolation. Usually when a @Validated validation fails.
      *
-     * @param cv the ConstraintViolation
+     * @param cv the ConstraintViolation.
      */
     private void addValidationError(ConstraintViolation<?> cv) {
         this.addValidationError(
@@ -176,8 +178,6 @@ class ApiError {
 
     }
 
-    /*@Data
-    @EqualsAndHashCode(callSuper = false)*/
     class ApiValidationError extends ApiSubError {
 
         private String object;

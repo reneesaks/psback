@@ -14,6 +14,11 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+/**
+ * Configure authorization server.
+ *
+ * @see org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter
+ */
 @Configuration
 @EnableAuthorizationServer
 @Profile({"production", "deployment"})
