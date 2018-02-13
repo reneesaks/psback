@@ -1,9 +1,8 @@
 package com.perfectstrangers.repository;
 
+import com.perfectstrangers.domain.PasswordResetToken;
 import com.perfectstrangers.domain.User;
-import com.perfectstrangers.domain.VerificationToken;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,21 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public interface VerificationTokenRepository extends CrudRepository<VerificationToken, Long> {
+public interface PasswordResetTokenRepository extends CrudRepository<PasswordResetToken, Long> {
 
-    List<VerificationToken> findAll();
+    PasswordResetToken findByToken(String token);
 
-    VerificationToken findById(Long id);
+    PasswordResetToken findByUser(User user);
 
-    VerificationToken findByToken(String token);
-
-    VerificationToken findByUser(User user);
-
-    Stream<VerificationToken> findAllByExpiryDateLessThan(Date now);
+    Stream<PasswordResetToken> findAllByExpiryDateLessThan(Date now);
 
     void deleteByExpiryDateLessThan(Date now);
 
     @Modifying
-    @Query("delete from VerificationToken t where t.expiryDate <= ?1")
+    @Query("delete from PasswordResetToken t where t.expiryDate <= ?1")
     void deleteAllExpiredSince(Date now);
 }

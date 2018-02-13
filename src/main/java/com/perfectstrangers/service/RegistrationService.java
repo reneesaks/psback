@@ -16,9 +16,11 @@ public interface RegistrationService {
 
     VerificationToken createNewVerificationToken(User user);
 
-    User getUserByVerificationToken(String verificationToken);
+    String validateVerificationToken(String token);
 
-    VerificationToken getVerificationToken(String VerificationToken);
+    User getUserByVerificationToken(String token);
+
+    VerificationToken getVerificationToken(String token);
 
     VerificationToken getVerificationTokenByUser(User user);
 }

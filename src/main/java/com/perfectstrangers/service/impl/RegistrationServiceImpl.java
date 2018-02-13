@@ -8,6 +8,7 @@ import com.perfectstrangers.repository.RoleRepository;
 import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.repository.VerificationTokenRepository;
 import com.perfectstrangers.service.RegistrationService;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,13 +104,28 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public User getUserByVerificationToken(String verificationToken) {
-        return verificationTokenRepository.findByToken(verificationToken).getUser();
+    public String validateVerificationToken(String token) {
+        VerificationToken verificationToken = this.getVerificationToken(token);
+
+        if (verificationToken == null) {
+            return "Invalid token!";
+        }
+
+        Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            return "Verification link has expired!";
+        }
+        return null;
     }
 
     @Override
-    public VerificationToken getVerificationToken(String VerificationToken) {
-        return verificationTokenRepository.findByToken(VerificationToken);
+    public User getUserByVerificationToken(String token) {
+        return verificationTokenRepository.findByToken(token).getUser();
+    }
+
+    @Override
+    public VerificationToken getVerificationToken(String token) {
+        return verificationTokenRepository.findByToken(token);
     }
 
     @Override

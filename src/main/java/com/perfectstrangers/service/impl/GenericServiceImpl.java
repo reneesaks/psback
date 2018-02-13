@@ -23,7 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
- * Most repositories are accessible with this service.
+ * All repositories are accessible with this service. Includes most common methods that might be needed.
  */
 @Service
 public class GenericServiceImpl implements GenericService {
@@ -86,6 +86,21 @@ public class GenericServiceImpl implements GenericService {
         return user;
     }
 
+    @Override
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateUser(User user) throws EntityNotFoundException {
+        Long id = user.getId();
+        User findUser = userRepository.findById(id);
+        if (findUser == null) {
+            throw new EntityNotFoundException(User.class, "id", id.toString());
+        }
+        userRepository.save(user);
+    }
+
     // ============== OCCUPATIONS ============
     @Override
     public List<Occupation> getAllOccupations() {
@@ -110,6 +125,21 @@ public class GenericServiceImpl implements GenericService {
         return occupation;
     }
 
+    @Override
+    public void saveOccupation(Occupation occupation) {
+        occupationRepository.save(occupation);
+    }
+
+    @Override
+    public void updateOccupation(Occupation occupation) throws EntityNotFoundException {
+        Long id = occupation.getId();
+        Occupation findOccupation = occupationRepository.findById(id);
+        if (findOccupation == null) {
+            throw new EntityNotFoundException(Occupation.class, "id", id.toString());
+        }
+        occupationRepository.save(occupation);
+    }
+
     // ============== DEGREES ============
     @Override
     public List<Degree> getAllDegrees() {
@@ -132,6 +162,21 @@ public class GenericServiceImpl implements GenericService {
             throw new EntityNotFoundException(Degree.class, "id", id.toString());
         }
         return degree;
+    }
+
+    @Override
+    public void saveDegree(Degree degree) {
+        degreeRepository.save(degree);
+    }
+
+    @Override
+    public void updateDegree(Degree degree) throws EntityNotFoundException {
+        Long id = degree.getId();
+        Degree findDegree = degreeRepository.findById(id);
+        if (findDegree == null) {
+            throw new EntityNotFoundException(Degree.class, "id", id.toString());
+        }
+        degreeRepository.save(degree);
     }
 
     // ============== HOTELS ============
@@ -163,6 +208,21 @@ public class GenericServiceImpl implements GenericService {
         return hotel;
     }
 
+    @Override
+    public void saveHotel(Hotel hotel) {
+        hotelRepository.save(hotel);
+    }
+
+    @Override
+    public void updateHotel(Hotel hotel) throws EntityNotFoundException {
+        Long id = hotel.getId();
+        Hotel findHotel = hotelRepository.findById(id);
+        if (findHotel == null) {
+            throw new EntityNotFoundException(Hotel.class, "id", id.toString());
+        }
+        hotelRepository.save(hotel);
+    }
+
     // ============== RESTOS ============
     @Override
     public List<Resto> getAllRestos() {
@@ -192,6 +252,21 @@ public class GenericServiceImpl implements GenericService {
         return resto;
     }
 
+    @Override
+    public void saveResto(Resto resto) {
+        restoRepository.save(resto);
+    }
+
+    @Override
+    public void updateResto(Resto resto) throws EntityNotFoundException {
+        Long id = resto.getId();
+        Resto findResto = restoRepository.findById(id);
+        if (findResto == null) {
+            throw new EntityNotFoundException(Resto.class, "id", id.toString());
+        }
+        restoRepository.save(resto);
+    }
+
     // ============== ADVERTS ============
     @Override
     public List<Advert> getAllAdverts() {
@@ -212,6 +287,21 @@ public class GenericServiceImpl implements GenericService {
         return advert;
     }
 
+    @Override
+    public void saveAdvert(Advert advert) {
+        advertRepository.save(advert);
+    }
+
+    @Override
+    public void updateAdvert(Advert advert) throws EntityNotFoundException {
+        Long id = advert.getId();
+        Advert findAdvert = advertRepository.findById(id);
+        if (findAdvert == null) {
+            throw new EntityNotFoundException(Advert.class, "id", id.toString());
+        }
+        advertRepository.save(advert);
+    }
+
     // ============== RESPONSES ============
     @Override
     public List<Response> getAllResponses() {
@@ -230,5 +320,20 @@ public class GenericServiceImpl implements GenericService {
             throw new EntityNotFoundException(Response.class, "id", id.toString());
         }
         return response;
+    }
+
+    @Override
+    public void saveResponse(Response response) {
+        responseRepository.save(response);
+    }
+
+    @Override
+    public void updateResponse(Response response) throws EntityNotFoundException {
+        Long id = response.getId();
+        Response findResponse = responseRepository.findById(id);
+        if (findResponse == null) {
+            throw new EntityNotFoundException(Response.class, "id", id.toString());
+        }
+        responseRepository.save(response);
     }
 }

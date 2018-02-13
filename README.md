@@ -23,12 +23,14 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 - [Running tests](#running-tests)
 - [Authentication](#authentication)
   - [Basic information](#basic-information)
-    - [1. Generate an access token](#1-generate-an-access-token)
-    - [2. Use the token to access resources through your RESTful API](#2-use-the-token-to-access-resources-through-your-restful-api)
+    - [1. Generate an access token for testing purposes](#1-generate-an-access-token-for-testing-purposes)
+    - [2. Generate an access token for testing purposes](#2-generate-an-access-token-for-production/deployment-purposes)
+    - [3. Generate an access token for production/deployment purposes](#3-use-the-token-to-access-resources-through-your-restful-api)
 - [Testing registration](#testing-registration)
   - [Setting up MailSlurper](#setting-up-mailslurper)
   - [Registration endpoint](#registration-endpoint)
   - [Resend registration confirmation](#resend-registration-confirmation)
+- [Resetting password](#resetting-password)
 - [Using Postman for testing](#using-postman-for-testing)
 - [Integration with Angular](#integration-with-angular)
 - [TODO](#todo)
@@ -152,31 +154,44 @@ Testing endpoints with JWT can only be done in production environment. Authentic
 
 ## Basic information
 
-* client: testjwtclientid
-* secret: XY7kmzoNzl100
+* client_id: testjwtclientid
+* client_secret: XY7kmzoNzl100
 * Standard user username and password: `standard@user.com` and `password`
 * Admin user: `admin@user.com` and `password`
 * Example of resource accessible to all authenticated users:  http://localhost:8080/api/private/hotels
 * Example of resource accessible to only an admin user:  http://localhost:8080/api/private/users
 * Example of resource accesible publicly: http://localhost:8080/api/public/hello
 
-### 1. Generate an access token
+### 1. Generate an access token for testing purposes
 
 Use the following generic command to generate an access token for the non-admin user `user`:
 `$ curl testjwtclientid:XY7kmzoNzl100@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=password`
 
 You'll receive a response similar to below
 
-`
+```
 {
 	"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsidGVzdGp3dHJlc291cmNlaWQiXSwidXNlcl9uYW1lIjoiYWRtaW4uYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNDk0NDU0MjgyLCJhdXRob3JpdGllcyI6WyJTVEFOREFSRF9VU0VSIiwiQURNSU5fVVNFUiJdLCJqdGkiOiIwYmQ4ZTQ1MC03ZjVjLTQ5ZjMtOTFmMC01Nzc1YjdiY2MwMGYiLCJjbGllbnRfaWQiOiJ0ZXN0and0Y2xpZW50aWQifQ.rvEAa4dIz8hT8uxzfjkEJKG982Ree5PdUW17KtFyeec",
 	"token_type": "bearer",
 	"expires_in": 43199,
 	"scope": "read write",
 	"jti": "0bd8e450-7f5c-49f3-91f0-5775b7bcc00f"
-}`
+}
+```
 
-### 2. Use the token to access resources through your RESTful API
+### 2. Generate an access token for production/deployment purposes
+
+In production/deployment environment, the `client_id` and the `client_secret` will be sent over authorization header in base64 encoded string over HTTPS protocol. Base encoding is done on `client_id:client_secret` string including the semicolon in the form of `Authorization: Basic <base64-encoded-string>`. Curl request will look like this:
+
+```
+curl -X POST \
+   http://localhost:8080/oauth/token \
+   -H 'authorization: Basic dGVzdGp3dGNsaWVudGlkOlhZN2ttem9OemwxMDA=' \
+   -H 'content-type: application/x-www-form-urlencoded' \
+   -d 'grant_type=password&username=admin@user.com&password=password'
+```
+
+### 3. Use the token to access resources through your RESTful API
 
 * Access content available to all authenticated users
 
@@ -246,6 +261,34 @@ curl -X POST \
 	"email": "new@user.com"
 }'
 ```
+
+# Resetting password
+
+Password reset can be requested through public endpoints. 
+
+1. First make a request for a password reset, which will send an email with a password reset link. You can use [MailSlurper](#setting-up-mailslurper) for testing.
+```
+curl -X POST \
+  http://localhost:8080/api/public/password-reset/request-password-reset \
+  -H 'content-type: application/json' \
+  -d '{
+	"email": "standard@user.com"
+}'
+```
+
+2. The link contains parameters `id` and `token`, which will be used by front end to make a password change request. The following request has to be made:
+```
+curl -X POST \
+  http://localhost:8080/api/public/password-reset/change-password \
+  -H 'content-type: application/json' \
+  -d '{
+	"id": 1,
+	"password": "123ASdsdagf21341!",
+	"token": "e4305b0d-a3db-4976-9942-a8417476e7ac"
+}'
+```
+
+Activation link(token) stays active for 15 minutes.
 
 # Using Postman for testing
 

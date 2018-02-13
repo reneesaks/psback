@@ -7,7 +7,6 @@ import com.perfectstrangers.util.EmailConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +19,14 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     private RegistrationService registrationService;
     private JavaMailSender mailSender;
+    private EmailConstructor emailConstructor;
 
     @Autowired
-    public RegistrationListener(RegistrationService registrationService, JavaMailSender mailSender) {
+    public RegistrationListener(RegistrationService registrationService, JavaMailSender mailSender,
+            EmailConstructor emailConstructor) {
         this.registrationService = registrationService;
         this.mailSender = mailSender;
+        this.emailConstructor = emailConstructor;
     }
 
     @Override
@@ -41,8 +43,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         User user = event.getUser();
         registrationService.createVerificationToken(user);
         String token = registrationService.getVerificationTokenByUser(user).getToken();
-        SimpleMailMessage email = new EmailConstructor()
-                .constructConfirmationEmail(event.getAppUrl(), token, user);
-        mailSender.send(email);
+        mailSender.send(emailConstructor.constructConfirmationEmail(token, user));
     }
 }

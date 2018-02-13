@@ -24,6 +24,10 @@ public interface GenericService {
 
     User getUserById(Long id) throws EntityNotFoundException;
 
+    void saveUser(User user);
+
+    void updateUser(User user) throws EntityNotFoundException;
+
     // ============== OCCUPATIONS ============
     List<Occupation> getAllOccupations();
 
@@ -31,12 +35,20 @@ public interface GenericService {
 
     Occupation getOccupationById(Long id) throws EntityNotFoundException;
 
+    void saveOccupation(Occupation occupation);
+
+    void updateOccupation(Occupation occupation) throws EntityNotFoundException;
+
     // ============== DEGREES ============
     List<Degree> getAllDegrees();
 
     Degree getDegreeByName(String name) throws EntityNotFoundException;
 
     Degree getDegreeById(Long id) throws EntityNotFoundException;
+
+    void saveDegree(Degree degree);
+
+    void updateDegree(Degree degree) throws EntityNotFoundException;
 
     // ============== HOTELS ============
     List<Hotel> getAllHotels();
@@ -47,6 +59,10 @@ public interface GenericService {
 
     Hotel getHotelById(Long id) throws EntityNotFoundException;
 
+    void saveHotel(Hotel hotel);
+
+    void updateHotel(Hotel hotel) throws EntityNotFoundException;
+
     // ============== RESTOS ============
     List<Resto> getAllRestos();
 
@@ -56,6 +72,10 @@ public interface GenericService {
 
     Resto getRestoById(Long id) throws EntityNotFoundException;
 
+    void saveResto(Resto resto);
+
+    void updateResto(Resto resto) throws EntityNotFoundException;
+
     // ============== ADVERTS ============
     List<Advert> getAllAdverts();
 
@@ -63,10 +83,18 @@ public interface GenericService {
 
     Advert getAdvertById(Long id) throws EntityNotFoundException;
 
+    void saveAdvert(Advert advert);
+
+    void updateAdvert(Advert advert) throws EntityNotFoundException;
+
     // ============== RESPONSES ============
     List<Response> getAllResponses();
 
     Page<Response> getAllResponsesByPage(Pageable pageable);
 
     Response getResponseById(Long id) throws EntityNotFoundException;
+
+    void saveResponse(Response response);
+
+    void updateResponse(Response response) throws EntityNotFoundException;
 }
