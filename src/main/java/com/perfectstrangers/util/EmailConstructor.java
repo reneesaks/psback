@@ -40,6 +40,7 @@ public class EmailConstructor {
      *
      * @param token Token that will be put in the request parameter.
      * @param user User who will receive the email.
+     * @return SimpleMailMessage.
      */
     public SimpleMailMessage constructConfirmationEmail(String token, User user) {
         String confirmationUrl = this.hostServerAddress
@@ -54,6 +55,7 @@ public class EmailConstructor {
      *
      * @param newToken Newly generated token that will be put in the request parameter.
      * @param user User who will receive the email.
+     * @return SimpleMailMessage.
      */
     public SimpleMailMessage constructResendConfirmationEmail(String newToken, User user) {
         String confirmationUrl = this.hostServerAddress
@@ -63,6 +65,12 @@ public class EmailConstructor {
         return constructEmail("Resend Registration Confirmation", message + confirmationUrl, user);
     }
 
+    /**
+     *
+     * @param token Token that will be put in the request parameter.
+     * @param user User who will receive the email.
+     * @return SimpleMailMessage.
+     */
     public SimpleMailMessage constructPasswordResetEmail(String token, User user) {
         String resetUrl = this.clientPasswordResetUrl + "?id=" + user.getId() + "&token=" + token;
         String message = "You have requested a password reset. If this was not you, please ignore "

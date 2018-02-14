@@ -46,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @SuppressWarnings("SpringJavaAutowiringInspection")
-    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl,
+    public SecurityConfig(
+            UserDetailsServiceImpl userDetailsServiceImpl,
             AuthenticationEventPublisher authenticationEventPublisher) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.authenticationEventPublisher = authenticationEventPublisher;
@@ -59,8 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * .authenticationEventPublisher(authenticationEventPublisher) required for listening on authentication
-     * events
+     * ".authenticationEventPublisher(authenticationEventPublisher)" is required for listening on
+     * authentication events.
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -73,15 +74,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .antMatcher("/**")
+                .headers().frameOptions().sameOrigin()
                 .and()
-                .httpBasic()
-                .realmName(securityRealm)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .csrf()
-                .disable();
-
+                .authorizeRequests()
+                .antMatchers(
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/**",
+                        "/webjars/**").permitAll()
+                .antMatchers(
+                        "/v2/api-docs",
+                        "/swagger-ui.html").hasAuthority("DEVELOPER")
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic().realmName(securityRealm).and().csrf().disable();
     }
 
     /**

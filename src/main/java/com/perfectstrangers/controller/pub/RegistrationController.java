@@ -8,7 +8,6 @@ import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.error.MailServiceNoConnectionException;
 import com.perfectstrangers.error.UsernameExistsException;
 import com.perfectstrangers.error.UsernameIsActivatedException;
-import com.perfectstrangers.event.OnRegistrationCompleteEvent;
 import com.perfectstrangers.service.GenericService;
 import com.perfectstrangers.service.RegistrationService;
 import com.perfectstrangers.util.EmailConstructor;
@@ -92,7 +91,16 @@ public class RegistrationController {
         user.setPassword(userDTO.getPassword());
         user.setEmail(userDTO.getEmail());
         User registeredUser = registrationService.registerNewUserAccount(user);
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser));
+        registrationService.createVerificationToken(registeredUser);
+        String token = registrationService.getVerificationTokenByUser(registeredUser).getToken();
+
+        try {
+            mailSender.send(emailConstructor.constructConfirmationEmail(token, registeredUser));
+        } catch (MailSendException e) {
+            LOGGER.error("Failed email to: " + user.getEmail() + ". " + e.getFailedMessages());
+            throw new MailServiceNoConnectionException();
+        }
+
         LOGGER.info("User with email " + user.getEmail() + " is registered. Waiting for activation.");
         return user;
     }
@@ -135,6 +143,7 @@ public class RegistrationController {
      * @return Returns username object.
      * @throws EntityNotFoundException when the username doesn't exist.
      * @throws UsernameIsActivatedException when the username is already activated.
+     * @throws MailServiceNoConnectionException when mail service fails.
      */
     @PostMapping(value = "/resend-registration-confirmation")
     @ResponseStatus(HttpStatus.OK)

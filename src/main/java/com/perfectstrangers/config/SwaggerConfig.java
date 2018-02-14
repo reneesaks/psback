@@ -1,19 +1,37 @@
 package com.perfectstrangers.config;
 
+import static com.google.common.collect.Lists.newArrayList;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.OAuth;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.util.Collections;
 
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+
+    @Value("${security.jwt.client-id}")
+    private String clientId;
+
+    @Value("${security.jwt.client-secret}")
+    private String clientSecret;
 
     /**
      * A builder which is intended to be the primary interface into the swagger-springmvc framework. Provides
@@ -22,12 +40,54 @@ public class SwaggerConfig {
      * @return Docket
      */
     @Bean
-    public Docket api() {
+    public Docket pub() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("public")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.perfectstrangers.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.perfectstrangers.controller.pub"))
                 .build()
                 .apiInfo(apiInfo());
+    }
+
+    @Bean
+    public Docket priv() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("private")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.perfectstrangers.controller.priv"))
+                .build()
+                .securityContexts(Collections.singletonList(securityContext()))
+                .securitySchemes(Arrays.asList(securitySchema()))
+                .apiInfo(apiInfo());
+    }
+
+    @Bean
+    SecurityConfiguration security() {
+        return SecurityConfigurationBuilder.builder()
+                .clientId(this.clientId)
+                .clientSecret(this.clientSecret)
+                .build();
+    }
+
+
+    private OAuth securitySchema() {
+        List<AuthorizationScope> authorizationScopeList = newArrayList();
+        List<GrantType> grantTypes = newArrayList();
+        GrantType passwordCredentialsGrant = new ResourceOwnerPasswordCredentialsGrant("/oauth/token");
+        grantTypes.add(passwordCredentialsGrant);
+        return new OAuth("oauth2", authorizationScopeList, grantTypes);
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder().securityReferences(defaultAuth()).build();
+    }
+
+    private List<SecurityReference> defaultAuth() {
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[3];
+        authorizationScopes[0] = new AuthorizationScope("read", "read all");
+        authorizationScopes[1] = new AuthorizationScope("trust", "trust all");
+        authorizationScopes[2] = new AuthorizationScope("write", "write all");
+        return Collections.singletonList(new SecurityReference("oauth2", authorizationScopes));
     }
 
     /**

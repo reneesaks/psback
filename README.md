@@ -108,12 +108,15 @@ Use `mvn clean package -P deployment -DskipTests` to create a deployable `.war` 
 
 # API Documentation (Swagger)
 
-* To see API documentation with Swagger UI visit `<your-base-bath>/swagger-ui.html`. Use username `dev` and password `password`. 
-* Private endpoints `api/private/*` can not be tested using Swagger UI in production environment as they require a valid token.
+* To see API documentation with Swagger UI visit `<your-base-bath>/swagger-ui.html`. Use username `developer@user.com` and password `password`. 
+* On the upper left corner you can select a spec. Endpoints are divided into two categories - public and private.
+* Public endpoints are accessible to everyone.
+* Private endpoints are accessible only to registered users.
+* Authorization can be done by clicking on green `Authorize` button in private spec. Upon successful login your access token will be included in the requests you make.
 
 # Java Documentation
 
-To create Java documentation with Javadoc run the following maven command `mvn javadoc:javadoc`. Documentation will be created in `/target/site/apidocs/index.html`.
+Documentation is available at the project root(live version). Use the same credentials as for Swagger UI login. To create Java documentation with Javadoc run the following maven command `mvn javadoc:javadoc`. Documentation will be created in `/target/site/apidocs/index.html`.
 
 # Accessing H2 database
 
