@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Used to validate new users.
  */
-public class UserDTO {
+public class NewUserDTO {
 
     @NotNull
     @ValidEmail

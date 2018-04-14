@@ -3,7 +3,6 @@ package com.perfectstrangers.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.perfectstrangers.domain.enums.Gender;
-import java.time.Instant;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -63,13 +63,13 @@ public class User {
     @Column(name = "age")
     private String age;
 
-    @Column(name = "reg_date", columnDefinition = "DATETIME")
-    private Instant regDate;
+    @Column(name = "reg_date")
+    private String regDate;
 
     @Column(name = "lastVisit")
     private String lastVisit;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinTable(
             name = "user_degree",
@@ -78,7 +78,7 @@ public class User {
     )
     private List<Degree> degree;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinTable(
             name = "user_occupation",
@@ -99,22 +99,24 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonIgnore
     @JoinTable(
             name = "user_advert",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "advert_id")
     )
+    @Valid
     private List<Advert> adverts;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonIgnore
     @JoinTable(
             name = "user_response",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "response_id")
     )
+    @Valid
     private List<Response> responses;
 
     public Long getId() {
@@ -191,11 +193,11 @@ public class User {
         this.age = age;
     }
 
-    public Instant getRegDate() {
+    public String getRegDate() {
         return regDate;
     }
 
-    public void setRegDate(Instant regDate) {
+    public void setRegDate(String regDate) {
         this.regDate = regDate;
     }
 

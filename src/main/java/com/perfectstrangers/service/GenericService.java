@@ -28,6 +28,8 @@ public interface GenericService {
 
     void updateUser(User user) throws EntityNotFoundException;
 
+    void deleteUser(User user) throws EntityNotFoundException;
+
     // ============== OCCUPATIONS ============
     List<Occupation> getAllOccupations();
 
@@ -39,6 +41,8 @@ public interface GenericService {
 
     void updateOccupation(Occupation occupation) throws EntityNotFoundException;
 
+    void deleteOccupation(Occupation occupation) throws EntityNotFoundException;
+
     // ============== DEGREES ============
     List<Degree> getAllDegrees();
 
@@ -49,6 +53,8 @@ public interface GenericService {
     void saveDegree(Degree degree);
 
     void updateDegree(Degree degree) throws EntityNotFoundException;
+
+    void deleteDegree(Degree degree) throws EntityNotFoundException;
 
     // ============== HOTELS ============
     List<Hotel> getAllHotels();
@@ -63,6 +69,8 @@ public interface GenericService {
 
     void updateHotel(Hotel hotel) throws EntityNotFoundException;
 
+    void deleteHotel(Hotel hotel) throws EntityNotFoundException;
+
     // ============== RESTOS ============
     List<Resto> getAllRestos();
 
@@ -76,6 +84,8 @@ public interface GenericService {
 
     void updateResto(Resto resto) throws EntityNotFoundException;
 
+    void deleteResto(Resto resto) throws EntityNotFoundException;
+
     // ============== ADVERTS ============
     List<Advert> getAllAdverts();
 
@@ -87,6 +97,8 @@ public interface GenericService {
 
     void updateAdvert(Advert advert) throws EntityNotFoundException;
 
+    void deleteAdvert(Advert advert) throws EntityNotFoundException;
+
     // ============== RESPONSES ============
     List<Response> getAllResponses();
 
@@ -97,4 +109,6 @@ public interface GenericService {
     void saveResponse(Response response);
 
     void updateResponse(Response response) throws EntityNotFoundException;
+
+    void deleteResponse(Response response) throws EntityNotFoundException;
 }

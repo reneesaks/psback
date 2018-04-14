@@ -2,7 +2,6 @@ package com.perfectstrangers.domain;
 
 import com.perfectstrangers.domain.enums.AdvertStatus;
 import com.perfectstrangers.domain.enums.MealType;
-import java.time.Instant;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -31,8 +31,8 @@ public class Advert {
     @Column(name = "advert_status")
     private AdvertStatus advertStatus;
 
-    @Column(name = "created_date", columnDefinition = "DATETIME")
-    private Instant createdDate;
+    @Column(name = "created_date")
+    private String createdDate;
 
     @Lob
     @Column(name = "advert_text")
@@ -42,16 +42,16 @@ public class Advert {
     @Column(name = "meal_type")
     private MealType mealType;
 
-    @Column(name = "preferred_start", columnDefinition = "DATETIME")
-    private Instant preferredStart;
+    @Column(name = "preferred_start")
+    private String preferredStart;
 
-    @Column(name = "preferred_end", columnDefinition = "DATETIME")
-    private Instant preferredEnd;
+    @Column(name = "preferred_end")
+    private String preferredEnd;
 
-    @Column(name = "accepted_time", columnDefinition = "DATETIME")
-    private Instant acceptedTime;
+    @Column(name = "accepted_time")
+    private String acceptedTime;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "advert_resto",
             joinColumns = @JoinColumn(name = "advert_id"),
@@ -59,15 +59,15 @@ public class Advert {
     )
     private List<Resto> restos;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
-            name = "advert_hotels",
+            name = "advert_hotel",
             joinColumns = @JoinColumn(name = "advert_id"),
             inverseJoinColumns = @JoinColumn(name = "hotel_id")
     )
     private List<Hotel> hotels;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "advert_response",
             joinColumns = @JoinColumn(name = "advert_id"),
@@ -94,11 +94,11 @@ public class Advert {
         this.advertStatus = advertStatus;
     }
 
-    public Instant getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Instant createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -118,27 +118,27 @@ public class Advert {
         this.mealType = mealType;
     }
 
-    public Instant getPreferredStart() {
+    public String getPreferredStart() {
         return preferredStart;
     }
 
-    public void setPreferredStart(Instant preferredStart) {
+    public void setPreferredStart(String preferredStart) {
         this.preferredStart = preferredStart;
     }
 
-    public Instant getPreferredEnd() {
+    public String getPreferredEnd() {
         return preferredEnd;
     }
 
-    public void setPreferredEnd(Instant preferredEnd) {
+    public void setPreferredEnd(String preferredEnd) {
         this.preferredEnd = preferredEnd;
     }
 
-    public Instant getAcceptedTime() {
+    public String getAcceptedTime() {
         return acceptedTime;
     }
 
-    public void setAcceptedTime(Instant acceptedTime) {
+    public void setAcceptedTime(String acceptedTime) {
         this.acceptedTime = acceptedTime;
     }
 

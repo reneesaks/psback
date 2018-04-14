@@ -1,7 +1,6 @@
 package com.perfectstrangers.domain;
 
 import com.perfectstrangers.domain.enums.ResponseStatus;
-import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,7 +25,7 @@ public class Response {
     private String responseText;
 
     @Column(name = "proposed_time", columnDefinition = "DATETIME")
-    private Instant proposedTime;
+    private String proposedTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "response_status")
@@ -48,11 +47,11 @@ public class Response {
         this.responseText = responseText;
     }
 
-    public Instant getProposedTime() {
+    public String getProposedTime() {
         return proposedTime;
     }
 
-    public void setProposedTime(Instant proposedTime) {
+    public void setProposedTime(String proposedTime) {
         this.proposedTime = proposedTime;
     }
 

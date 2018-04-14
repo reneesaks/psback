@@ -78,7 +78,9 @@ INSERT INTO user_response (user_id, response_id) VALUES (2, 3);
 
 -- Populate advert_resto table
 INSERT INTO advert_resto (advert_id, resto_id) VALUES (1, 2);
+INSERT INTO advert_resto (advert_id, resto_id) VALUES (2, 2);
 
--- Populate advert_hotels table
-INSERT INTO advert_hotels (advert_id, hotel_id) VALUES (1, 2);
+-- Populate advert_hotel table
+INSERT INTO advert_hotel (advert_id, hotel_id) VALUES (1, 2);
+INSERT INTO advert_hotel (advert_id, hotel_id) VALUES (2, 2);
 

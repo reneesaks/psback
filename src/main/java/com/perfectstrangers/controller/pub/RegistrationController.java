@@ -2,7 +2,7 @@ package com.perfectstrangers.controller.pub;
 
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.VerificationToken;
-import com.perfectstrangers.dto.UserDTO;
+import com.perfectstrangers.dto.NewUserDTO;
 import com.perfectstrangers.dto.UsernameDTO;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.error.MailServiceNoConnectionException;
@@ -12,6 +12,7 @@ import com.perfectstrangers.service.GenericService;
 import com.perfectstrangers.service.RegistrationService;
 import com.perfectstrangers.util.EmailConstructor;
 import java.io.IOException;
+import java.time.Instant;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -76,7 +77,7 @@ public class RegistrationController {
     /**
      * Creates new user. If any exception is thrown it will roll back any database changes.
      *
-     * @param userDTO User object for validation.
+     * @param newUserDTO User object for validation.
      * @return the newly created user.
      * @throws MailServiceNoConnectionException when email service is not available.
      * @throws UsernameExistsException when the username already exists.
@@ -84,12 +85,12 @@ public class RegistrationController {
     @PostMapping(value = "/new-user")
     @ResponseStatus(HttpStatus.OK)
     @Transactional(rollbackFor = Exception.class)
-    public User registerNewUser(@RequestBody @Valid UserDTO userDTO)
+    public User registerNewUser(@RequestBody @Valid NewUserDTO newUserDTO)
             throws MailServiceNoConnectionException, UsernameExistsException {
 
         User user = new User();
-        user.setPassword(userDTO.getPassword());
-        user.setEmail(userDTO.getEmail());
+        user.setPassword(newUserDTO.getPassword());
+        user.setEmail(newUserDTO.getEmail());
         User registeredUser = registrationService.registerNewUserAccount(user);
         registrationService.createVerificationToken(registeredUser);
         String token = registrationService.getVerificationTokenByUser(registeredUser).getToken();
@@ -102,6 +103,8 @@ public class RegistrationController {
         }
 
         LOGGER.info("User with email " + user.getEmail() + " is registered. Waiting for activation.");
+        // TODO: ISO standard must be used
+        user.setRegDate(Instant.now().toString());
         return user;
     }
 

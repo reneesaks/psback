@@ -101,6 +101,16 @@ public class GenericServiceImpl implements GenericService {
         userRepository.save(user);
     }
 
+    @Override
+    public void deleteUser(User user) throws EntityNotFoundException {
+        Long id = user.getId();
+        User findUser = userRepository.findById(id);
+        if (findUser == null) {
+            throw new EntityNotFoundException(User.class, "id", id.toString());
+        }
+        userRepository.delete(user);
+    }
+
     // ============== OCCUPATIONS ============
     @Override
     public List<Occupation> getAllOccupations() {
@@ -140,6 +150,16 @@ public class GenericServiceImpl implements GenericService {
         occupationRepository.save(occupation);
     }
 
+    @Override
+    public void deleteOccupation(Occupation occupation) throws EntityNotFoundException {
+        Long id = occupation.getId();
+        Occupation findOccupation = occupationRepository.findById(id);
+        if (findOccupation == null) {
+            throw new EntityNotFoundException(Occupation.class, "id", id.toString());
+        }
+        occupationRepository.delete(occupation);
+    }
+
     // ============== DEGREES ============
     @Override
     public List<Degree> getAllDegrees() {
@@ -177,6 +197,16 @@ public class GenericServiceImpl implements GenericService {
             throw new EntityNotFoundException(Degree.class, "id", id.toString());
         }
         degreeRepository.save(degree);
+    }
+
+    @Override
+    public void deleteDegree(Degree degree) throws EntityNotFoundException {
+        Long id = degree.getId();
+        Degree findDegree = degreeRepository.findById(id);
+        if (findDegree == null) {
+            throw new EntityNotFoundException(Degree.class, "id", id.toString());
+        }
+        degreeRepository.delete(degree);
     }
 
     // ============== HOTELS ============
@@ -223,6 +253,16 @@ public class GenericServiceImpl implements GenericService {
         hotelRepository.save(hotel);
     }
 
+    @Override
+    public void deleteHotel(Hotel hotel) throws EntityNotFoundException {
+        Long id = hotel.getId();
+        Hotel findHotel = hotelRepository.findById(id);
+        if (findHotel == null) {
+            throw new EntityNotFoundException(Hotel.class, "id", id.toString());
+        }
+        hotelRepository.delete(hotel);
+    }
+
     // ============== RESTOS ============
     @Override
     public List<Resto> getAllRestos() {
@@ -267,6 +307,16 @@ public class GenericServiceImpl implements GenericService {
         restoRepository.save(resto);
     }
 
+    @Override
+    public void deleteResto(Resto resto) throws EntityNotFoundException {
+        Long id = resto.getId();
+        Resto findResto = restoRepository.findById(id);
+        if (findResto == null) {
+            throw new EntityNotFoundException(Resto.class, "id", id.toString());
+        }
+        restoRepository.delete(resto);
+    }
+
     // ============== ADVERTS ============
     @Override
     public List<Advert> getAllAdverts() {
@@ -302,6 +352,16 @@ public class GenericServiceImpl implements GenericService {
         advertRepository.save(advert);
     }
 
+    @Override
+    public void deleteAdvert(Advert advert) throws EntityNotFoundException {
+        Long id = advert.getId();
+        Advert findAdvert = advertRepository.findById(id);
+        if (findAdvert == null) {
+            throw new EntityNotFoundException(Advert.class, "id", id.toString());
+        }
+        advertRepository.delete(advert);
+    }
+
     // ============== RESPONSES ============
     @Override
     public List<Response> getAllResponses() {
@@ -335,5 +395,15 @@ public class GenericServiceImpl implements GenericService {
             throw new EntityNotFoundException(Response.class, "id", id.toString());
         }
         responseRepository.save(response);
+    }
+
+    @Override
+    public void deleteResponse(Response response) throws EntityNotFoundException {
+        Long id = response.getId();
+        Response findResponse = responseRepository.findById(id);
+        if (findResponse == null) {
+            throw new EntityNotFoundException(Response.class, "id", id.toString());
+        }
+        responseRepository.delete(response);
     }
 }
