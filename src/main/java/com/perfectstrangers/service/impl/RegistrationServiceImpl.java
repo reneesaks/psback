@@ -8,6 +8,7 @@ import com.perfectstrangers.repository.RoleRepository;
 import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.repository.VerificationTokenRepository;
 import com.perfectstrangers.service.RegistrationService;
+import com.perfectstrangers.util.PasswordHasher;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -63,7 +64,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         User user = new User();
         List<Role> role = roleRepository.findByRoleName("STANDARD_USER");
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
+        // Hash password here because .save will trigger also setPassword and double hash will occur
+        String password = new PasswordHasher().hashPasswordWithSha256(userDTO.getPassword());
+        user.setPassword(password);
         user.setRoles(role);
         return userRepository.save(user);
     }

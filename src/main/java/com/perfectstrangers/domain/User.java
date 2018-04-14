@@ -3,7 +3,6 @@ package com.perfectstrangers.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.perfectstrangers.domain.enums.Gender;
-import com.perfectstrangers.util.PasswordHasher;
 import java.time.Instant;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -163,14 +162,9 @@ public class User {
         return password;
     }
 
-    /**
-     * Password is being encrypted upon setting password.
-     *
-     * @param password password in raw form
-     */
     @JsonProperty
     public void setPassword(String password) {
-        this.password = new PasswordHasher().hashPasswordWithSha256(password);
+        this.password = password;
     }
 
     public boolean isActivated() {
