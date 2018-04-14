@@ -1,65 +1,33 @@
-package com.perfectstrangers.domain;
+package com.perfectstrangers.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.perfectstrangers.domain.Resto;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "hotel")
-public class Hotel {
+public class HotelDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
-    @Column(name = "name")
+    @NotNull
     private String name;
 
-    @Column(name = "webpage")
+    @NotNull
     private String webpage;
 
-    @Column(name = "country")
+    @NotNull
     private String country;
 
-    @Column(name = "state")
+    @NotNull
     private String state;
 
-    @Column(name = "city")
+    @NotNull
     private String city;
 
-    @Column(name = "address")
+    @NotNull
     private String address;
 
-    @Column(name = "zipCode")
+    @NotNull
     private String zipCode;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "hotel", orphanRemoval = true)
-    @JsonManagedReference
     private List<Resto> restos;
-
-    public Hotel() {
-    }
-
-    public Hotel(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

@@ -6,6 +6,7 @@ import com.perfectstrangers.dto.PasswordChangeDTO;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.service.GenericService;
 import com.perfectstrangers.util.PasswordHasher;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,11 @@ public class UserController {
     /**
      * Gets all users. Has to be an admin.
      *
-     * @return all users as list.
+     * @return user list.
      */
     @GetMapping()
     @PreAuthorize("hasAuthority('ADMIN_USER')")
+    @ApiOperation(value = "getUsers ADMIN_ONLY")
     public List<User> getUsers() {
         return genericService.getAllUsers();
     }

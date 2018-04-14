@@ -36,7 +36,7 @@ public class AdvertController {
     /**
      * Get all adverts as as a list.
      *
-     * @return Returns every advert in database.
+     * @return advert list.
      */
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -45,7 +45,7 @@ public class AdvertController {
     }
 
     /**
-     * Get one Advert by id.
+     * Get one advert by id.
      *
      * @param id id of an existing advert.
      * @return advert object.
@@ -113,7 +113,7 @@ public class AdvertController {
     }
 
     /**
-     * Deletes an existing advert.
+     * Delete an existing advert.
      *
      * @param id id of an existing advert.
      * @throws EntityNotFoundException when advert with given id is not found.
