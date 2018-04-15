@@ -1,6 +1,7 @@
 package com.perfectstrangers.controller.priv;
 
 import com.perfectstrangers.domain.Advert;
+import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.enums.AdvertStatus;
 import com.perfectstrangers.dto.AdvertDTO;
 import com.perfectstrangers.error.EntityNotFoundException;
@@ -10,6 +11,10 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,10 +69,12 @@ public class AdvertController {
      */
     @PostMapping(value = "new")
     @ResponseStatus(HttpStatus.OK)
-    public void newAdvert(@RequestBody @Valid AdvertDTO advertDTO) {
+    public void newAdvert(@RequestBody @Valid AdvertDTO advertDTO) throws EntityNotFoundException {
 
         Advert advert = new Advert();
         String currentTime = Instant.now().toString();
+        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        User user = genericService.getUserByEmail(email);
 
         advert.setAdvertStatus(AdvertStatus.NOT_ACCEPTED);
         advert.setCreatedDate(currentTime);
@@ -77,6 +84,7 @@ public class AdvertController {
         advert.setPreferredEnd(advertDTO.getPreferredEnd());
         advert.setRestos(advertDTO.getRestos());
         advert.setHotels(advertDTO.getHotels());
+        advert.setUser(user);
 
         this.genericService.saveAdvert(advert);
     }
@@ -120,8 +128,19 @@ public class AdvertController {
      */
     @DeleteMapping(value = "delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteAdvert(@PathVariable("id") Long id) throws EntityNotFoundException {
+    public void deleteAdvert(@PathVariable("id") Long id)
+            throws EntityNotFoundException, BadCredentialsException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getPrincipal().toString();
+        Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
+        User user = genericService.getUserByEmail(email);
         Advert advert = genericService.getAdvertById(id);
-        genericService.deleteAdvert(advert);
+
+        if (advert.getUser().getEmail().equals(email) || isAdmin) {
+            genericService.deleteAdvert(advert);
+        } else {
+            throw new BadCredentialsException("Only advert owner or admin can delete this advert");
+        }
     }
 }

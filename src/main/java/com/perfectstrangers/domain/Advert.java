@@ -1,5 +1,6 @@
 package com.perfectstrangers.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.perfectstrangers.domain.enums.AdvertStatus;
 import com.perfectstrangers.domain.enums.MealType;
 import java.util.List;
@@ -15,7 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -65,15 +66,25 @@ public class Advert {
             joinColumns = @JoinColumn(name = "advert_id"),
             inverseJoinColumns = @JoinColumn(name = "hotel_id")
     )
+    @JsonIgnoreProperties({ "restos" })
     private List<Hotel> hotels;
 
-    @OneToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "advert_response",
             joinColumns = @JoinColumn(name = "advert_id"),
             inverseJoinColumns = @JoinColumn(name = "response_id")
     )
     private List<Response> responses;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "advert_user",
+            joinColumns = @JoinColumn(name = "advert_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnoreProperties({ "firstName", "lastName", "email", "activated", "regDate", "lastVisit" })
+    private User user;
 
     public Advert() {
     }
@@ -164,5 +175,13 @@ public class Advert {
 
     public void setResponses(List<Response> responses) {
         this.responses = responses;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

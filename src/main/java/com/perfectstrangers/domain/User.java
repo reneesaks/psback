@@ -102,16 +102,6 @@ public class User {
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JsonIgnore
     @JoinTable(
-            name = "user_advert",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "advert_id")
-    )
-    @Valid
-    private List<Advert> adverts;
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JsonIgnore
-    @JoinTable(
             name = "user_response",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "response_id")
@@ -231,14 +221,6 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }
-
-    public List<Advert> getAdverts() {
-        return adverts;
-    }
-
-    public void setAdverts(List<Advert> adverts) {
-        this.adverts = adverts;
     }
 
     public List<Response> getResponses() {
