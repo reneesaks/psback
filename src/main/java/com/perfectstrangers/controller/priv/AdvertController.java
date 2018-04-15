@@ -103,21 +103,27 @@ public class AdvertController {
             @PathVariable("id") Long id
     ) throws EntityNotFoundException {
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getPrincipal().toString();
+        Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
+        User user = genericService.getUserByEmail(email);
         Advert advert = genericService.getAdvertById(id);
 
-        // Set advert status to new one if it is provided
-        if (advertDTO.getAdvertStatus() != null) {
-            advert.setAdvertStatus(advertDTO.getAdvertStatus());
+        if (advert.getUser().getEmail().equals(email) || isAdmin) {
+            // Set advert status to new one if it is provided
+            if (advertDTO.getAdvertStatus() != null) {
+                advert.setAdvertStatus(advertDTO.getAdvertStatus());
+            }
+            advert.setAdvertText(advertDTO.getAdvertText());
+            advert.setMealType(advertDTO.getMealType());
+            advert.setPreferredStart(advertDTO.getPreferredStart());
+            advert.setPreferredEnd(advertDTO.getPreferredEnd());
+            advert.setRestos(advertDTO.getRestos());
+            advert.setHotels(advertDTO.getHotels());
+            this.genericService.saveAdvert(advert);
+        } else {
+            throw new BadCredentialsException("Only advert owner or admin can delete this advert");
         }
-
-        advert.setAdvertText(advertDTO.getAdvertText());
-        advert.setMealType(advertDTO.getMealType());
-        advert.setPreferredStart(advertDTO.getPreferredStart());
-        advert.setPreferredEnd(advertDTO.getPreferredEnd());
-        advert.setRestos(advertDTO.getRestos());
-        advert.setHotels(advertDTO.getHotels());
-
-        this.genericService.saveAdvert(advert);
     }
 
     /**

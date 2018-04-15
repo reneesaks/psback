@@ -42,7 +42,7 @@ public class Hotel {
     @Column(name = "zipCode")
     private String zipCode;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "hotel", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JsonManagedReference
     private List<Resto> restos;
 
