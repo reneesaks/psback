@@ -80,6 +80,7 @@ public class AdvertController {
      * Create a new advert.
      *
      * @param advertDTO advert object.
+     * @throws EntityNotFoundException when hotel with given id is not found.
      */
     @PostMapping(value = "new")
     @ResponseStatus(HttpStatus.OK)
