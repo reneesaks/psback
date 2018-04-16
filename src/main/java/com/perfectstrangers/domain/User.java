@@ -3,6 +3,7 @@ package com.perfectstrangers.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.perfectstrangers.domain.enums.Gender;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,9 +17,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -69,23 +70,23 @@ public class User {
     @Column(name = "lastVisit")
     private String lastVisit;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonIgnore
     @JoinTable(
             name = "user_degree",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "degree_id")
     )
-    private List<Degree> degree;
+    private Degree degree;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonIgnore
     @JoinTable(
             name = "user_occupation",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "occupation_id")
     )
-    private List<Occupation> occupation;
+    private Occupation occupation;
 
     /**
      * Roles are being eagerly loaded here because they are a fairly small collection of items for this
@@ -99,15 +100,13 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinTable(
-            name = "user_response",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "response_id")
-    )
-    @Valid
-    private List<Response> responses;
+    private Collection<Response> responses;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Collection<Advert> adverts;
 
     public Long getId() {
         return id;
@@ -199,19 +198,19 @@ public class User {
         this.lastVisit = lastVisit;
     }
 
-    public List<Degree> getDegree() {
+    public Degree getDegree() {
         return degree;
     }
 
-    public void setDegree(List<Degree> degree) {
+    public void setDegree(Degree degree) {
         this.degree = degree;
     }
 
-    public List<Occupation> getOccupation() {
+    public Occupation getOccupation() {
         return occupation;
     }
 
-    public void setOccupation(List<Occupation> occupation) {
+    public void setOccupation(Occupation occupation) {
         this.occupation = occupation;
     }
 
@@ -221,14 +220,6 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }
-
-    public List<Response> getResponses() {
-        return responses;
-    }
-
-    public void setResponses(List<Response> responses) {
-        this.responses = responses;
     }
 }
 

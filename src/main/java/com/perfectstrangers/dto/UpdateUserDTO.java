@@ -3,9 +3,8 @@ package com.perfectstrangers.dto;
 import com.perfectstrangers.domain.Degree;
 import com.perfectstrangers.domain.Occupation;
 import com.perfectstrangers.domain.enums.Gender;
-import java.util.List;
 
-public class EditUserDTO {
+public class UpdateUserDTO {
 
     private String firstName;
 
@@ -17,9 +16,9 @@ public class EditUserDTO {
 
     private String age;
 
-    private List<Degree> degree;
+    private Degree degree;
 
-    private List<Occupation> occupation;
+    private Occupation occupation;
 
     public String getFirstName() {
         return firstName;
@@ -61,19 +60,19 @@ public class EditUserDTO {
         this.age = age;
     }
 
-    public List<Degree> getDegree() {
+    public Degree getDegree() {
         return degree;
     }
 
-    public void setDegree(List<Degree> degree) {
+    public void setDegree(Degree degree) {
         this.degree = degree;
     }
 
-    public List<Occupation> getOccupation() {
+    public Occupation getOccupation() {
         return occupation;
     }
 
-    public void setOccupation(List<Occupation> occupation) {
+    public void setOccupation(Occupation occupation) {
         this.occupation = occupation;
     }
 }

@@ -1,6 +1,9 @@
 package com.perfectstrangers.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -45,6 +49,10 @@ public class Resto {
     @JoinColumn(name = "hotel_id")
     @JsonBackReference
     private Hotel hotel;
+
+    @ManyToMany(mappedBy = "restos", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Advert> adverts;
 
     public Resto() {
     }
@@ -124,13 +132,4 @@ public class Resto {
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
     }
-
-    /*
-    // Get hotel id to return with JSON
-    // Ignoring now as it creates a duplicate hotel_id in resto entity when getting hotels
-    @JsonProperty
-    public Long getHotelId() {
-        return hotel == null ? null : hotel.getId();
-    }
-    */
 }

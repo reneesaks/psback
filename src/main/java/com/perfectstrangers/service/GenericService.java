@@ -93,6 +93,8 @@ public interface GenericService {
 
     Advert getAdvertById(Long id) throws EntityNotFoundException;
 
+    List<Advert> getAdvertsByHotelId(Long id) throws EntityNotFoundException;
+
     void saveAdvert(Advert advert);
 
     void updateAdvert(Advert advert) throws EntityNotFoundException;
@@ -105,6 +107,8 @@ public interface GenericService {
     Page<Response> getAllResponsesByPage(Pageable pageable);
 
     Response getResponseById(Long id) throws EntityNotFoundException;
+
+    List<Response> getResponsesByAdvert(Advert advert) throws EntityNotFoundException;
 
     void saveResponse(Response response);
 

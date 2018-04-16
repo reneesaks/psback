@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,14 +45,14 @@ public class HotelController {
     /**
      * Get one hotel by id.
      *
-     * @param id id of an existing hotel.
+     * @param hotelId id of an existing hotel.
      * @return hotel object.
      * @throws EntityNotFoundException when hotel with given id is not found.
      */
-    @GetMapping("{id}")
+    @GetMapping("{hotelId}")
     @ResponseStatus(HttpStatus.OK)
-    public Hotel getHotel(@PathVariable("id") Long id) throws EntityNotFoundException {
-        return genericService.getHotelById(id);
+    public Hotel getHotel(@PathVariable("hotelId") Long hotelId) throws EntityNotFoundException {
+        return genericService.getHotelById(hotelId);
     }
 
     /**
@@ -61,7 +62,7 @@ public class HotelController {
      */
     @PostMapping("new")
     @PreAuthorize("hasAuthority('ADMIN_USER')")
-    @ApiOperation(value = "newHotel ADMIN_ONLY")
+    @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
     public void newHotel(@RequestBody @Valid HotelDTO hotelDTO) {
 
@@ -80,22 +81,22 @@ public class HotelController {
     }
 
     /**
-     * Update existing hotel.
+     * Update an existing hotel.
      *
      * @param hotelDTO hotel object.
-     * @param id id of an existing hotel.
+     * @param hotelId id of an existing hotel.
      * @throws EntityNotFoundException when hotel with given id is not found.
      */
-    @PutMapping("update/{id}")
+    @PutMapping("update/{hotelId}")
     @PreAuthorize("hasAuthority('ADMIN_USER')")
-    @ApiOperation(value = "updateHotel ADMIN_ONLY")
+    @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void editHotel(
+    public void updateHotel(
             @RequestBody @Valid HotelDTO hotelDTO,
-            @PathVariable("id") Long id
+            @PathVariable("hotelId") Long hotelId
     ) throws EntityNotFoundException {
 
-        Hotel hotel = genericService.getHotelById(id);
+        Hotel hotel = genericService.getHotelById(hotelId);
 
         hotel.setName(hotelDTO.getName());
         hotel.setWebpage(hotelDTO.getWebpage());
@@ -112,15 +113,15 @@ public class HotelController {
     /**
      * Delete an existing hotel.
      *
-     * @param id id of an existing advert.
+     * @param hotelId id of an existing advert.
      * @throws EntityNotFoundException when hotel with given id is not found.
      */
-    @PutMapping("delete/{id}")
+    @DeleteMapping("delete/{hotelId}")
     @PreAuthorize("hasAuthority('ADMIN_USER')")
-    @ApiOperation(value = "deleteHotel ADMIN_ONLY")
+    @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteHotel(@PathVariable("id") Long id) throws EntityNotFoundException {
-        Hotel hotel = genericService.getHotelById(id);
+    public void deleteHotel(@PathVariable("hotelId") Long hotelId) throws EntityNotFoundException {
+        Hotel hotel = genericService.getHotelById(hotelId);
         genericService.deleteHotel(hotel);
     }
 }

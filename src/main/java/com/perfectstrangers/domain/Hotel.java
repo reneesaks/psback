@@ -1,5 +1,6 @@
 package com.perfectstrangers.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -9,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -45,6 +47,10 @@ public class Hotel {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JsonManagedReference
     private List<Resto> restos;
+
+    @ManyToMany(mappedBy = "hotels", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Advert> adverts;
 
     public Hotel() {
     }

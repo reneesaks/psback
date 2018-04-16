@@ -33,7 +33,7 @@ INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) V
 
 -- Populate random restos
 INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (1, 'FancyResto', 'www.fancyresto.com', 'Estonia', 'Harjumaa', 'Tallinn', 'Järvevana tee 5', '87987', 1);
-INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (2, 'RandomResto', 'www.randomresto.com', 'Estonia', 'Harjumaa', 'Tallinn', 'Järvevana tee 8', '87987', NULL);
+INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (2, 'RandomResto', 'www.randomresto.com', 'Estonia', 'Harjumaa', 'Tallinn', 'Järvevana tee 8', '87987', 2);
 INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (3, 'ModestResto', 'www.modestresto.com', 'Estonia', 'Tartumaa', 'Tartu', 'Mõisavahe 102', '59348', 5);
 INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (4, 'KHK-Resto', 'www.khkresto.com', 'Estonia', 'Tartumaa', 'Tartu', 'Kopli 9', '57787', 6);
 INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (5, 'KHK-Söökla', 'www.khksookla.com', 'Estonia', 'Tartumaa', 'Tartu', 'Kopli 9', '57787', 6);
@@ -55,27 +55,27 @@ INSERT INTO user_occupation (user_id, occupation_id) VALUES (1, 2);
 INSERT INTO user_occupation (user_id, occupation_id) VALUES (2, 1);
 
 -- Populate advert table
-INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (1, 'NOT_ACCEPTED', NULL, 'Programmer looking for a dinner companion.', 'DINNER', NULL, NULL, NULL);
-INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (2, 'ACCEPTED', NULL, 'Is there somebody who wants to have a meaningful conversation over breakfast?.', 'BREAKFAST', NULL, NULL, NULL);
+INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (1, 'NOT_ACCEPTED', NULL, 'Programmer looking for a dinner companion.', 'DINNER', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
+INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (2, 'ACCEPTED', NULL, 'Is there somebody who wants to have a meaningful conversation over breakfast?.', 'BREAKFAST', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
 
 -- Populate response table
-INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (1, 'That is a great idea! I would love to have a meaningful conversation over breakfast.', NULL, 'NOT_ANSWERED');
-INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (2, 'Why not. I am up for it!', NULL, 'NOT_ANSWERED');
-INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (3, 'YES! This is absolutely what I need!', NULL, 'NOT_ANSWERED');
+INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (1, 'That is a great idea! I would love to have a meaningful conversation over breakfast.', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
+INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (2, 'Why not. I am up for it!', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
+INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (3, 'YES! This is absolutely what I need!', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
 
--- Populate advert_response table
-INSERT INTO advert_response (advert_id, response_id) VALUES (2, 1);
-INSERT INTO advert_response (advert_id, response_id) VALUES (2, 2);
-INSERT INTO advert_response (advert_id, response_id) VALUES (1, 3);
+-- Populate response_advert table
+INSERT INTO response_advert (response_id, advert_id) VALUES (1, 2);
+INSERT INTO response_advert (response_id, advert_id) VALUES (2, 2);
+INSERT INTO response_advert (response_id, advert_id) VALUES (3, 1);
 
 -- Populate advert_user table
 INSERT INTO advert_user (advert_id, user_id) VALUES (1, 2);
 INSERT INTO advert_user (advert_id, user_id) VALUES (2, 3);
 
--- Populate user_response table
-INSERT INTO user_response (user_id, response_id) VALUES (2, 1);
-INSERT INTO user_response (user_id, response_id) VALUES (3, 2);
-INSERT INTO user_response (user_id, response_id) VALUES (2, 3);
+-- Populate response_user table
+INSERT INTO response_user (response_id, user_id) VALUES (1, 2);
+INSERT INTO response_user (response_id, user_id) VALUES (2, 3);
+INSERT INTO response_user (response_id, user_id) VALUES (3, 2);
 
 -- Populate advert_resto table
 INSERT INTO advert_resto (advert_id, resto_id) VALUES (1, 2);

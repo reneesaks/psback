@@ -52,18 +52,32 @@ public class AdvertController {
     /**
      * Get one advert by id.
      *
-     * @param id id of an existing advert.
+     * @param advertId id of an existing advert.
      * @return advert object.
      * @throws EntityNotFoundException when advert with given id is not found.
      */
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "{advertId}")
     @ResponseStatus(HttpStatus.OK)
-    public Advert getAdvert(@PathVariable("id") Long id) throws EntityNotFoundException {
-        return genericService.getAdvertById(id);
+    public Advert getAdvert(@PathVariable("advertId") Long advertId) throws EntityNotFoundException {
+        return genericService.getAdvertById(advertId);
     }
 
     /**
-     * Creates new advert.
+     * Get all adverts belonging to an hotel.
+     *
+     * @param hotelId id of an existing hotel.
+     * @return list of adverts.
+     * @throws EntityNotFoundException when hotel with given id is not found.
+     */
+    @GetMapping(value = "hotel/{hotelId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Advert> getAdvertsByHotelId(@PathVariable("hotelId") Long hotelId)
+            throws EntityNotFoundException {
+        return genericService.getAdvertsByHotelId(hotelId);
+    }
+
+    /**
+     * Create a new advert.
      *
      * @param advertDTO advert object.
      */
@@ -90,24 +104,23 @@ public class AdvertController {
     }
 
     /**
-     * Updates existing advert.
+     * Update an existing advert.
      *
      * @param advertDTO advert object.
-     * @param id id of an existing advert.
+     * @param advertId id of an existing advert.
      * @throws EntityNotFoundException when advert with given id is not found.
      */
-    @PutMapping(value = "update/{id}")
+    @PutMapping(value = "update/{advertId}")
     @ResponseStatus(HttpStatus.OK)
     public void updateAdvert(
             @RequestBody @Valid AdvertDTO advertDTO,
-            @PathVariable("id") Long id
+            @PathVariable("advertId") Long advertId
     ) throws EntityNotFoundException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getPrincipal().toString();
         Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
-        User user = genericService.getUserByEmail(email);
-        Advert advert = genericService.getAdvertById(id);
+        Advert advert = genericService.getAdvertById(advertId);
 
         if (advert.getUser().getEmail().equals(email) || isAdmin) {
             // Set advert status to new one if it is provided
@@ -122,26 +135,25 @@ public class AdvertController {
             advert.setHotels(advertDTO.getHotels());
             this.genericService.saveAdvert(advert);
         } else {
-            throw new BadCredentialsException("Only advert owner or admin can delete this advert");
+            throw new BadCredentialsException("Only advert owner or admin can edit this advert");
         }
     }
 
     /**
      * Delete an existing advert.
      *
-     * @param id id of an existing advert.
+     * @param advertId id of an existing advert.
      * @throws EntityNotFoundException when advert with given id is not found.
      */
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(value = "delete/{advertId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteAdvert(@PathVariable("id") Long id)
+    public void deleteAdvert(@PathVariable("advertId") Long advertId)
             throws EntityNotFoundException, BadCredentialsException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getPrincipal().toString();
         Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
-        User user = genericService.getUserByEmail(email);
-        Advert advert = genericService.getAdvertById(id);
+        Advert advert = genericService.getAdvertById(advertId);
 
         if (advert.getUser().getEmail().equals(email) || isAdmin) {
             genericService.deleteAdvert(advert);

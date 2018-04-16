@@ -16,6 +16,7 @@ import com.perfectstrangers.repository.ResponseRepository;
 import com.perfectstrangers.repository.RestoRepository;
 import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.service.GenericService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -338,6 +339,13 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
+    public List<Advert> getAdvertsByHotelId(Long id) throws EntityNotFoundException {
+        List<Hotel> hotel = new ArrayList<>();
+        hotel.add(hotelRepository.findById(id));
+        return advertRepository.findAllByHotels(hotel);
+    }
+
+    @Override
     public void saveAdvert(Advert advert) {
         advertRepository.save(advert);
     }
@@ -380,6 +388,11 @@ public class GenericServiceImpl implements GenericService {
             throw new EntityNotFoundException(Response.class, "id", id.toString());
         }
         return response;
+    }
+
+    @Override
+    public List<Response> getResponsesByAdvert(Advert advert) throws EntityNotFoundException {
+        return advert.getResponses();
     }
 
     @Override

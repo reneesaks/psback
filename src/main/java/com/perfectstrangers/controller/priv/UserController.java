@@ -1,7 +1,7 @@
 package com.perfectstrangers.controller.priv;
 
 import com.perfectstrangers.domain.User;
-import com.perfectstrangers.dto.EditUserDTO;
+import com.perfectstrangers.dto.UpdateUserDTO;
 import com.perfectstrangers.dto.PasswordChangeDTO;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.service.GenericService;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+// TODO: getUser should be controlled somehow. User details can be accessed by everyone right now.
 @RestController
 @RequestMapping("api/private/user")
 public class UserController {
@@ -41,7 +42,7 @@ public class UserController {
      */
     @GetMapping()
     @PreAuthorize("hasAuthority('ADMIN_USER')")
-    @ApiOperation(value = "getUsers ADMIN_ONLY")
+    @ApiOperation(value = "ADMIN_ONLY")
     public List<User> getUsers() {
         return genericService.getAllUsers();
     }
@@ -49,35 +50,35 @@ public class UserController {
     /**
      * Get one user by id.
      *
-     * @param id id of an existing user.
+     * @param userId id of an existing user.
      * @return advert object.
      * @throws EntityNotFoundException when user with given id is not found.
      */
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser(@PathVariable("id") Long id) throws EntityNotFoundException {
-        return genericService.getUserById(id);
+    public User getUser(@PathVariable("userId") Long userId) throws EntityNotFoundException {
+        return genericService.getUserById(userId);
     }
 
     /**
-     * Edit the current logged in user.
+     * Update the current logged in user.
      *
-     * @param editUserDTO user object.
+     * @param updateUserDTO user object.
      * @throws EntityNotFoundException when user with given id is not found.
      */
-    @PutMapping(value = "edit")
+    @PutMapping(value = "update")
     @ResponseStatus(HttpStatus.OK)
-    public void editUser(@RequestBody @Valid EditUserDTO editUserDTO) throws EntityNotFoundException {
+    public void updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) throws EntityNotFoundException {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         User user = genericService.getUserByEmail(email);
 
-        user.setFirstName(editUserDTO.getFirstName());
-        user.setLastName(editUserDTO.getLastName());
-        user.setGender(editUserDTO.getGender());
-        user.setAge(editUserDTO.getAge());
-        user.setDegree(editUserDTO.getDegree());
-        user.setOccupation(editUserDTO.getOccupation());
+        user.setFirstName(updateUserDTO.getFirstName());
+        user.setLastName(updateUserDTO.getLastName());
+        user.setGender(updateUserDTO.getGender());
+        user.setAge(updateUserDTO.getAge());
+        user.setDegree(updateUserDTO.getDegree());
+        user.setOccupation(updateUserDTO.getOccupation());
 
         genericService.saveUser(user);
     }
@@ -102,7 +103,7 @@ public class UserController {
     }
 
     /**
-     * Deletes the current logged in user.
+     * Delete the current logged in user.
      *
      * @throws EntityNotFoundException when user with given id is not found.
      */
@@ -111,6 +112,20 @@ public class UserController {
     public void deleteUser() throws EntityNotFoundException {
         String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         User user = genericService.getUserByEmail(email);
+        genericService.deleteUser(user);
+    }
+
+    /**
+     * Delete user by id.
+     *
+     * @param userId id of an existing user.
+     * @throws EntityNotFoundException when user with given id is not found.
+     */
+    @DeleteMapping("delete/{userId}")
+    @PreAuthorize("hasAuthority('ADMIN_USER')")
+    @ApiOperation(value = "ADMIN_ONLY")
+    public void deleteSpecificUser(@PathVariable("userId") Long userId) throws EntityNotFoundException {
+        User user = genericService.getUserById(userId);
         genericService.deleteUser(user);
     }
 }

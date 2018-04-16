@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -52,7 +53,7 @@ public class Advert {
     @Column(name = "accepted_time")
     private String acceptedTime;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany
     @JoinTable(
             name = "advert_resto",
             joinColumns = @JoinColumn(name = "advert_id"),
@@ -60,7 +61,7 @@ public class Advert {
     )
     private List<Resto> restos;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany
     @JoinTable(
             name = "advert_hotel",
             joinColumns = @JoinColumn(name = "advert_id"),
@@ -69,15 +70,10 @@ public class Advert {
     @JsonIgnoreProperties({ "restos" })
     private List<Hotel> hotels;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(
-            name = "advert_response",
-            joinColumns = @JoinColumn(name = "advert_id"),
-            inverseJoinColumns = @JoinColumn(name = "response_id")
-    )
+    @OneToMany(mappedBy = "advert", cascade = CascadeType.ALL)
     private List<Response> responses;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinTable(
             name = "advert_user",
             joinColumns = @JoinColumn(name = "advert_id"),
