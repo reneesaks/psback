@@ -68,7 +68,7 @@ public class UserController {
      */
     @PutMapping(value = "update")
     @ResponseStatus(HttpStatus.OK)
-    public void updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) throws EntityNotFoundException {
+    public User updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) throws EntityNotFoundException {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         User user = genericService.getUserByEmail(email);
@@ -81,6 +81,7 @@ public class UserController {
         user.setOccupation(updateUserDTO.getOccupation());
 
         genericService.saveUser(user);
+        return user;
     }
 
     /**

@@ -59,6 +59,7 @@ public class Advert {
             joinColumns = @JoinColumn(name = "advert_id"),
             inverseJoinColumns = @JoinColumn(name = "resto_id")
     )
+    @JsonIgnoreProperties({"hotel"})
     private List<Resto> restos;
 
     @ManyToMany

@@ -65,12 +65,13 @@ public class OccupationController {
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void newHotel(@RequestBody @Valid OccupationDTO occupationDTO) {
+    public Occupation newOccupation(@RequestBody @Valid OccupationDTO occupationDTO) {
 
         Occupation occupation = new Occupation();
         occupation.setName(occupationDTO.getName());
         occupation.setDescription(occupationDTO.getDescription());
         genericService.saveOccupation(occupation);
+        return occupation;
     }
 
     /**
@@ -84,7 +85,7 @@ public class OccupationController {
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void updateOccupation(
+    public Occupation updateOccupation(
             @RequestBody @Valid OccupationDTO occupationDTO,
             @PathVariable("occupationId") Long occupationId
     ) throws EntityNotFoundException {
@@ -93,6 +94,7 @@ public class OccupationController {
         occupation.setName(occupationDTO.getName());
         occupation.setDescription(occupationDTO.getDescription());
         genericService.saveOccupation(occupation);
+        return occupation;
     }
 
     /**

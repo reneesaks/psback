@@ -64,12 +64,13 @@ public class DegreeController {
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void newDegree(@RequestBody @Valid DegreeDTO degreeDTO) {
+    public Degree newDegree(@RequestBody @Valid DegreeDTO degreeDTO) {
 
         Degree degree = new Degree();
         degree.setName(degreeDTO.getName());
         degree.setDescription(degreeDTO.getDescription());
         genericService.saveDegree(degree);
+        return degree;
     }
 
     /**
@@ -83,7 +84,7 @@ public class DegreeController {
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void updateDegree(
+    public Degree updateDegree(
             @RequestBody @Valid DegreeDTO degreeDTO,
             @PathVariable("degreeId") Long degreeId
     ) throws EntityNotFoundException {
@@ -92,6 +93,7 @@ public class DegreeController {
         degree.setName(degreeDTO.getName());
         degree.setDescription(degreeDTO.getDescription());
         genericService.saveDegree(degree);
+        return degree;
     }
 
     /**

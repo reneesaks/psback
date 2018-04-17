@@ -64,7 +64,7 @@ public class HotelController {
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void newHotel(@RequestBody @Valid HotelDTO hotelDTO) {
+    public Hotel newHotel(@RequestBody @Valid HotelDTO hotelDTO) {
 
         Hotel hotel = new Hotel();
 
@@ -78,6 +78,7 @@ public class HotelController {
         hotel.setRestos(hotelDTO.getRestos());
 
         genericService.saveHotel(hotel);
+        return hotel;
     }
 
     /**
@@ -91,7 +92,7 @@ public class HotelController {
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void updateHotel(
+    public Hotel updateHotel(
             @RequestBody @Valid HotelDTO hotelDTO,
             @PathVariable("hotelId") Long hotelId
     ) throws EntityNotFoundException {
@@ -108,6 +109,7 @@ public class HotelController {
         hotel.setRestos(hotelDTO.getRestos());
 
         genericService.saveHotel(hotel);
+        return hotel;
     }
 
     /**

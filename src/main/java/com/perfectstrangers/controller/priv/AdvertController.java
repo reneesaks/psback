@@ -84,7 +84,7 @@ public class AdvertController {
      */
     @PostMapping(value = "new")
     @ResponseStatus(HttpStatus.OK)
-    public void newAdvert(@RequestBody @Valid AdvertDTO advertDTO) throws EntityNotFoundException {
+    public Advert newAdvert(@RequestBody @Valid AdvertDTO advertDTO) throws EntityNotFoundException {
 
         Advert advert = new Advert();
         String currentTime = Instant.now().toString();
@@ -102,6 +102,7 @@ public class AdvertController {
         advert.setUser(user);
 
         this.genericService.saveAdvert(advert);
+        return advert;
     }
 
     /**
@@ -113,7 +114,7 @@ public class AdvertController {
      */
     @PutMapping(value = "update/{advertId}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateAdvert(
+    public Advert updateAdvert(
             @RequestBody @Valid AdvertDTO advertDTO,
             @PathVariable("advertId") Long advertId
     ) throws EntityNotFoundException {
@@ -135,6 +136,8 @@ public class AdvertController {
             advert.setRestos(advertDTO.getRestos());
             advert.setHotels(advertDTO.getHotels());
             this.genericService.saveAdvert(advert);
+
+            return advert;
         } else {
             throw new BadCredentialsException("Only advert owner or admin can edit this advert");
         }

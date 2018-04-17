@@ -32,11 +32,15 @@ INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) V
 INSERT INTO hotel (id, name, webpage, country, state, city, address, zip_code) VALUES (10, 'Vene', 'www.vene.com', 'Estonia', 'Ida-Virumaa', 'Narva', 'Vene tee 15', '85345');
 
 -- Populate random restos
-INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (1, 'FancyResto', 'www.fancyresto.com', 'Estonia', 'Harjumaa', 'Tallinn', 'Järvevana tee 5', '87987', 1);
-INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (2, 'RandomResto', 'www.randomresto.com', 'Estonia', 'Harjumaa', 'Tallinn', 'Järvevana tee 8', '87987', 2);
-INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (3, 'ModestResto', 'www.modestresto.com', 'Estonia', 'Tartumaa', 'Tartu', 'Mõisavahe 102', '59348', 5);
-INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (4, 'KHK-Resto', 'www.khkresto.com', 'Estonia', 'Tartumaa', 'Tartu', 'Kopli 9', '57787', 6);
-INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code, hotel_id) VALUES (5, 'KHK-Söökla', 'www.khksookla.com', 'Estonia', 'Tartumaa', 'Tartu', 'Kopli 9', '57787', 6);
+INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code) VALUES (1, 'FancyResto', 'www.fancyresto.com', 'Estonia', 'Harjumaa', 'Tallinn', 'Järvevana tee 5', '87987');
+INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code) VALUES (2, 'RandomResto', 'www.randomresto.com', 'Estonia', 'Harjumaa', 'Tallinn', 'Järvevana tee 8', '87987');
+INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code) VALUES (3, 'ModestResto', 'www.modestresto.com', 'Estonia', 'Tartumaa', 'Tartu', 'Mõisavahe 102', '59348');
+INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code) VALUES (4, 'KHK-Resto', 'www.khkresto.com', 'Estonia', 'Tartumaa', 'Tartu', 'Kopli 9', '57787');
+INSERT INTO resto (id, name, webpage, country, state, city, address, zip_code) VALUES (5, 'KHK-Söökla', 'www.khksookla.com', 'Estonia', 'Tartumaa', 'Tartu', 'Kopli 9', '57787');
+
+-- Populate resto_hotel join table
+INSERT INTO resto_hotel (resto_id, hotel_id) VALUES (1, 1);
+INSERT INTO resto_hotel (resto_id, hotel_id) VALUES (2, 2);
 
 -- Populate degrees
 INSERT INTO degree (id, name, description) VALUES (1, 'Bachelor Degree', 'Some description');
@@ -55,8 +59,8 @@ INSERT INTO user_occupation (user_id, occupation_id) VALUES (1, 2);
 INSERT INTO user_occupation (user_id, occupation_id) VALUES (2, 1);
 
 -- Populate advert table
-INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (1, 'NOT_ACCEPTED', NULL, 'Programmer looking for a dinner companion.', 'DINNER', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
-INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (2, 'ACCEPTED', NULL, 'Is there somebody who wants to have a meaningful conversation over breakfast?.', 'BREAKFAST', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
+INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (1, 'NOT_ACCEPTED', '2017-08-14T12:17:47.720Z', 'Programmer looking for a dinner companion.', 'DINNER', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
+INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (2, 'ACCEPTED', '2017-08-14T12:17:47.720Z', 'Is there somebody who wants to have a meaningful conversation over breakfast?.', 'BREAKFAST', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
 
 -- Populate response table
 INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (1, 'That is a great idea! I would love to have a meaningful conversation over breakfast.', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');

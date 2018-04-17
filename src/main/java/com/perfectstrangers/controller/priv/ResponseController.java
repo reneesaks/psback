@@ -60,7 +60,7 @@ public class ResponseController {
      */
     @PostMapping(value = "new")
     @ResponseStatus(HttpStatus.OK)
-    public void newResponse(
+    public Response newResponse(
             @RequestBody @Valid ResponseDTO responseDTO,
             @PathVariable Long advertId
     ) throws EntityNotFoundException {
@@ -79,6 +79,7 @@ public class ResponseController {
         advertResponses.add(response);
         advert.setResponses(advertResponses);
         genericService.saveAdvert(advert);
+        return response;
     }
 
     /**
@@ -90,7 +91,7 @@ public class ResponseController {
      */
     @PutMapping(value = "update/{responseId}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateResponse(
+    public Response updateResponse(
             @RequestBody @Valid ResponseDTO responseDTO,
             @PathVariable("responseId") Long responseId
     ) throws EntityNotFoundException {
@@ -105,6 +106,8 @@ public class ResponseController {
             response.setProposedTime(responseDTO.getProposedTime());
             response.setResponseStatus(responseDTO.getResponseStatus());
             genericService.saveResponse(response);
+
+            return response;
         } else {
             throw new BadCredentialsException("Only response owner or admin can edit this response");
         }

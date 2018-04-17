@@ -65,7 +65,7 @@ public class RestoController {
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void newResto(@RequestBody @Valid RestoDTO restoDTO) {
+    public Resto newResto(@RequestBody @Valid RestoDTO restoDTO) {
 
         Resto resto = new Resto();
 
@@ -79,6 +79,7 @@ public class RestoController {
         resto.setHotel(restoDTO.getHotel());
 
         genericService.saveResto(resto);
+        return resto;
     }
 
     /**
@@ -92,7 +93,7 @@ public class RestoController {
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     @ApiOperation(value = "ADMIN_ONLY")
     @ResponseStatus(HttpStatus.OK)
-    public void updateResto(
+    public Resto updateResto(
             @RequestBody @Valid RestoDTO restoDTO,
             @PathVariable("restoId") Long restoId
     ) throws EntityNotFoundException {
@@ -109,6 +110,7 @@ public class RestoController {
         resto.setHotel(restoDTO.getHotel());
 
         genericService.saveResto(resto);
+        return resto;
     }
 
     /**

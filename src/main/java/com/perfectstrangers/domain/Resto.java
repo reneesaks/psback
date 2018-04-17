@@ -1,18 +1,18 @@
 package com.perfectstrangers.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -45,9 +45,13 @@ public class Resto {
     @Column(name = "zipCode")
     private String zipCode;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id")
-    @JsonBackReference
+    @ManyToOne
+    @JoinTable(
+            name = "resto_hotel",
+            joinColumns = @JoinColumn(name = "resto_id"),
+            inverseJoinColumns = @JoinColumn(name = "hotel_id")
+    )
+    @JsonIgnoreProperties({"restos"})
     private Hotel hotel;
 
     @ManyToMany(mappedBy = "restos", cascade = CascadeType.ALL)
