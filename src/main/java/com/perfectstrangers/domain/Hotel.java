@@ -42,7 +42,8 @@ public class Hotel {
     @Column(name = "zipCode")
     private String zipCode;
 
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    // Merge to prevent resto deletion
+    @OneToMany(mappedBy = "hotel", cascade = {CascadeType.MERGE})
     @JsonIgnoreProperties({"hotel"})
     private List<Resto> restos;
 

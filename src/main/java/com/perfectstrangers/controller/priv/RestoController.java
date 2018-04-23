@@ -107,7 +107,7 @@ public class RestoController {
         resto.setCity(restoDTO.getCity());
         resto.setAddress(restoDTO.getAddress());
         resto.setZipCode(restoDTO.getZipCode());
-        resto.setHotel(restoDTO.getHotel());
+        resto.setHotel(genericService.getHotelById(restoDTO.getHotel().getId()));
 
         genericService.saveResto(resto);
         return resto;
@@ -125,6 +125,7 @@ public class RestoController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteResto(@PathVariable("restoId") Long restoId) throws EntityNotFoundException {
         Resto resto = genericService.getRestoById(restoId);
+        resto.setHotel(null);
         genericService.deleteResto(resto);
     }
 }

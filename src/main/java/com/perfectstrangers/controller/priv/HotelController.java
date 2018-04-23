@@ -1,10 +1,12 @@
 package com.perfectstrangers.controller.priv;
 
 import com.perfectstrangers.domain.Hotel;
+import com.perfectstrangers.domain.Resto;
 import com.perfectstrangers.dto.HotelDTO;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.service.GenericService;
 import io.swagger.annotations.ApiOperation;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,8 +108,22 @@ public class HotelController {
         hotel.setCity(hotelDTO.getCity());
         hotel.setAddress(hotelDTO.getAddress());
         hotel.setZipCode(hotelDTO.getZipCode());
-        hotel.setRestos(hotelDTO.getRestos());
 
+        List<Resto> existingRestos = hotel.getRestos();
+        List<Resto> updatedRestos = hotelDTO.getRestos();
+        List<Resto> newRestos = new ArrayList<>();
+
+        for (Resto resto : existingRestos) {
+            resto.setHotel(null);
+        }
+
+        for (Resto resto : updatedRestos) {
+            Resto restoToAdd = genericService.getRestoById(resto.getId());
+            restoToAdd.setHotel(hotel);
+            newRestos.add(restoToAdd);
+        }
+
+        hotel.setRestos(newRestos);
         genericService.saveHotel(hotel);
         return hotel;
     }
@@ -124,6 +140,12 @@ public class HotelController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteHotel(@PathVariable("hotelId") Long hotelId) throws EntityNotFoundException {
         Hotel hotel = genericService.getHotelById(hotelId);
+        List<Resto> restos = hotel.getRestos();
+
+        for (Resto resto: restos) {
+            resto.setHotel(null);
+        }
+
         genericService.deleteHotel(hotel);
     }
 }
