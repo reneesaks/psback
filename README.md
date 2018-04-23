@@ -73,6 +73,8 @@ This project has three Spring Boot profiles:
 * Production environment called `production` 
 * Deployment environment called `development`
 
+All `.properties` files are encrypted using custom encryption utility. Encrypted files have `.pf` (Protected File) exentsion. To decrypt them, run `util/PropertiesEncryptor.java` main method with arguments `decrypt` AND `password`. For encryption, run it with arguments `encrypt` AND `password`. For example, in IntelliJ, you can edit the configuration and add program parameters (i.e `decrypt supersecretpassword`).
+
 By default development environment is used in packaged application build process. Test data is loaded in via `import.sql` file in resources folder.
 
 ## Before running
