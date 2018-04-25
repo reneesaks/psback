@@ -4,6 +4,7 @@ import com.perfectstrangers.domain.Role;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.util.HttpServletRequestUtil;
+import java.time.Instant;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new InvalidGrantException("Bad credentials");
         }
+
+        user.setLastVisit(Instant.now().toString()); // TODO: ISO standard must be used
+        userRepository.save(user);
 
         return new org.springframework.security.core.userdetails.User(
                 user.getId().toString(),

@@ -88,8 +88,12 @@ public class AdvertController {
 
         Advert advert = new Advert();
         String currentTime = Instant.now().toString();
-        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User user = genericService.getUserByEmail(email);
+        Long id = Long.valueOf(
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
+        );
+        User user = genericService.getUserById(id);
+        user.setTotalAdverts(user.getTotalAdverts() + 1);
+        genericService.saveUser(user);
 
         advert.setAdvertStatus(AdvertStatus.NOT_ACCEPTED);
         advert.setCreatedDate(currentTime);

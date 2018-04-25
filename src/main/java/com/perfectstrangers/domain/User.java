@@ -36,18 +36,18 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
     @NotNull
     @Column(name = "email")
     private String email;
 
     @Column(name = "alias")
     private String alias;
+
+    @Column(name = "total_adverts")
+    private Long totalAdverts;
+
+    @Column(name = "total_responses")
+    private Long totalResponses;
 
     @NotNull
     @JsonIgnore
@@ -116,22 +116,6 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -146,6 +130,22 @@ public class User {
 
     public void setAlias(String alias) {
         this.alias = alias;
+    }
+
+    public Long getTotalAdverts() {
+        return totalAdverts;
+    }
+
+    public void setTotalAdverts(Long totalAdverts) {
+        this.totalAdverts = totalAdverts;
+    }
+
+    public Long getTotalResponses() {
+        return totalResponses;
+    }
+
+    public void setTotalResponses(Long totalResponses) {
+        this.totalResponses = totalResponses;
     }
 
     @JsonIgnore

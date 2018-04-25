@@ -67,8 +67,12 @@ public class ResponseController {
 
         Advert advert = genericService.getAdvertById(advertId);
         List<Response> advertResponses = advert.getResponses();
-        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User user = genericService.getUserByEmail(email);
+        Long id = Long.valueOf(
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
+        );
+        User user = genericService.getUserById(id);
+        user.setTotalResponses(user.getTotalResponses() + 1);
+        genericService.saveUser(user);
 
         Response response = new Response();
         response.setResponseText(responseDTO.getResponseText());

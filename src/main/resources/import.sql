@@ -8,10 +8,10 @@ INSERT INTO role (id, role_name, description) VALUES (2, 'ADMIN_USER', 'Admin Us
 INSERT INTO role (id, role_name, description) VALUES (3, 'DEVELOPER', 'Developer user - Has access to documentation, server etc.');
 
 -- USER (non-encrypted password: password)
-INSERT INTO user (id, first_name, last_name, email, alias, password, activated, gender) VALUES (1, 'Developer', 'User', 'developer@user.com', 'DevUser', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 'MALE');
-INSERT INTO user (id, first_name, last_name, email, alias, password, activated, gender) VALUES (2, 'Standard', 'User', 'standard@user.com', 'StandUser', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 'MALE');
-INSERT INTO user (id, first_name, last_name, email, alias, password, activated, gender) VALUES (3, 'Admin', 'User', 'admin@user.com', 'AdminUser', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 'FEMALE');
-INSERT INTO user (id, first_name, last_name, email, alias, password, activated, gender) VALUES (4, 'Random', 'User', 'random@user.com', 'RandUser', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 'MALE');
+INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender) VALUES (1, 'developer@user.com', 'DevUser', 0, 0, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 'MALE');
+INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender) VALUES (2, 'standard@user.com', 'StandUser', 0, 0, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 'MALE');
+INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender) VALUES (3, 'admin@user.com', 'AdminUser', 0, 0, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 'FEMALE');
+INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender) VALUES (4, 'random@user.com', 'RandUser', 0, 0, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 'MALE');
 
 -- Populate the user_role join table
 INSERT INTO user_role (user_id, role_id) VALUES (1, 3);

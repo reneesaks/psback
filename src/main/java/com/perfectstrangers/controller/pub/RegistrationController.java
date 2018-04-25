@@ -91,6 +91,7 @@ public class RegistrationController {
         User user = new User();
         user.setPassword(newUserDTO.getPassword());
         user.setEmail(newUserDTO.getEmail());
+        user.setRegDate(Instant.now().toString()); // TODO: ISO standard must be used
         User registeredUser = registrationService.registerNewUserAccount(user);
         registrationService.createVerificationToken(registeredUser);
         String token = registrationService.getVerificationTokenByUser(registeredUser).getToken();
@@ -103,8 +104,6 @@ public class RegistrationController {
         }
 
         LOGGER.info("User with email " + user.getEmail() + " is registered. Waiting for activation.");
-        // TODO: ISO standard must be used
-        user.setRegDate(Instant.now().toString());
         return user;
     }
 

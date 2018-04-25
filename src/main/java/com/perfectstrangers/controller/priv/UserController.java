@@ -1,8 +1,8 @@
 package com.perfectstrangers.controller.priv;
 
 import com.perfectstrangers.domain.User;
-import com.perfectstrangers.dto.UpdateUserDTO;
 import com.perfectstrangers.dto.PasswordChangeDTO;
+import com.perfectstrangers.dto.UpdateUserDTO;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.service.GenericService;
 import com.perfectstrangers.util.PasswordHasher;
@@ -61,6 +61,23 @@ public class UserController {
     }
 
     /**
+     * Gets logged in user.
+     *
+     * @return user object
+     * @throws EntityNotFoundException when user is not found
+     */
+    @GetMapping(value = "current-user")
+    @ResponseStatus(HttpStatus.OK)
+    public User getCurrentUser() throws EntityNotFoundException {
+
+        Long id = Long.valueOf(
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
+        );
+
+        return genericService.getUserById(id);
+    }
+
+    /**
      * Update the current logged in user.
      *
      * @param updateUserDTO user object.
@@ -70,11 +87,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public User updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) throws EntityNotFoundException {
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User user = genericService.getUserByEmail(email);
+        Long id = Long.valueOf(
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
+        );
+        User user = genericService.getUserById(id);
 
-        user.setFirstName(updateUserDTO.getFirstName());
-        user.setLastName(updateUserDTO.getLastName());
         user.setGender(updateUserDTO.getGender());
         user.setAge(updateUserDTO.getAge());
         user.setDegree(updateUserDTO.getDegree());
@@ -95,8 +112,10 @@ public class UserController {
     public void changePassword(@RequestBody @Valid PasswordChangeDTO passwordChangeDTO)
             throws EntityNotFoundException {
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User user = genericService.getUserByEmail(email);
+        Long id = Long.valueOf(
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
+        );
+        User user = genericService.getUserById(id);
         String password = new PasswordHasher().hashPasswordWithSha256(passwordChangeDTO.getPassword());
         user.setPassword(password);
 
