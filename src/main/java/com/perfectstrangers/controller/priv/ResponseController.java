@@ -101,7 +101,8 @@ public class ResponseController {
     ) throws EntityNotFoundException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getPrincipal().toString();
+        Long id = Long.valueOf(auth.getPrincipal().toString());
+        String email = genericService.getUserById(id).getEmail();
         Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
         Response response = genericService.getResponseById(responseId);
 

@@ -1,6 +1,7 @@
 package com.perfectstrangers.controller.priv;
 
 import com.perfectstrangers.domain.Advert;
+import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.enums.AdvertStatus;
 import com.perfectstrangers.dto.AdvertDTO;
@@ -124,7 +125,8 @@ public class AdvertController {
     ) throws EntityNotFoundException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getPrincipal().toString();
+        Long id = Long.valueOf(auth.getPrincipal().toString());
+        String email = genericService.getUserById(id).getEmail();
         Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
         Advert advert = genericService.getAdvertById(advertId);
 
@@ -148,6 +150,44 @@ public class AdvertController {
     }
 
     /**
+     * Accept a response
+     *
+     * @param advertId id of an existing advert
+     * @param responseId id of an existing response
+     * @throws EntityNotFoundException when advert or response with given id is not found
+     */
+    @PutMapping(value = "{advertId}/accept/{responseId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void acceptResponse(
+            @PathVariable("advertId") Long advertId,
+            @PathVariable("responseId") Long responseId) throws EntityNotFoundException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long id = Long.valueOf(auth.getPrincipal().toString());
+        String email = genericService.getUserById(id).getEmail();
+        Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
+        Advert advert = genericService.getAdvertById(advertId);
+        List<Response> responses = genericService.getResponsesByAdvert(advert);
+
+        if (advert.getUser().getEmail().equals(email) || isAdmin) {
+
+            advert.setAdvertStatus(AdvertStatus.ACCEPTED);
+            for (Response response: responses) {
+                if (response.getId().equals(responseId)) {
+                    response.setResponseStatus(com.perfectstrangers.domain.enums.ResponseStatus.ACCEPTED);
+                } else {
+                    response.setResponseStatus(com.perfectstrangers.domain.enums.ResponseStatus.DECLINED);
+                }
+                genericService.saveResponse(response);
+            }
+            genericService.saveAdvert(advert);
+
+        } else {
+            throw new BadCredentialsException("Only advert owner or admin can edit this advert");
+        }
+    }
+
+    /**
      * Delete an existing advert.
      *
      * @param advertId id of an existing advert.
@@ -159,7 +199,8 @@ public class AdvertController {
             throws EntityNotFoundException, BadCredentialsException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getPrincipal().toString();
+        Long id = Long.valueOf(auth.getPrincipal().toString());
+        String email = genericService.getUserById(id).getEmail();
         Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
         Advert advert = genericService.getAdvertById(advertId);
 

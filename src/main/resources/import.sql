@@ -66,11 +66,13 @@ INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, pre
 INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (1, 'That is a great idea! I would love to have a meaningful conversation over breakfast.', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
 INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (2, 'Why not. I am up for it!', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
 INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (3, 'YES! This is absolutely what I need!', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
+INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (4, 'I do not care. Pffff...', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
 
 -- Populate response_advert table
 INSERT INTO response_advert (response_id, advert_id) VALUES (1, 2);
 INSERT INTO response_advert (response_id, advert_id) VALUES (2, 2);
 INSERT INTO response_advert (response_id, advert_id) VALUES (3, 1);
+INSERT INTO response_advert (response_id, advert_id) VALUES (4, 1);
 
 -- Populate advert_user table
 INSERT INTO advert_user (advert_id, user_id) VALUES (1, 2);
