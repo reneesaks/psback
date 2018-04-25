@@ -5,8 +5,10 @@ import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.dto.ResponseDTO;
 import com.perfectstrangers.error.EntityNotFoundException;
+import com.perfectstrangers.error.ResponseLimitException;
 import com.perfectstrangers.service.GenericService;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,7 +65,7 @@ public class ResponseController {
     public Response newResponse(
             @RequestBody @Valid ResponseDTO responseDTO,
             @PathVariable Long advertId
-    ) throws EntityNotFoundException {
+    ) throws EntityNotFoundException, ResponseLimitException {
 
         Advert advert = genericService.getAdvertById(advertId);
         List<Response> advertResponses = advert.getResponses();
@@ -71,6 +73,13 @@ public class ResponseController {
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
         );
         User user = genericService.getUserById(id);
+
+        for (Response response: advertResponses) {
+            if (Objects.equals(response.getUser().getId(), id)) {
+                throw new ResponseLimitException();
+            }
+        }
+
         user.setTotalResponses(user.getTotalResponses() + 1);
         genericService.saveUser(user);
 
@@ -79,10 +88,9 @@ public class ResponseController {
         response.setProposedTime(responseDTO.getProposedTime());
         response.setResponseStatus(com.perfectstrangers.domain.enums.ResponseStatus.NOT_ANSWERED);
         response.setUser(user);
+        response.setAdvert(advert);
+        genericService.saveResponse(response);
 
-        advertResponses.add(response);
-        advert.setResponses(advertResponses);
-        genericService.saveAdvert(advert);
         return response;
     }
 
