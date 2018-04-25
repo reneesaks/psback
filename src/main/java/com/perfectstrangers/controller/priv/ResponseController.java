@@ -109,7 +109,10 @@ public class ResponseController {
         if (response.getUser().getEmail().equals(email) || isAdmin) {
             response.setResponseText(responseDTO.getResponseText());
             response.setProposedTime(responseDTO.getProposedTime());
-            response.setResponseStatus(responseDTO.getResponseStatus());
+
+            if (isAdmin) {
+                response.setResponseStatus(responseDTO.getResponseStatus());
+            }
             genericService.saveResponse(response);
 
             return response;
