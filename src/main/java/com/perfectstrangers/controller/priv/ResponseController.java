@@ -121,6 +121,13 @@ public class ResponseController {
         }
     }
 
+    /**
+     * Delete response by id
+     *
+     * @param responseId id of an existing response
+     * @throws EntityNotFoundException when response is not found
+     * @throws BadCredentialsException when user is not an admin and not the owner of the response
+     */
     @DeleteMapping(value = "delete/{responseId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteResponse(@PathVariable("responseId") Long responseId)

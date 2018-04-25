@@ -2,6 +2,7 @@ package com.perfectstrangers.repository;
 
 import com.perfectstrangers.domain.Advert;
 import com.perfectstrangers.domain.Hotel;
+import com.perfectstrangers.domain.User;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,4 +17,6 @@ public interface AdvertRepository extends PagingAndSortingRepository<Advert, Lon
     Advert findById(Long id);
 
     List<Advert> findAllByHotels(List<Hotel> hotels);
+
+    List<Advert> findAllByUser(User user);
 }

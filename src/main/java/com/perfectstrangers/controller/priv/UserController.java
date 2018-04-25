@@ -1,5 +1,7 @@
 package com.perfectstrangers.controller.priv;
 
+import com.perfectstrangers.domain.Advert;
+import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.dto.PasswordChangeDTO;
 import com.perfectstrangers.dto.UpdateUserDTO;
@@ -76,6 +78,46 @@ public class UserController {
 
         return genericService.getUserById(id);
     }
+
+    /**
+     * Get adverts by user id
+     *
+     * @param userId id of an existing user
+     * @return list of adverts
+     * @throws EntityNotFoundException when user with given id is not found
+     */
+    @GetMapping(value = "{userId}/adverts")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Advert> getUserAdverts(
+            @PathVariable("userId") Long userId
+    ) throws EntityNotFoundException {
+
+        List<Advert> adverts = genericService.getAdvertsByUserId(userId);
+
+        return adverts;
+    }
+
+    /**
+     * Get responses by user id
+     *
+     * @param userId id of an existing user
+     * @return responses list
+     * @throws EntityNotFoundException when user with given id is not found
+     */
+    @GetMapping(value = "{userId}/responses")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Response> getUserResponses(
+            @PathVariable("userId") Long userId
+    ) throws EntityNotFoundException {
+
+        List<Response> responses = genericService.getResponsesByUserId(userId);
+
+        for (Response response: responses) {
+            response.setUser(null);
+        }
+        return responses;
+    }
+
 
     /**
      * Update the current logged in user.

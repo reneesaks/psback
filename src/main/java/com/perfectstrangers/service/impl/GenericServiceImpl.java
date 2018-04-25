@@ -346,6 +346,11 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
+    public List<Advert> getAdvertsByUserId(Long id) throws EntityNotFoundException {
+        return advertRepository.findAllByUser(userRepository.findById(id));
+    }
+
+    @Override
     public void saveAdvert(Advert advert) {
         advertRepository.save(advert);
     }
@@ -393,6 +398,11 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public List<Response> getResponsesByAdvert(Advert advert) throws EntityNotFoundException {
         return advert.getResponses();
+    }
+
+    @Override
+    public List<Response> getResponsesByUserId(Long id) throws EntityNotFoundException {
+        return responseRepository.findAllByUser(userRepository.findById(id));
     }
 
     @Override

@@ -82,6 +82,7 @@ INSERT INTO advert_user (advert_id, user_id) VALUES (2, 3);
 INSERT INTO response_user (response_id, user_id) VALUES (1, 2);
 INSERT INTO response_user (response_id, user_id) VALUES (2, 3);
 INSERT INTO response_user (response_id, user_id) VALUES (3, 2);
+INSERT INTO response_user (response_id, user_id) VALUES (4, 1);
 
 -- Populate advert_resto table
 INSERT INTO advert_resto (advert_id, resto_id) VALUES (1, 2);
