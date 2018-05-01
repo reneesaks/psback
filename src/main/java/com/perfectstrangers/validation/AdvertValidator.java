@@ -15,23 +15,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdvertValidator {
 
-    private static Advert advert;
     private static List<Advert> adverts;
     private static Date preferredStart;
     private static Date preferredEnd;
+    private static Date today;
 
     public AdvertValidator() {
     }
 
     /**
-     * Check if daily limit is exceeded
+     * Check if daily limit is exceeded.
      *
      * @return boolean
      */
     private static boolean isDailyLimitExceeded() {
 
         int counter = 0;
-        Date today = Date.from(Instant.now());
 
         for (Advert advert : adverts) {
 
@@ -45,7 +44,7 @@ public class AdvertValidator {
     }
 
     /**
-     * Check if start and end time are on the same day
+     * Check if start and end time are on the same day.
      *
      * @return boolean
      */
@@ -53,27 +52,37 @@ public class AdvertValidator {
         return DateUtils.isSameDay(preferredStart, preferredEnd);
     }
 
+    /**
+     * Check if end time is greater than start time.
+     *
+     * @return boolean
+     */
     private static boolean isEndGreater() {
         return preferredEnd.after(preferredStart);
+    }
+
+    /**
+     * Check if advert date is in future.
+     *
+     * @return boolean
+     */
+    private static boolean isInFuture() {
+        return preferredStart.after(today);
     }
 
     public static void validate(Advert advert, List<Advert> adverts) throws
             DailyAdvertLimitException,
             AdvertStartAndEndException {
-        AdvertValidator.advert = advert;
         AdvertValidator.adverts = adverts;
         AdvertValidator.preferredStart = Date.from(Instant.parse(advert.getPreferredStart()));
         AdvertValidator.preferredEnd = Date.from(Instant.parse(advert.getPreferredEnd()));
+        AdvertValidator.today = Date.from(Instant.now());
 
         if (isDailyLimitExceeded()) {
             throw new DailyAdvertLimitException();
         }
 
-        if (!areOnTheSameDay()) {
-            throw new AdvertStartAndEndException();
-        }
-
-        if (!isEndGreater()) {
+        if (!areOnTheSameDay() || !isEndGreater() || !isInFuture()) {
             throw new AdvertStartAndEndException();
         }
     }
