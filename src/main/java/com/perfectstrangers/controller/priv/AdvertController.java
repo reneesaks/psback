@@ -5,8 +5,10 @@ import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.enums.AdvertStatus;
 import com.perfectstrangers.dto.AdvertDTO;
+import com.perfectstrangers.error.DailyAdvertLimitExceeded;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.service.GenericService;
+import com.perfectstrangers.validation.AdvertValidator;
 import java.time.Instant;
 import java.util.List;
 import javax.validation.Valid;
@@ -85,19 +87,23 @@ public class AdvertController {
      */
     @PostMapping(value = "new")
     @ResponseStatus(HttpStatus.OK)
-    public Advert newAdvert(@RequestBody @Valid AdvertDTO advertDTO) throws EntityNotFoundException {
+    public Advert newAdvert(@RequestBody @Valid AdvertDTO advertDTO) throws
+            EntityNotFoundException, DailyAdvertLimitExceeded {
 
-        Advert advert = new Advert();
-        String currentTime = Instant.now().toString();
+
         Long id = Long.valueOf(
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
         );
         User user = genericService.getUserById(id);
         user.setTotalAdverts(user.getTotalAdverts() + 1);
+
+        Advert advert = new Advert();
+        AdvertValidator.validate(advert, genericService.getAdvertsByUserId(id));
+
         genericService.saveUser(user);
 
         advert.setAdvertStatus(AdvertStatus.NOT_ACCEPTED);
-        advert.setCreatedDate(currentTime);
+        advert.setCreatedDate(Instant.now().toString());
         advert.setAdvertText(advertDTO.getAdvertText());
         advert.setMealType(advertDTO.getMealType());
         advert.setPreferredStart(advertDTO.getPreferredStart());

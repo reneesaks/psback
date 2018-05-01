@@ -92,9 +92,7 @@ public class UserController {
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
         );
 
-        List<Advert> adverts = genericService.getAdvertsByUserId(id);
-
-        return adverts;
+        return genericService.getAdvertsByUserId(id);
     }
 
     /**
