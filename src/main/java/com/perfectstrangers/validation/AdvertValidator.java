@@ -17,6 +17,8 @@ public class AdvertValidator {
 
     private static Advert advert;
     private static List<Advert> adverts;
+    private static Date preferredStart;
+    private static Date preferredEnd;
 
     public AdvertValidator() {
     }
@@ -42,11 +44,17 @@ public class AdvertValidator {
         return counter >= 5;
     }
 
-    private static boolean isStartAndEndToday() {
-        Date preferredStart = Date.from(Instant.parse(advert.getPreferredStart()));
-        Date preferredEnd = Date.from(Instant.parse(advert.getPreferredEnd()));
-
+    /**
+     * Check if start and end time are on the same day
+     *
+     * @return boolean
+     */
+    private static boolean areOnTheSameDay() {
         return DateUtils.isSameDay(preferredStart, preferredEnd);
+    }
+
+    private static boolean isEndGreater() {
+        return preferredEnd.after(preferredStart);
     }
 
     public static void validate(Advert advert, List<Advert> adverts) throws
@@ -54,12 +62,18 @@ public class AdvertValidator {
             AdvertStartAndEndException {
         AdvertValidator.advert = advert;
         AdvertValidator.adverts = adverts;
+        AdvertValidator.preferredStart = Date.from(Instant.parse(advert.getPreferredStart()));
+        AdvertValidator.preferredEnd = Date.from(Instant.parse(advert.getPreferredEnd()));
 
         if (isDailyLimitExceeded()) {
             throw new DailyAdvertLimitException();
         }
 
-        if (!isStartAndEndToday()) {
+        if (!areOnTheSameDay()) {
+            throw new AdvertStartAndEndException();
+        }
+
+        if (!isEndGreater()) {
             throw new AdvertStartAndEndException();
         }
     }
