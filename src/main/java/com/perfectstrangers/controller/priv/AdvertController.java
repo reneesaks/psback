@@ -5,7 +5,8 @@ import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.enums.AdvertStatus;
 import com.perfectstrangers.dto.AdvertDTO;
-import com.perfectstrangers.error.DailyAdvertLimitExceeded;
+import com.perfectstrangers.error.AdvertStartAndEndException;
+import com.perfectstrangers.error.DailyAdvertLimitException;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.service.GenericService;
 import com.perfectstrangers.validation.AdvertValidator;
@@ -88,8 +89,7 @@ public class AdvertController {
     @PostMapping(value = "new")
     @ResponseStatus(HttpStatus.OK)
     public Advert newAdvert(@RequestBody @Valid AdvertDTO advertDTO) throws
-            EntityNotFoundException, DailyAdvertLimitExceeded {
-
+            EntityNotFoundException, DailyAdvertLimitException, AdvertStartAndEndException {
 
         Long id = Long.valueOf(
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
@@ -98,10 +98,6 @@ public class AdvertController {
         user.setTotalAdverts(user.getTotalAdverts() + 1);
 
         Advert advert = new Advert();
-        AdvertValidator.validate(advert, genericService.getAdvertsByUserId(id));
-
-        genericService.saveUser(user);
-
         advert.setAdvertStatus(AdvertStatus.NOT_ACCEPTED);
         advert.setCreatedDate(Instant.now().toString());
         advert.setAdvertText(advertDTO.getAdvertText());
@@ -112,7 +108,11 @@ public class AdvertController {
         advert.setHotels(advertDTO.getHotels());
         advert.setUser(user);
 
-        this.genericService.saveAdvert(advert);
+        AdvertValidator.validate(advert, genericService.getAdvertsByUserId(id));
+
+        genericService.saveUser(user);
+        genericService.saveAdvert(advert);
+
         return advert;
     }
 
@@ -178,7 +178,7 @@ public class AdvertController {
         if (advert.getUser().getEmail().equals(email) || isAdmin) {
 
             advert.setAdvertStatus(AdvertStatus.ACCEPTED);
-            for (Response response: responses) {
+            for (Response response : responses) {
                 if (response.getId().equals(responseId)) {
                     response.setResponseStatus(com.perfectstrangers.domain.enums.ResponseStatus.ACCEPTED);
                 } else {

@@ -110,7 +110,7 @@ public class UserController {
         );
         List<Response> responses = genericService.getResponsesByUserId(id);
 
-        for (Response response: responses) {
+        for (Response response : responses) {
             response.setUser(null);
         }
         return responses;
