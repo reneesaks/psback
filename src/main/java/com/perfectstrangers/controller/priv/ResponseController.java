@@ -6,9 +6,10 @@ import com.perfectstrangers.domain.User;
 import com.perfectstrangers.dto.ResponseDTO;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.error.ResponseLimitException;
+import com.perfectstrangers.error.ResponseTimeException;
 import com.perfectstrangers.service.GenericService;
+import com.perfectstrangers.validation.ResponseValidator;
 import java.util.List;
-import java.util.Objects;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-// TODO: Response logic is more complicated. This is simplified. Right now will focus on this in front end.
-// TODO: When front end is ready, this logic should be also here so server validation is done.
 @RestController
 @RequestMapping("api/private/advert/{advertId}/response")
 public class ResponseController {
@@ -57,7 +56,7 @@ public class ResponseController {
      * Create a new response to an advert.
      *
      * @param responseDTO response object.
-     * @param advertId advert id
+     * @param advertId advert id.
      * @throws EntityNotFoundException when advert with given id is not found.
      */
     @PostMapping(value = "new")
@@ -65,23 +64,14 @@ public class ResponseController {
     public Response newResponse(
             @RequestBody @Valid ResponseDTO responseDTO,
             @PathVariable Long advertId
-    ) throws EntityNotFoundException, ResponseLimitException {
+    ) throws EntityNotFoundException, ResponseLimitException, ResponseTimeException {
 
-        Advert advert = genericService.getAdvertById(advertId);
-        List<Response> advertResponses = advert.getResponses();
         Long id = Long.valueOf(
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
         );
+        Advert advert = genericService.getAdvertById(advertId);
         User user = genericService.getUserById(id);
-
-        for (Response response: advertResponses) {
-            if (Objects.equals(response.getUser().getId(), id)) {
-                throw new ResponseLimitException();
-            }
-        }
-
         user.setTotalResponses(user.getTotalResponses() + 1);
-        genericService.saveUser(user);
 
         Response response = new Response();
         response.setResponseText(responseDTO.getResponseText());
@@ -89,6 +79,10 @@ public class ResponseController {
         response.setResponseStatus(com.perfectstrangers.domain.enums.ResponseStatus.NOT_ANSWERED);
         response.setUser(user);
         response.setAdvert(advert);
+
+        ResponseValidator.validate(user, advert, response);
+
+        genericService.saveUser(user);
         genericService.saveResponse(response);
 
         return response;
@@ -97,7 +91,7 @@ public class ResponseController {
     /**
      * Update an existing response.
      *
-     * @param responseDTO response
+     * @param responseDTO response.
      * @param responseId response id.
      * @throws EntityNotFoundException when advert or response with given id is not found.
      */
@@ -130,11 +124,11 @@ public class ResponseController {
     }
 
     /**
-     * Delete response by id
+     * Delete response by id.
      *
-     * @param responseId id of an existing response
-     * @throws EntityNotFoundException when response is not found
-     * @throws BadCredentialsException when user is not an admin and not the owner of the response
+     * @param responseId id of an existing response.
+     * @throws EntityNotFoundException when response is not found.
+     * @throws BadCredentialsException when user is not an admin and not the owner of the response.
      */
     @DeleteMapping(value = "delete/{responseId}")
     @ResponseStatus(HttpStatus.OK)

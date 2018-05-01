@@ -1,7 +1,7 @@
 package com.perfectstrangers.validation;
 
 import com.perfectstrangers.domain.Advert;
-import com.perfectstrangers.error.AdvertStartAndEndException;
+import com.perfectstrangers.error.AdvertTimeException;
 import com.perfectstrangers.error.DailyAdvertLimitException;
 import java.time.Instant;
 import java.util.Date;
@@ -10,7 +10,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Component;
 
 /**
- * Checks if advert is valid.
+ * Checks if an advert is valid.
  */
 @Component
 public class AdvertValidator {
@@ -26,7 +26,7 @@ public class AdvertValidator {
     /**
      * Check if daily limit is exceeded.
      *
-     * @return boolean
+     * @return boolean.
      */
     private static boolean isDailyLimitExceeded() {
 
@@ -44,35 +44,27 @@ public class AdvertValidator {
     }
 
     /**
-     * Check if start and end time are on the same day.
+     * Check if advert start and end times are valid.
      *
-     * @return boolean
+     * @return boolean.
      */
-    private static boolean areOnTheSameDay() {
-        return DateUtils.isSameDay(preferredStart, preferredEnd);
+    private static boolean isTimeValid() {
+        return DateUtils.isSameDay(preferredStart, preferredEnd) &&
+                preferredEnd.after(preferredStart) &&
+                preferredStart.after(today);
     }
 
     /**
-     * Check if end time is greater than start time.
+     * Validate advert time.
      *
-     * @return boolean
+     * @param advert new advert.
+     * @param adverts list of adverts belonging to the user.
+     * @throws DailyAdvertLimitException when user has exceeded daily adverts limit.
+     * @throws AdvertTimeException when advert time is invalid.
      */
-    private static boolean isEndGreater() {
-        return preferredEnd.after(preferredStart);
-    }
-
-    /**
-     * Check if advert date is in future.
-     *
-     * @return boolean
-     */
-    private static boolean isInFuture() {
-        return preferredStart.after(today);
-    }
-
     public static void validate(Advert advert, List<Advert> adverts) throws
             DailyAdvertLimitException,
-            AdvertStartAndEndException {
+            AdvertTimeException {
         AdvertValidator.adverts = adverts;
         AdvertValidator.preferredStart = Date.from(Instant.parse(advert.getPreferredStart()));
         AdvertValidator.preferredEnd = Date.from(Instant.parse(advert.getPreferredEnd()));
@@ -82,8 +74,8 @@ public class AdvertValidator {
             throw new DailyAdvertLimitException();
         }
 
-        if (!areOnTheSameDay() || !isEndGreater() || !isInFuture()) {
-            throw new AdvertStartAndEndException();
+        if (!isTimeValid()) {
+            throw new AdvertTimeException();
         }
     }
 }

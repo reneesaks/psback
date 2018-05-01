@@ -18,8 +18,8 @@ public class CustomErrorAttributes extends DefaultErrorAttributes {
     /**
      * Timestamp is converted to human readable format and exception is removed from map if exists.
      *
-     * @param requestAttributes RequestAttributes
-     * @param includeStackTrace boolean
+     * @param requestAttributes RequestAttributes.
+     * @param includeStackTrace boolean.
      */
     @Override
     public Map<String, Object> getErrorAttributes(

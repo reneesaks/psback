@@ -5,7 +5,7 @@ import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.enums.AdvertStatus;
 import com.perfectstrangers.dto.AdvertDTO;
-import com.perfectstrangers.error.AdvertStartAndEndException;
+import com.perfectstrangers.error.AdvertTimeException;
 import com.perfectstrangers.error.DailyAdvertLimitException;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.service.GenericService;
@@ -29,8 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-// TODO: Advert logic is more complicated. This is simplified. Right now will focus on this in front end.
-// TODO: When front end is ready, this logic should be also here so server validation is done.
 @RestController
 @RequestMapping("api/private/advert")
 public class AdvertController {
@@ -89,7 +87,7 @@ public class AdvertController {
     @PostMapping(value = "new")
     @ResponseStatus(HttpStatus.OK)
     public Advert newAdvert(@RequestBody @Valid AdvertDTO advertDTO) throws
-            EntityNotFoundException, DailyAdvertLimitException, AdvertStartAndEndException {
+            EntityNotFoundException, DailyAdvertLimitException, AdvertTimeException {
 
         Long id = Long.valueOf(
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
@@ -128,12 +126,12 @@ public class AdvertController {
     public Advert updateAdvert(
             @RequestBody @Valid AdvertDTO advertDTO,
             @PathVariable("advertId") Long advertId
-    ) throws EntityNotFoundException {
+    ) throws EntityNotFoundException, DailyAdvertLimitException, AdvertTimeException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Long id = Long.valueOf(auth.getPrincipal().toString());
-        String email = genericService.getUserById(id).getEmail();
         Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
+        String email = genericService.getUserById(id).getEmail();
         Advert advert = genericService.getAdvertById(advertId);
 
         if (advert.getUser().getEmail().equals(email) || isAdmin) {
@@ -147,6 +145,9 @@ public class AdvertController {
             advert.setPreferredEnd(advertDTO.getPreferredEnd());
             advert.setRestos(advertDTO.getRestos());
             advert.setHotels(advertDTO.getHotels());
+
+            AdvertValidator.validate(advert, genericService.getAdvertsByUserId(id));
+
             this.genericService.saveAdvert(advert);
 
             return advert;
@@ -156,7 +157,7 @@ public class AdvertController {
     }
 
     /**
-     * Accept a response
+     * Accept a response.
      *
      * @param advertId id of an existing advert
      * @param responseId id of an existing response
@@ -170,8 +171,8 @@ public class AdvertController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Long id = Long.valueOf(auth.getPrincipal().toString());
-        String email = genericService.getUserById(id).getEmail();
         Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
+        String email = genericService.getUserById(id).getEmail();
         Advert advert = genericService.getAdvertById(advertId);
         List<Response> responses = genericService.getResponsesByAdvert(advert);
 
@@ -206,8 +207,8 @@ public class AdvertController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Long id = Long.valueOf(auth.getPrincipal().toString());
-        String email = genericService.getUserById(id).getEmail();
         Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
+        String email = genericService.getUserById(id).getEmail();
         Advert advert = genericService.getAdvertById(advertId);
 
         if (advert.getUser().getEmail().equals(email) || isAdmin) {
