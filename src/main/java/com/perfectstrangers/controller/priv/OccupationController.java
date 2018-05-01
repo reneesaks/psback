@@ -60,6 +60,7 @@ public class OccupationController {
      * Create a new occupation.
      *
      * @param occupationDTO occupation object.
+     * @return new occupation object.
      */
     @PostMapping("new")
     @PreAuthorize("hasAuthority('ADMIN_USER')")
@@ -79,6 +80,7 @@ public class OccupationController {
      *
      * @param occupationDTO occupation object.
      * @param occupationId id of an existing occupation.
+     * @return updated occupation object.
      * @throws EntityNotFoundException when occupation with given id is not found.
      */
     @PutMapping("update/{occupationId}")

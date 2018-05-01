@@ -172,7 +172,7 @@ public class PropertiesEncryptor {
     /**
      * Main entry point to start this utility.
      *
-     * @param args <decrypt> or <encrypt> AND <password> argument
+     * @param args decrypt or encrypt AND password argument.
      */
     public static void main(String[] args) {
 

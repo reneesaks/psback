@@ -64,8 +64,8 @@ public class UserController {
     /**
      * Get logged in user.
      *
-     * @return user object
-     * @throws EntityNotFoundException when user is not found
+     * @return user object.
+     * @throws EntityNotFoundException when user is not found.
      */
     @GetMapping(value = "current-user")
     @ResponseStatus(HttpStatus.OK)
@@ -81,8 +81,8 @@ public class UserController {
     /**
      * Get logged in user adverts.
      *
-     * @return list of adverts
-     * @throws EntityNotFoundException when user with given id is not found
+     * @return list of adverts.
+     * @throws EntityNotFoundException when user with given id is not found.
      */
     @GetMapping(value = "adverts")
     @ResponseStatus(HttpStatus.OK)
@@ -96,10 +96,10 @@ public class UserController {
     }
 
     /**
-     * Get logged in user responses
+     * Get logged in user responses.
      *
-     * @return responses list
-     * @throws EntityNotFoundException when user with given id is not found
+     * @return responses list.
+     * @throws EntityNotFoundException when user with given id is not found.
      */
     @GetMapping(value = "responses")
     @ResponseStatus(HttpStatus.OK)
@@ -121,6 +121,7 @@ public class UserController {
      * Update the current logged in user.
      *
      * @param updateUserDTO user object.
+     * @return updated user object.
      * @throws EntityNotFoundException when user with given id is not found.
      */
     @PutMapping(value = "update")

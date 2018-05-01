@@ -59,6 +59,7 @@ public class DegreeController {
      * Create a new degree.
      *
      * @param degreeDTO degree object.
+     * @return created degree object.
      */
     @PostMapping("new")
     @PreAuthorize("hasAuthority('ADMIN_USER')")
@@ -78,6 +79,7 @@ public class DegreeController {
      *
      * @param degreeDTO degree object.
      * @param degreeId id of an existing degree.
+     * @return updated degree object.
      * @throws EntityNotFoundException when degree with given id is not found.
      */
     @PutMapping("update/{degreeId}")

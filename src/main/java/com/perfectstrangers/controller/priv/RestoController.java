@@ -60,6 +60,7 @@ public class RestoController {
      * Create a new resto.
      *
      * @param restoDTO resto object.
+     * @return created resto object.
      */
     @PostMapping("new")
     @PreAuthorize("hasAuthority('ADMIN_USER')")
@@ -87,6 +88,7 @@ public class RestoController {
      *
      * @param restoDTO resto object.
      * @param restoId id of an existing resto.
+     * @return updated resto object.
      * @throws EntityNotFoundException when resto with given id is not found.
      */
     @PutMapping("update/{restoId}")

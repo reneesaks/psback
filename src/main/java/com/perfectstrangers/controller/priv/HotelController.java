@@ -61,6 +61,7 @@ public class HotelController {
      * Create new hotel.
      *
      * @param hotelDTO hotel object.
+     * @return created hotel object.
      */
     @PostMapping("new")
     @PreAuthorize("hasAuthority('ADMIN_USER')")
@@ -88,6 +89,7 @@ public class HotelController {
      *
      * @param hotelDTO hotel object.
      * @param hotelId id of an existing hotel.
+     * @return updated hotel object.
      * @throws EntityNotFoundException when hotel with given id is not found.
      */
     @PutMapping("update/{hotelId}")
@@ -142,7 +144,7 @@ public class HotelController {
         Hotel hotel = genericService.getHotelById(hotelId);
         List<Resto> restos = hotel.getRestos();
 
-        for (Resto resto: restos) {
+        for (Resto resto : restos) {
             resto.setHotel(null);
         }
 

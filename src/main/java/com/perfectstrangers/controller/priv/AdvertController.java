@@ -84,6 +84,16 @@ public class AdvertController {
      * @param advertDTO advert object.
      * @throws EntityNotFoundException when hotel with given id is not found.
      */
+
+    /**
+     * Create a new advert.
+     *
+     * @param advertDTO advert object.
+     * @return created advert object.
+     * @throws EntityNotFoundException when hotel with given id is not found.
+     * @throws DailyAdvertLimitException when user has exceeded daily adverts limit.
+     * @throws AdvertTimeException when advert time is invalid.
+     */
     @PostMapping(value = "new")
     @ResponseStatus(HttpStatus.OK)
     public Advert newAdvert(@RequestBody @Valid AdvertDTO advertDTO) throws
@@ -119,7 +129,10 @@ public class AdvertController {
      *
      * @param advertDTO advert object.
      * @param advertId id of an existing advert.
-     * @throws EntityNotFoundException when advert with given id is not found.
+     * @return updated advert object.
+     * @throws EntityNotFoundException when hotel with given id is not found.
+     * @throws DailyAdvertLimitException when user has exceeded daily adverts limit.
+     * @throws AdvertTimeException when advert time is invalid.
      */
     @PutMapping(value = "update/{advertId}")
     @ResponseStatus(HttpStatus.OK)
@@ -152,16 +165,16 @@ public class AdvertController {
 
             return advert;
         } else {
-            throw new BadCredentialsException("Only advert owner or admin can edit this advert");
+            throw new BadCredentialsException("Only the advert owner or admin can edit this advert");
         }
     }
 
     /**
      * Accept a response.
      *
-     * @param advertId id of an existing advert
-     * @param responseId id of an existing response
-     * @throws EntityNotFoundException when advert or response with given id is not found
+     * @param advertId id of an existing advert.
+     * @param responseId id of an existing response.
+     * @throws EntityNotFoundException when advert or response with given id is not found.
      */
     @PutMapping(value = "{advertId}/accept/{responseId}")
     @ResponseStatus(HttpStatus.OK)
@@ -190,7 +203,7 @@ public class AdvertController {
             genericService.saveAdvert(advert);
 
         } else {
-            throw new BadCredentialsException("Only advert owner or admin can edit this advert");
+            throw new BadCredentialsException("Only the advert owner or admin can edit this advert");
         }
     }
 
@@ -214,7 +227,7 @@ public class AdvertController {
         if (advert.getUser().getEmail().equals(email) || isAdmin) {
             genericService.deleteAdvert(advert);
         } else {
-            throw new BadCredentialsException("Only advert owner or admin can delete this advert");
+            throw new BadCredentialsException("Only the advert owner or admin can delete this advert");
         }
     }
 }

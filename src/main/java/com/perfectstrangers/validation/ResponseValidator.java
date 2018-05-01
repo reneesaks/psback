@@ -43,7 +43,7 @@ public class ResponseValidator {
 
         List<Response> advertResponses = advert.getResponses();
 
-        for (Response response: advertResponses) {
+        for (Response response : advertResponses) {
             if (Objects.equals(response.getUser().getId(), user.getId())) {
                 return true;
             }
@@ -54,8 +54,10 @@ public class ResponseValidator {
     /**
      * Validate response time.
      *
+     * @param user user of the response.
      * @param advert existing advert.
      * @param response new response to that advert.
+     * @throws ResponseLimitException when user has exceeded response limit.
      * @throws ResponseTimeException when response time is invalid.
      */
     public static void validate(User user, Advert advert, Response response) throws

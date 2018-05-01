@@ -43,7 +43,7 @@ public class ResponseController {
      *
      * @param advertId advert id.
      * @return list of responses.
-     * @throws EntityNotFoundException when advert with given id is not found.
+     * @throws EntityNotFoundException when response with given id is not found.
      */
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -56,8 +56,11 @@ public class ResponseController {
      * Create a new response to an advert.
      *
      * @param responseDTO response object.
-     * @param advertId advert id.
-     * @throws EntityNotFoundException when advert with given id is not found.
+     * @param advertId response id.
+     * @return created response object.
+     * @throws EntityNotFoundException when response with given id is not found.
+     * @throws ResponseLimitException when user has exceeded response limit.
+     * @throws ResponseTimeException when response time is invalid.
      */
     @PostMapping(value = "new")
     @ResponseStatus(HttpStatus.OK)
@@ -93,33 +96,39 @@ public class ResponseController {
      *
      * @param responseDTO response.
      * @param responseId response id.
-     * @throws EntityNotFoundException when advert or response with given id is not found.
+     * @return updated response object.
+     * @throws EntityNotFoundException when advert with given id is not found.
+     * @throws ResponseLimitException when user has exceeded response limit.
+     * @throws ResponseTimeException when response time is invalid.
      */
     @PutMapping(value = "update/{responseId}")
     @ResponseStatus(HttpStatus.OK)
     public Response updateResponse(
             @RequestBody @Valid ResponseDTO responseDTO,
             @PathVariable("responseId") Long responseId
-    ) throws EntityNotFoundException {
+    ) throws EntityNotFoundException, ResponseLimitException, ResponseTimeException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Long id = Long.valueOf(auth.getPrincipal().toString());
-        String email = genericService.getUserById(id).getEmail();
         Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
+        User user = genericService.getUserById(id);
         Response response = genericService.getResponseById(responseId);
 
-        if (response.getUser().getEmail().equals(email) || isAdmin) {
+        if (response.getUser().getEmail().equals(user.getEmail()) || isAdmin) {
             response.setResponseText(responseDTO.getResponseText());
             response.setProposedTime(responseDTO.getProposedTime());
 
             if (isAdmin) {
                 response.setResponseStatus(responseDTO.getResponseStatus());
             }
+
+            ResponseValidator.validate(user, response.getAdvert(), response);
+
             genericService.saveResponse(response);
 
             return response;
         } else {
-            throw new BadCredentialsException("Only response owner or admin can edit this response");
+            throw new BadCredentialsException("Only the response owner or admin can edit this response");
         }
     }
 
@@ -143,7 +152,7 @@ public class ResponseController {
         if (response.getUser().getEmail().equals(email) || isAdmin) {
             genericService.deleteResponse(response);
         } else {
-            throw new BadCredentialsException("Only response owner or admin can delete this response");
+            throw new BadCredentialsException("Only the response owner or admin can delete this response");
         }
     }
 }
