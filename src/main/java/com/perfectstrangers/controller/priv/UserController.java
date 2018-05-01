@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-// TODO: getUser should be controlled somehow. User details can be accessed by everyone right now.
 @RestController
 @RequestMapping("api/private/user")
 public class UserController {
@@ -63,7 +62,7 @@ public class UserController {
     }
 
     /**
-     * Gets logged in user.
+     * Get logged in user.
      *
      * @return user object
      * @throws EntityNotFoundException when user is not found
@@ -80,37 +79,38 @@ public class UserController {
     }
 
     /**
-     * Get adverts by user id
+     * Get logged in user adverts.
      *
-     * @param userId id of an existing user
      * @return list of adverts
      * @throws EntityNotFoundException when user with given id is not found
      */
-    @GetMapping(value = "{userId}/adverts")
+    @GetMapping(value = "adverts")
     @ResponseStatus(HttpStatus.OK)
-    public List<Advert> getUserAdverts(
-            @PathVariable("userId") Long userId
-    ) throws EntityNotFoundException {
+    public List<Advert> getCurrentUserAdverts() throws EntityNotFoundException {
 
-        List<Advert> adverts = genericService.getAdvertsByUserId(userId);
+        Long id = Long.valueOf(
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
+        );
+
+        List<Advert> adverts = genericService.getAdvertsByUserId(id);
 
         return adverts;
     }
 
     /**
-     * Get responses by user id
+     * Get logged in user responses
      *
-     * @param userId id of an existing user
      * @return responses list
      * @throws EntityNotFoundException when user with given id is not found
      */
-    @GetMapping(value = "{userId}/responses")
+    @GetMapping(value = "responses")
     @ResponseStatus(HttpStatus.OK)
-    public List<Response> getUserResponses(
-            @PathVariable("userId") Long userId
-    ) throws EntityNotFoundException {
+    public List<Response> getCurrentUserResponses() throws EntityNotFoundException {
 
-        List<Response> responses = genericService.getResponsesByUserId(userId);
+        Long id = Long.valueOf(
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
+        );
+        List<Response> responses = genericService.getResponsesByUserId(id);
 
         for (Response response: responses) {
             response.setUser(null);
@@ -134,6 +134,7 @@ public class UserController {
         );
         User user = genericService.getUserById(id);
 
+        user.setAlias(updateUserDTO.getAlias());
         user.setGender(updateUserDTO.getGender());
         user.setAge(updateUserDTO.getAge());
         user.setDegree(updateUserDTO.getDegree());
