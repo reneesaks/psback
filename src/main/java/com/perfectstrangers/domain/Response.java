@@ -1,6 +1,5 @@
 package com.perfectstrangers.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.perfectstrangers.domain.enums.ResponseStatus;
 import javax.persistence.Column;
@@ -42,7 +41,7 @@ public class Response {
             joinColumns = @JoinColumn(name = "response_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonIgnoreProperties({ "firstName", "lastName", "email", "activated", "regDate", "lastVisit" })
+    @JsonIgnoreProperties({ "totalAdverts", "totalResponses" , "email", "activated", "regDate", "lastVisit" })
     private User user;
 
     @ManyToOne
@@ -51,7 +50,7 @@ public class Response {
             joinColumns = @JoinColumn(name = "response_id"),
             inverseJoinColumns = @JoinColumn(name = "advert_id")
     )
-    @JsonIgnore
+    @JsonIgnoreProperties({ "responses" })
     private Advert advert;
 
     public Long getId() {

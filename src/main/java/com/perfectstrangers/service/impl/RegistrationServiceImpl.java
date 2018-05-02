@@ -1,6 +1,5 @@
 package com.perfectstrangers.service.impl;
 
-import com.perfectstrangers.domain.Role;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.domain.VerificationToken;
 import com.perfectstrangers.error.UsernameExistsException;
@@ -10,7 +9,6 @@ import com.perfectstrangers.repository.VerificationTokenRepository;
 import com.perfectstrangers.service.RegistrationService;
 import com.perfectstrangers.util.PasswordHasher;
 import java.util.Calendar;
-import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,22 +50,19 @@ public class RegistrationServiceImpl implements RegistrationService {
     /**
      * Saves the newly created user with activated field set to false.
      *
-     * @param userDTO User object for validation.
-     * @return User object
+     * @param user user object.
+     * @return user object
      * @throws UsernameExistsException when the username already exists.
      */
     @Override
-    public User registerNewUserAccount(User userDTO) throws UsernameExistsException {
-        if (emailExists(userDTO.getEmail())) {
+    public User registerNewUserAccount(User user) throws UsernameExistsException {
+        if (emailExists(user.getEmail())) {
             throw new UsernameExistsException();
         }
-        User user = new User();
-        List<Role> role = roleRepository.findByRoleName("STANDARD_USER");
-        user.setEmail(userDTO.getEmail());
+
         // Hash password here because .save will trigger also setPassword and double hash will occur
-        String password = new PasswordHasher().hashPasswordWithSha256(userDTO.getPassword());
-        user.setPassword(password);
-        user.setRoles(role);
+        user.setPassword(new PasswordHasher().hashPasswordWithSha256(user.getPassword()));
+        user.setRoles(roleRepository.findByRoleName("STANDARD_USER"));
         return userRepository.save(user);
     }
 

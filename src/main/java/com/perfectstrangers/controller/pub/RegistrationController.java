@@ -91,7 +91,7 @@ public class RegistrationController {
         User user = new User();
         user.setPassword(newUserDTO.getPassword());
         user.setEmail(newUserDTO.getEmail());
-        user.setRegDate(Instant.now().toString()); // TODO: ISO standard must be used
+        user.setRegDate(Instant.now().toString());
         User registeredUser = registrationService.registerNewUserAccount(user);
         registrationService.createVerificationToken(registeredUser);
         String token = registrationService.getVerificationTokenByUser(registeredUser).getToken();

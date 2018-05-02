@@ -71,7 +71,6 @@ public class User {
     private String lastVisit;
 
     @ManyToOne
-    @JsonIgnore
     @JoinTable(
             name = "user_degree",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -80,7 +79,6 @@ public class User {
     private Degree degree;
 
     @ManyToOne
-    @JsonIgnore
     @JoinTable(
             name = "user_occupation",
             joinColumns = @JoinColumn(name = "user_id"),
