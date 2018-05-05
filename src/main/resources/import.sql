@@ -59,8 +59,8 @@ INSERT INTO user_occupation (user_id, occupation_id) VALUES (1, 2);
 INSERT INTO user_occupation (user_id, occupation_id) VALUES (2, 1);
 
 -- Populate advert table
-INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (1, 'NOT_ACCEPTED', '2017-08-14T12:17:47.720Z', 'Programmer looking for a dinner companion.', 'DINNER', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
-INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (2, 'ACCEPTED', '2017-08-14T12:17:47.720Z', 'Is there somebody who wants to have a meaningful conversation over breakfast?.', 'BREAKFAST', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
+INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (1, 'NOT_ACCEPTED', '2018-08-14T12:17:47.720Z', 'Programmer looking for a dinner companion.', 'DINNER', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
+INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (2, 'ACCEPTED', '2018-08-14T12:17:47.720Z', 'Is there somebody who wants to have a meaningful conversation over breakfast?.', 'BREAKFAST', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z', '2017-08-14T12:17:47.720Z');
 
 -- Populate response table
 INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (1, 'That is a great idea! I would love to have a meaningful conversation over breakfast.', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');

@@ -61,6 +61,7 @@ public class AdvertController {
     @GetMapping(value = "{advertId}")
     @ResponseStatus(HttpStatus.OK)
     public Advert getAdvert(@PathVariable("advertId") Long advertId) throws EntityNotFoundException {
+
         return genericService.getAdvertById(advertId);
     }
 

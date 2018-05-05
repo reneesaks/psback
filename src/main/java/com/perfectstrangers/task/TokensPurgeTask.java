@@ -27,7 +27,7 @@ public class TokensPurgeTask {
         this.passwordResetTokenRepository = passwordResetTokenRepository;
     }
 
-    @Scheduled(cron = "${purge.oldTokens}")
+    @Scheduled(cron = "${purge.everyDay}")
     public void purgeExpired() {
         Date now = Date.from(Instant.now());
         verificationTokenRepository.deleteAllExpiredSince(now);

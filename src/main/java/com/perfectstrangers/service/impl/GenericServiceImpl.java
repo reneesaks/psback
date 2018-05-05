@@ -17,8 +17,11 @@ import com.perfectstrangers.repository.ResponseRepository;
 import com.perfectstrangers.repository.RestoRepository;
 import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.service.GenericService;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -322,12 +325,18 @@ public class GenericServiceImpl implements GenericService {
     // ============== ADVERTS ============
     @Override
     public List<Advert> getAllAdverts() {
-        return advertRepository.findAllByAdvertStatusIsNot(AdvertStatus.ACCEPTED);
+
+        List<Advert> adverts = advertRepository.findAllByAdvertStatusIsNot(AdvertStatus.ACCEPTED);
+        final Date now = DateUtils.addMinutes(Date.from(Instant.now()), 15);
+
+        adverts.removeIf(advert -> Date.from(Instant.parse(advert.getPreferredStart())).before(now));
+
+        return adverts;
     }
 
     @Override
     public Page<Advert> getAllAdvertsByPage(Pageable pageable) {
-        return advertRepository.findAll(pageable);
+        return advertRepository.findAllByAdvertStatusIsNot(pageable, AdvertStatus.ACCEPTED);
     }
 
     @Override
@@ -341,14 +350,26 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public List<Advert> getAdvertsByHotelId(Long id) throws EntityNotFoundException {
+
         List<Hotel> hotel = new ArrayList<>();
         hotel.add(hotelRepository.findById(id));
-        return advertRepository.findAllByHotels(hotel);
+        List<Advert> adverts = advertRepository
+                .findAllByHotelsAndAdvertStatusIsNot(hotel, AdvertStatus.ACCEPTED);
+        final Date now = DateUtils.addMinutes(Date.from(Instant.now()), 15);
+
+        adverts.removeIf(advert -> Date.from(Instant.parse(advert.getPreferredStart())).before(now));
+
+        return adverts;
     }
 
     @Override
     public List<Advert> getAdvertsByUserId(Long id) throws EntityNotFoundException {
-        return advertRepository.findAllByUser(userRepository.findById(id));
+        User user = userRepository.findById(id);
+        if (user == null) {
+            throw new EntityNotFoundException(User.class, "id", id.toString());
+        }
+
+        return advertRepository.findAllByUser(userRepository.findById(user.getId()));
     }
 
     @Override
@@ -403,7 +424,19 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public List<Response> getResponsesByUserId(Long id) throws EntityNotFoundException {
-        return responseRepository.findAllByUser(userRepository.findById(id));
+
+        User user = userRepository.findById(id);
+        if (user == null) {
+            throw new EntityNotFoundException(User.class, "id", id.toString());
+        }
+
+        List<Response> responses = responseRepository.findAllByUser(user);
+        final Date now = DateUtils.addMinutes(Date.from(Instant.now()), 15);
+
+        responses.removeIf(
+                response -> Date.from(Instant.parse(response.getAdvert().getPreferredStart())).before(now));
+
+        return responses;
     }
 
     @Override

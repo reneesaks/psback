@@ -72,6 +72,7 @@ public class Advert {
     private List<Hotel> hotels;
 
     @OneToMany(mappedBy = "advert", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({ "advert" })
     private List<Response> responses;
 
     @ManyToOne
