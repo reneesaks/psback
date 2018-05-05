@@ -2,7 +2,6 @@ package com.perfectstrangers.domain.enums;
 
 public enum AdvertStatus {
 
-    COMPLETED("Completed"),
     ACCEPTED("Accepted"),
     NOT_ACCEPTED("NotAccepted");
 

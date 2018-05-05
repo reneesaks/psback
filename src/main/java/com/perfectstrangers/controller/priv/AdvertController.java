@@ -82,13 +82,6 @@ public class AdvertController {
      * Create a new advert.
      *
      * @param advertDTO advert object.
-     * @throws EntityNotFoundException when hotel with given id is not found.
-     */
-
-    /**
-     * Create a new advert.
-     *
-     * @param advertDTO advert object.
      * @return created advert object.
      * @throws EntityNotFoundException when hotel with given id is not found.
      * @throws DailyAdvertLimitException when user has exceeded daily adverts limit.

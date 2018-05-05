@@ -1,6 +1,8 @@
 package com.perfectstrangers.controller.priv;
 
 import com.perfectstrangers.domain.Advert;
+import com.perfectstrangers.domain.Degree;
+import com.perfectstrangers.domain.Occupation;
 import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.User;
 import com.perfectstrangers.dto.PasswordChangeDTO;
@@ -132,12 +134,14 @@ public class UserController {
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
         );
         User user = genericService.getUserById(id);
+        Degree degree = genericService.getDegreeById(updateUserDTO.getDegree().getId());
+        Occupation occupation = genericService.getOccupationById(updateUserDTO.getOccupation().getId());
 
         user.setAlias(updateUserDTO.getAlias());
         user.setGender(updateUserDTO.getGender());
         user.setAge(updateUserDTO.getAge());
-        user.setDegree(updateUserDTO.getDegree());
-        user.setOccupation(updateUserDTO.getOccupation());
+        user.setDegree(degree);
+        user.setOccupation(occupation);
 
         genericService.saveUser(user);
         return user;

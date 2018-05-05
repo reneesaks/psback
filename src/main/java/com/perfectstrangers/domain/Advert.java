@@ -80,7 +80,7 @@ public class Advert {
             joinColumns = @JoinColumn(name = "advert_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonIgnoreProperties({ "firstName", "lastName", "email", "activated", "regDate", "lastVisit" })
+    @JsonIgnoreProperties({ "email", "activated", "regDate", "lastVisit" })
     private User user;
 
     public Advert() {

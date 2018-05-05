@@ -7,6 +7,7 @@ import com.perfectstrangers.domain.Occupation;
 import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.Resto;
 import com.perfectstrangers.domain.User;
+import com.perfectstrangers.domain.enums.AdvertStatus;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.repository.AdvertRepository;
 import com.perfectstrangers.repository.DegreeRepository;
@@ -321,7 +322,7 @@ public class GenericServiceImpl implements GenericService {
     // ============== ADVERTS ============
     @Override
     public List<Advert> getAllAdverts() {
-        return advertRepository.findAll();
+        return advertRepository.findAllByAdvertStatusIsNot(AdvertStatus.ACCEPTED);
     }
 
     @Override

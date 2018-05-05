@@ -1,12 +1,12 @@
 package com.perfectstrangers.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.perfectstrangers.domain.Hotel;
 import com.perfectstrangers.domain.Resto;
 import com.perfectstrangers.domain.enums.AdvertStatus;
 import com.perfectstrangers.domain.enums.MealType;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 // TODO: Add more logic here (validation etc)
 public class AdvertDTO {
@@ -14,17 +14,16 @@ public class AdvertDTO {
     private AdvertStatus advertStatus;
 
     @NotNull
-    @JsonProperty("advertText")
+    @Size(max = 140)
     private String advertText;
 
     @NotNull
-    @JsonProperty("mealType")
     private MealType mealType;
 
-    @JsonProperty("preferredStart")
+    @NotNull
     private String preferredStart;
 
-    @JsonProperty("preferredEnd")
+    @NotNull
     private String preferredEnd;
 
     @NotNull

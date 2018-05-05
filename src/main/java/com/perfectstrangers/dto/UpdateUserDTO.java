@@ -3,6 +3,8 @@ package com.perfectstrangers.dto;
 import com.perfectstrangers.domain.Degree;
 import com.perfectstrangers.domain.Occupation;
 import com.perfectstrangers.domain.enums.Gender;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class UpdateUserDTO {
 
@@ -10,6 +12,8 @@ public class UpdateUserDTO {
 
     private Gender gender;
 
+    @Size(max = 2)
+    @Pattern(regexp="[1-9][0-9]")
     private String age;
 
     private Degree degree;

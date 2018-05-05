@@ -1,11 +1,16 @@
 package com.perfectstrangers.dto;
 
 import com.perfectstrangers.domain.enums.ResponseStatus;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class ResponseDTO {
 
+    @NotNull
+    @Size(max = 140)
     private String responseText;
 
+    @NotNull
     private String proposedTime;
 
     private ResponseStatus responseStatus;

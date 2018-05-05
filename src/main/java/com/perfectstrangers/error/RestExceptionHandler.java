@@ -143,7 +143,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatus status,
             WebRequest request) {
         ServletWebRequest servletWebRequest = (ServletWebRequest) request;
+
         String error = "Malformed JSON request";
+        if (!ex.getCause().getMessage().isEmpty()) {
+            error = ex.getCause().getMessage();
+        }
+
         return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
     }
 
