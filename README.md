@@ -11,7 +11,7 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 - [Installing](#installing)
 - [Running](#running)
   - [Before running](#before-running)
-  - [PropertiesEncryptor](#properties-encryptor/decryptor)
+  - [PropertiesEncryptor](#properties-encryptordecryptor)
   - [Running as a packaged application](#running-as-a-packaged-application)
   - [Running using the Maven plugin](#running-using-the-maven-plugin)
   - [Running with IntellJ IDEA 2017](#running-with-intellj-idea-2017)
