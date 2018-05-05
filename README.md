@@ -11,6 +11,7 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 - [Installing](#installing)
 - [Running](#running)
   - [Before running](#before-running)
+  - [PropertiesEncryptor](#properties-encryptor/decryptor)
   - [Running as a packaged application](#running-as-a-packaged-application)
   - [Running using the Maven plugin](#running-using-the-maven-plugin)
   - [Running with IntellJ IDEA 2017](#running-with-intellj-idea-2017)
@@ -73,8 +74,6 @@ This project has three Spring Boot profiles:
 * Production environment called `production` 
 * Deployment environment called `development`
 
-All `.properties` files are encrypted using custom encryption utility. Encrypted files have `.pf` (Protected File) exentsion. To decrypt them, run `util/PropertiesEncryptor.java` main method with arguments `decrypt` AND `password`. For encryption, run it with arguments `encrypt` AND `password`. For example, in IntelliJ, you can edit the configuration and add program parameters (i.e `decrypt supersecretpassword`).
-
 By default development environment is used in packaged application build process. Test data is loaded in via `import.sql` file in resources folder.
 
 ## Before running
@@ -84,6 +83,10 @@ Before running in production environment make sure you have your MySQL server up
 * `create database perfectstrangers`
 
 Linux based systems commands should be somewhat similar if not the same. The development environment uses H2 database and does not require any manual configuration prior to running.
+
+## Properties encryptor/decryptor
+
+All `.properties` files are encrypted using custom encryption utility. Before encrypting or decrypting you need to install [JCE (Java Cryptography Extension)](https://github.com/nydiarra/springboot-jwt). Unpack the content in your `${java.home}/jre/lib/security/` folder. Make sure you use the right folder. Otherwise you will get `java.security.InvalidKeyException: Illegal key size or default parameters`. Encrypted files have `.pf` (Protected File) exentsion. To decrypt them, run `util/PropertiesEncryptor.java` main method with arguments `decrypt` AND `password` AND `salt`. For encryption, run it with arguments `encrypt` AND `password` AND `salt`. For example, in IntelliJ, you can edit the configuration and add program parameters (i.e `decrypt supersecretpassword supersecretsalt`).
 
 ## Running as a packaged application
 

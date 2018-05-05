@@ -115,7 +115,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- Small utility library for encoding and decoding JSON Web Tokens -->
         <dependency>
             <groupId>org.springframework.security</groupId>

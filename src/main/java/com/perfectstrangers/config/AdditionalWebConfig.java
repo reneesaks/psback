@@ -1,5 +1,6 @@
 package com.perfectstrangers.config;
 
+import java.util.Arrays;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +17,9 @@ import org.springframework.web.filter.CorsFilter;
 public class AdditionalWebConfig {
 
     /**
-     * Allowing all origins, headers and methods here is only intended to keep this example simple. This is
-     * not a default recommended configuration. Make adjustments as necessary to your use case.
+     * CORS configuration.
      *
-     * @return FilterRegistrationBean
+     * @return FilterRegistrationBean.
      */
     @Bean
     public FilterRegistrationBean corsFilter() {
@@ -27,8 +27,8 @@ public class AdditionalWebConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        config.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(0);

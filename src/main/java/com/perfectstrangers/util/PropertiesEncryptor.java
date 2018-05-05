@@ -7,13 +7,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.security.AlgorithmParameters;
+import java.security.spec.KeySpec;
 import java.util.Base64;
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -28,33 +29,28 @@ public class PropertiesEncryptor {
      * @param password password to use
      * @return encrypted string
      */
-    private static String encryptString(String str, String password) {
-        byte[] KeyData = password.getBytes();
-        SecretKeySpec blowfish = new SecretKeySpec(KeyData, "Blowfish");
-        Cipher cipher = null;
-        String encryptedString = null;
+    private static String encryptString(String str, String password, String salt) {
 
         try {
-            cipher = Cipher.getInstance("Blowfish");
-        } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
-            System.out.println("Something went wrong with the encryption");
-        }
+            // Derive the key, given password and salt.
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
 
-        try {
-            assert cipher != null;
-            cipher.init(Cipher.ENCRYPT_MODE, blowfish);
-        } catch (InvalidKeyException e) {
-            System.out.println("Invalid encryption key");
-        }
+            // Encrypt the string.
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secret);
+            AlgorithmParameters params = cipher.getParameters();
+            byte[] iv = params.getParameterSpec(IvParameterSpec.class).getIV();
+            byte[] cipherText = cipher.doFinal(str.getBytes("UTF-8"));
 
-        try {
-            Base64.Encoder encoder = Base64.getEncoder();
-            encryptedString = encoder.encodeToString(cipher.doFinal(str.getBytes()));
-        } catch (BadPaddingException | IllegalBlockSizeException e) {
-            System.out.println("Something went wrong with the encryption");
+            return Base64.getUrlEncoder().encodeToString(cipherText) +
+                    ":::" + Base64.getUrlEncoder().encodeToString(iv);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return encryptedString;
+        return null;
     }
 
     /**
@@ -64,33 +60,29 @@ public class PropertiesEncryptor {
      * @param password password to use
      * @return decrypted string
      */
-    private static String decryptString(String str, String password) {
-        byte[] KeyData = password.getBytes();
-        SecretKeySpec blowfish = new SecretKeySpec(KeyData, "Blowfish");
-        Base64.Decoder decoder = Base64.getDecoder();
-        String decryptedString = "";
-        Cipher cipher = null;
+    private static String decryptString(String str, String password, String salt) {
 
         try {
-            cipher = Cipher.getInstance("Blowfish");
-        } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
-            System.out.println("Something went wrong with the decryption or the key is wrong");
-        }
+            // Split line
+            String[] parts = str.split(":::");
+            byte[] cipherText = Base64.getUrlDecoder().decode(parts[0]);
+            byte[] iv = Base64.getUrlDecoder().decode(parts[1]);
 
-        try {
-            assert cipher != null;
-            cipher.init(Cipher.DECRYPT_MODE, blowfish);
-        } catch (InvalidKeyException e) {
-            System.out.println("Invalid decryption key");
-        }
+            // Derive the key, given password and salt.
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 256);
+            SecretKey tmp = factory.generateSecret(spec);
+            SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
 
-        try {
-            decryptedString = new String(cipher.doFinal(decoder.decode(str)));
-        } catch (BadPaddingException | IllegalBlockSizeException e) {
-            System.out.println("Something went wrong with the decryption");
-        }
+            // Decrypt the message, given derived key and initialization vector.
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(iv));
 
-        return decryptedString;
+            return new String(cipher.doFinal(cipherText), "UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -98,7 +90,7 @@ public class PropertiesEncryptor {
      *
      * @param password password to use
      */
-    private static void encrypt(String password) {
+    private static void encrypt(String password, String salt) {
         String line;
         String resourcesPath = Paths.get("").toAbsolutePath().toString() + "/src/main/resources/";
         File dir = new File(resourcesPath);
@@ -108,6 +100,7 @@ public class PropertiesEncryptor {
             throw new NullPointerException("No files found that end in .properties extension");
         }
 
+        String anim = "|/-\\";
         for (File file : files) {
             try {
 
@@ -117,9 +110,22 @@ public class PropertiesEncryptor {
                 FileWriter fileWriter = new FileWriter(newFile);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
 
+                int counter = 0;
                 while ((line = bufferedReader.readLine()) != null) {
-                    fileWriter.write(encryptString(line, password));
-                    fileWriter.write(System.lineSeparator());
+                    String encryptedString = encryptString(line, password, salt);
+                    String data = "\r" + anim.charAt(counter++ % anim.length());
+
+                    try {
+                        System.out.write(data.getBytes());
+                        Thread.sleep(200);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (encryptedString != null) {
+                        fileWriter.write(encryptedString);
+                        fileWriter.write(System.lineSeparator());
+                    }
                 }
 
                 bufferedReader.close();
@@ -137,7 +143,7 @@ public class PropertiesEncryptor {
      *
      * @param password password to use
      */
-    private static void decrpyt(String password) {
+    private static void decrpyt(String password, String salt) {
         String line;
         String resourcesPath = Paths.get("").toAbsolutePath().toString() + "/src/main/resources/";
         File dir = new File(resourcesPath);
@@ -147,6 +153,7 @@ public class PropertiesEncryptor {
             throw new NullPointerException("No files found that end in .pf extension");
         }
 
+        String anim = "|/-\\";
         for (File file : files) {
             try {
                 String newFile = resourcesPath + file.getName().replace(".pf", "");
@@ -154,9 +161,22 @@ public class PropertiesEncryptor {
                 FileWriter fileWriter = new FileWriter(newFile);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
 
+                int counter = 0;
                 while ((line = bufferedReader.readLine()) != null) {
-                    fileWriter.write(decryptString(line, password));
-                    fileWriter.write(System.lineSeparator());
+                    String decryptedString = decryptString(line, password, salt);
+                    String data = "\r" + anim.charAt(counter++ % anim.length());
+
+                    try {
+                        System.out.write(data.getBytes());
+                        Thread.sleep(200);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (decryptedString != null) {
+                        fileWriter.write(decryptedString);
+                        fileWriter.write(System.lineSeparator());
+                    }
                 }
 
                 bufferedReader.close();
@@ -178,13 +198,15 @@ public class PropertiesEncryptor {
 
         String method;
         String password;
+        String salt;
 
-        if (args.length != 2) {
-            System.out.println("You must provide <decrypt> or <encrypt> AND <password> argument");
+        if (args.length != 3) {
+            System.out.println("You must provide <decrypt> OR <encrypt> AND <password> AND <salt> argument");
             throw new IllegalArgumentException();
         } else {
             method = args[0].toUpperCase();
             password = args[1];
+            salt = args[2];
         }
 
         if (!(method.equals("ENCRYPT") || method.equals("DECRYPT"))) {
@@ -192,12 +214,15 @@ public class PropertiesEncryptor {
             throw new IllegalArgumentException();
         }
 
+        System.out.println("Working... ");
+
+
         if (method.equals("ENCRYPT")) {
-            encrypt(password);
+            encrypt(password, salt);
         } else {
-            decrpyt(password);
+            decrpyt(password, salt);
         }
 
-        System.out.println("All done!");
+        System.out.println("\nAll done!");
     }
 }
