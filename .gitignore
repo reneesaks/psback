@@ -127,7 +127,7 @@ buildNumber.properties
 
 ### Properties ###
 resources/*.properties
-/src/main/resources/application-deployment.properties
-/src/main/resources/application-dev.properties
-/src/main/resources/application-production.properties
 /src/main/resources/application.properties
+/src/main/resources/application-dev.properties
+/src/main/resources/application-staging.properties
+/src/main/resources/application-production.properties

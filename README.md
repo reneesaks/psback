@@ -52,7 +52,7 @@ This project requires the following prerequisites:
 * Spring Boot 2.0.1.RELEASE - go [here](https://docs.spring.io/spring-boot/docs/2.0.1.RELEASE/reference/htmlsingle/) to learn more about Spring Boot.
 * JSON Web Token - go to https://jwt.io/ to decode your generated token and learn more.
 * H2 Database Engine in development environment - used for rapid prototyping and development, but not suitable for production at least in most cases. Go to http://www.h2database.com/ to learn more.
-* MySQL Database in production environment - MySQL is an open-source relational database management system. Go to https://www.mysql.com/ to learn more.
+* MySQL Database in staging and production environment - MySQL is an open-source relational database management system. Go to https://www.mysql.com/ to learn more.
 * Flyway - database version control. Go to https://flywaydb.org/ for more information.
 * Swagger 2.0 - used for API documentation. Go to https://swagger.io/ to learn more.
  
@@ -71,8 +71,8 @@ git clone https://github.com/reneesaks/psback
 
 This project has three Spring Boot profiles:
 * Development environment called `dev`
-* Production environment called `production` 
-* Deployment environment called `development`
+* Staging environment called `staging` 
+* Production environment called `production`
 
 By default development environment is used in packaged application build process. Test data is loaded in via `import.sql` file in resources folder.
 
@@ -109,7 +109,7 @@ Open your Run/Debug Configurations and add a new Spring Boot configuration by cl
 
 # Deployment
 
-Use `mvn clean package -P deployment -DskipTests` to create a deployable `.war` file in `/target` directory for Tomcat server. To skip tests specify `-DskipTests` in command line.
+Use `mvn clean package -P production -DskipTests` to create a deployable `.war` file in `/target` directory for Tomcat server. To skip tests specify `-DskipTests` in command line.
 
 # API Documentation (Swagger)
 
@@ -144,7 +144,7 @@ When you build a packaged application, tests are executed automatically. To skip
 * To run all tests use `mvn clean test`
 * To run a specific test use `mvn clean -Dtest=<test-name> test`
 
-By default, right now, production environment is being loaded in as it is activated by default in `pom.xml`. To mock an user use `@WithMockUser(username="admin",roles={"USER","ADMIN"})` annotation.
+By default, right now, staging environment is being loaded in as it is activated by default in `pom.xml`. To mock an user use `@WithMockUser(username="admin",roles={"USER","ADMIN"})` annotation.
 
 ## Naming convention
 
@@ -158,7 +158,7 @@ Example: `V1.0124__seperated_users_contacts.sql`
 
 # Authentication
 
-Testing endpoints with JWT can only be done in production environment. Authentication attempts are limited by username and IP address because an attacker could reset the remote address counter by logging in to a valid account.
+Testing endpoints with JWT can only be done in staging and production environments. Authentication attempts are limited by username and IP address because an attacker could reset the remote address counter by logging in to a valid account.
 
 ## Basic information
 
@@ -186,7 +186,7 @@ You'll receive a response similar to below
 
 ### 2. Generate an access token for production/deployment purposes
 
-In production/deployment environment, the `client_id` and the `client_secret` will be sent over authorization header in base64 encoded string over HTTPS protocol. Base encoding is done on `client_id:client_secret` string including the semicolon in the form of `Authorization: Basic <base64-encoded-string>`. Curl request will look like this:
+In staging/production environment, the `client_id` and the `client_secret` will be sent over authorization header in base64 encoded string over HTTPS protocol. Base encoding is done on `client_id:client_secret` string including the semicolon in the form of `Authorization: Basic <base64-encoded-string>`. Curl request will look like this:
 
 ```
 curl -X POST \
@@ -214,7 +214,7 @@ Registration requires an username(e-mail) and a password (server side validation
 
 ## Setting up MailSlurper
 
-If you want to test registering function in production environment you need to set up an SMTP server. [MailSlurper](https://github.com/mailslurper/mailslurper/releases) does that conveniently for you. Use the following configuration in config.json file in MailSlurper directory.
+If you want to test registering function in staging environment you need to set up an SMTP server. [MailSlurper](https://github.com/mailslurper/mailslurper/releases) does that conveniently for you. Use the following configuration in config.json file in MailSlurper directory.
 
 ```
 {
@@ -305,7 +305,7 @@ You can also use Postman for endpoint testing. Ask for Postman collection.
 
 # Known issues
 
-* When running in production environment (in IntelliJ) without any tables in your database you get restriction errors. Just restart the run and the errors are gone.
+* When running in staging or production environment (in IntelliJ) without any tables in your database you get restriction errors. Just restart the run and the errors are gone.
 * `create.sql` schema code is created without delimiters.
 * It seems the Intellij cannot verify if the class implementation is a @Service or @Component. Using `@SuppressWarnings("SpringJavaAutowiringInspection")` on those.
 

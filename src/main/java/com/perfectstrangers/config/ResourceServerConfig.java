@@ -17,14 +17,14 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
  */
 @Configuration
 @EnableResourceServer
-@Profile({"production", "deployment"})
+@Profile({"staging", "production"})
 public class ResourceServerConfig {
 
     /**
      * Security configuration for endpoints that are public and private.
      */
     @Configuration
-    @Profile({"production", "deployment"})
+    @Profile({"staging", "production"})
     public static class ResourceConfig extends ResourceServerConfigurerAdapter {
 
         private ResourceServerTokenServices resourceServerTokenServices;

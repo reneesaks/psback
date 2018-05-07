@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
  * Main entry point for developer and production runs/builds.
  */
 @SpringBootApplication
-@Profile({"dev", "production"})
+@Profile({"dev", "staging"})
 public class PerfectStrangersApplication {
 
     public static void main(String[] args) {

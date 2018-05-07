@@ -13,7 +13,7 @@ import org.springframework.web.filter.CorsFilter;
  * Additional web configuration.
  */
 @Configuration
-@Profile({"production", "deployment"})
+@Profile({"staging", "production"})
 public class AdditionalWebConfig {
 
     /**

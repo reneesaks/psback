@@ -22,7 +22,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
  */
 @Configuration
 @EnableAuthorizationServer
-@Profile({"production", "deployment"})
+@Profile({"staging", "production"})
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     private TokenStore tokenStore;
