@@ -64,12 +64,20 @@ public class PasswordResetController {
      */
     @PostMapping(value = "request-password-reset")
     @ResponseStatus(HttpStatus.OK)
-    public void resetPassword(@RequestBody @Valid UsernameDTO usernameDTO)
+    public HttpStatus resetPassword(@RequestBody @Valid UsernameDTO usernameDTO)
             throws EntityNotFoundException, MailServiceNoConnectionException {
 
-        User user = genericService.getUserByEmail(usernameDTO.getEmail());
-        userService.createPasswordResetToken(user);
-        String token = userService.getPasswordTokenByUser(user);
+        User user;
+        String token;
+
+        try {
+            user = genericService.getUserByEmail(usernameDTO.getEmail());
+            userService.createPasswordResetToken(user);
+            token = userService.getPasswordTokenByUser(user);
+        } catch (EntityNotFoundException e) {
+            LOGGER.info(usernameDTO.getEmail() + " email provided for password reset does not exist.");
+            return HttpStatus.OK;
+        }
 
         try {
             mailSender.send(emailConstructor.constructPasswordResetEmail(token, user));
@@ -77,6 +85,8 @@ public class PasswordResetController {
             LOGGER.error("Failed email to: " + user.getEmail() + ". " + e.getFailedMessages());
             throw new MailServiceNoConnectionException();
         }
+
+        return HttpStatus.OK;
     }
 
     /**
@@ -87,14 +97,26 @@ public class PasswordResetController {
      */
     @PostMapping(value = "change-password")
     @ResponseStatus(HttpStatus.OK)
-    public void changePassword(@RequestBody @Valid PasswordResetDTO passwordResetDTO)
+    public HttpStatus changePassword(@RequestBody @Valid PasswordResetDTO passwordResetDTO)
             throws EntityNotFoundException {
 
-        User user = genericService.getUserById(passwordResetDTO.getId());
-        String validation = userService.validatePasswordResetToken(user.getId(), passwordResetDTO.getToken());
+        User user;
+        String validation;
+
+        try {
+            user = genericService.getUserById(passwordResetDTO.getId());
+            validation = userService.validatePasswordResetToken(user.getId(), passwordResetDTO.getToken());
+        } catch (EntityNotFoundException e) {
+            LOGGER.info(passwordResetDTO.getId() + " id provided for password change does not exist.");
+            return HttpStatus.OK;
+        }
+
+
         if (validation != null) {
             throw new BadCredentialsException(validation);
         }
         userService.updatePassword(user, passwordResetDTO.getPassword());
+
+        return HttpStatus.OK;
     }
 }

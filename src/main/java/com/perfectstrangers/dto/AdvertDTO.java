@@ -8,7 +8,6 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-// TODO: Add more logic here (validation etc)
 public class AdvertDTO {
 
     private AdvertStatus advertStatus;

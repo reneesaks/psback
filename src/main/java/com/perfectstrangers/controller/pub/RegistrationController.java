@@ -33,13 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-/*
- * TODO:
- * Should the resend registration confirmation only respond with "HttpStatus.OK"? Potential security problem.
- * This endpoint could be used to fish out valid emails because the response differs when the email is already
- * activated, thus giving away the email.
- */
-
 /**
  * Handles all registration associated events that are exposed by an endpoint.
  */
@@ -74,23 +67,31 @@ public class RegistrationController {
      * Creates new user. If any exception is thrown it will roll back any database changes.
      *
      * @param newUserDTO User object for validation.
-     * @return the newly created user.
      * @throws MailServiceNoConnectionException when email service is not available.
      * @throws UsernameExistsException when the username already exists.
      */
     @PostMapping(value = "/new-user")
     @ResponseStatus(HttpStatus.OK)
     @Transactional(rollbackFor = Exception.class)
-    public User registerNewUser(@RequestBody @Valid NewUserDTO newUserDTO)
+    public HttpStatus registerNewUser(@RequestBody @Valid NewUserDTO newUserDTO)
             throws MailServiceNoConnectionException, UsernameExistsException {
 
+        String token;
         User user = new User();
-        user.setPassword(newUserDTO.getPassword());
-        user.setEmail(newUserDTO.getEmail());
-        user.setRegDate(Instant.now().toString());
-        User registeredUser = registrationService.registerNewUserAccount(user);
-        registrationService.createVerificationToken(registeredUser);
-        String token = registrationService.getVerificationTokenByUser(registeredUser).getToken();
+        User registeredUser;
+
+        try {
+            user.setPassword(newUserDTO.getPassword());
+            user.setEmail(newUserDTO.getEmail());
+            user.setRegDate(Instant.now().toString());
+            registeredUser = registrationService.registerNewUserAccount(user);
+            registrationService.createVerificationToken(registeredUser);
+            token = registrationService.getVerificationTokenByUser(registeredUser).getToken();
+        } catch (UsernameExistsException e) {
+            LOGGER.info("User with email " + user.getEmail() + " already exists.");
+            return HttpStatus.OK;
+        }
+
 
         try {
             mailSender.send(emailConstructor.constructConfirmationEmail(token, registeredUser));
@@ -100,7 +101,7 @@ public class RegistrationController {
         }
 
         LOGGER.info("User with email " + user.getEmail() + " is registered. Waiting for activation.");
-        return user;
+        return HttpStatus.OK;
     }
 
     /**

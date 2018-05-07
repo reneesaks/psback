@@ -67,7 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new InvalidGrantException("Bad credentials");
         }
 
-        user.setLastVisit(Instant.now().toString()); // TODO: ISO standard must be used
+        user.setLastVisit(Instant.now().toString());
         userRepository.save(user);
 
         return new org.springframework.security.core.userdetails.User(
