@@ -21,9 +21,11 @@ public class AdvertDTO {
     private MealType mealType;
 
     @NotNull
+    @Size(max = 50)
     private String preferredStart;
 
     @NotNull
+    @Size(max = 50)
     private String preferredEnd;
 
     @NotNull

@@ -13,5 +13,5 @@ public interface DegreeRepository extends CrudRepository<Degree, Long> {
 
     Degree findByName(String name);
 
-    Degree findById(Long id);
+    Degree getById(Long id);
 }

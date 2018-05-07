@@ -17,7 +17,7 @@ public interface VerificationTokenRepository extends CrudRepository<Verification
 
     List<VerificationToken> findAll();
 
-    VerificationToken findById(Long id);
+    VerificationToken getById(Long id);
 
     VerificationToken findByToken(String token);
 

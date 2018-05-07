@@ -7,10 +7,10 @@ import com.perfectstrangers.repository.RoleRepository;
 import com.perfectstrangers.repository.UserRepository;
 import com.perfectstrangers.repository.VerificationTokenRepository;
 import com.perfectstrangers.service.RegistrationService;
-import com.perfectstrangers.util.PasswordHasher;
 import java.util.Calendar;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +24,18 @@ public class RegistrationServiceImpl implements RegistrationService {
     private UserRepository userRepository;
     private VerificationTokenRepository verificationTokenRepository;
     private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public RegistrationServiceImpl(
             UserRepository userRepository,
             VerificationTokenRepository verificationTokenRepository,
-            RoleRepository roleRepository) {
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -61,7 +64,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         // Hash password here because .save will trigger also setPassword and double hash will occur
-        user.setPassword(new PasswordHasher().hashPasswordWithSha256(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(roleRepository.findByRoleName("STANDARD_USER"));
         return userRepository.save(user);
     }

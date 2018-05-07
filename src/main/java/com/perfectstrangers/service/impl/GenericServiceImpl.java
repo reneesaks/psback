@@ -84,7 +84,7 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public User getUserById(Long id) throws EntityNotFoundException {
-        User user = userRepository.findById(id);
+        User user = userRepository.getById(id);
         if (user == null) {
             throw new EntityNotFoundException(User.class, "id", id.toString());
         }
@@ -99,7 +99,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void updateUser(User user) throws EntityNotFoundException {
         Long id = user.getId();
-        User findUser = userRepository.findById(id);
+        User findUser = userRepository.getById(id);
         if (findUser == null) {
             throw new EntityNotFoundException(User.class, "id", id.toString());
         }
@@ -109,7 +109,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void deleteUser(User user) throws EntityNotFoundException {
         Long id = user.getId();
-        User findUser = userRepository.findById(id);
+        User findUser = userRepository.getById(id);
         if (findUser == null) {
             throw new EntityNotFoundException(User.class, "id", id.toString());
         }
@@ -133,7 +133,7 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public Occupation getOccupationById(Long id) throws EntityNotFoundException {
-        Occupation occupation = occupationRepository.findById(id);
+        Occupation occupation = occupationRepository.getById(id);
         if (occupation == null) {
             throw new EntityNotFoundException(Occupation.class, "id", id.toString());
         }
@@ -148,7 +148,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void updateOccupation(Occupation occupation) throws EntityNotFoundException {
         Long id = occupation.getId();
-        Occupation findOccupation = occupationRepository.findById(id);
+        Occupation findOccupation = occupationRepository.getById(id);
         if (findOccupation == null) {
             throw new EntityNotFoundException(Occupation.class, "id", id.toString());
         }
@@ -158,7 +158,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void deleteOccupation(Occupation occupation) throws EntityNotFoundException {
         Long id = occupation.getId();
-        Occupation findOccupation = occupationRepository.findById(id);
+        Occupation findOccupation = occupationRepository.getById(id);
         if (findOccupation == null) {
             throw new EntityNotFoundException(Occupation.class, "id", id.toString());
         }
@@ -182,7 +182,7 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public Degree getDegreeById(Long id) throws EntityNotFoundException {
-        Degree degree = degreeRepository.findById(id);
+        Degree degree = degreeRepository.getById(id);
         if (degree == null) {
             throw new EntityNotFoundException(Degree.class, "id", id.toString());
         }
@@ -197,7 +197,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void updateDegree(Degree degree) throws EntityNotFoundException {
         Long id = degree.getId();
-        Degree findDegree = degreeRepository.findById(id);
+        Degree findDegree = degreeRepository.getById(id);
         if (findDegree == null) {
             throw new EntityNotFoundException(Degree.class, "id", id.toString());
         }
@@ -207,7 +207,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void deleteDegree(Degree degree) throws EntityNotFoundException {
         Long id = degree.getId();
-        Degree findDegree = degreeRepository.findById(id);
+        Degree findDegree = degreeRepository.getById(id);
         if (findDegree == null) {
             throw new EntityNotFoundException(Degree.class, "id", id.toString());
         }
@@ -236,7 +236,7 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public Hotel getHotelById(Long id) throws EntityNotFoundException {
-        Hotel hotel = hotelRepository.findById(id);
+        Hotel hotel = hotelRepository.getById(id);
         if (hotel == null) {
             throw new EntityNotFoundException(Hotel.class, "id", id.toString());
         }
@@ -251,7 +251,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void updateHotel(Hotel hotel) throws EntityNotFoundException {
         Long id = hotel.getId();
-        Hotel findHotel = hotelRepository.findById(id);
+        Hotel findHotel = hotelRepository.getById(id);
         if (findHotel == null) {
             throw new EntityNotFoundException(Hotel.class, "id", id.toString());
         }
@@ -261,7 +261,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void deleteHotel(Hotel hotel) throws EntityNotFoundException {
         Long id = hotel.getId();
-        Hotel findHotel = hotelRepository.findById(id);
+        Hotel findHotel = hotelRepository.getById(id);
         if (findHotel == null) {
             throw new EntityNotFoundException(Hotel.class, "id", id.toString());
         }
@@ -290,7 +290,7 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public Resto getRestoById(Long id) throws EntityNotFoundException {
-        Resto resto = restoRepository.findById(id);
+        Resto resto = restoRepository.getById(id);
         if (resto == null) {
             throw new EntityNotFoundException(Resto.class, "id", id.toString());
         }
@@ -305,7 +305,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void updateResto(Resto resto) throws EntityNotFoundException {
         Long id = resto.getId();
-        Resto findResto = restoRepository.findById(id);
+        Resto findResto = restoRepository.getById(id);
         if (findResto == null) {
             throw new EntityNotFoundException(Resto.class, "id", id.toString());
         }
@@ -315,7 +315,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void deleteResto(Resto resto) throws EntityNotFoundException {
         Long id = resto.getId();
-        Resto findResto = restoRepository.findById(id);
+        Resto findResto = restoRepository.getById(id);
         if (findResto == null) {
             throw new EntityNotFoundException(Resto.class, "id", id.toString());
         }
@@ -341,7 +341,7 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public Advert getAdvertById(Long id) throws EntityNotFoundException {
-        Advert advert = advertRepository.findById(id);
+        Advert advert = advertRepository.getById(id);
         if (advert == null) {
             throw new EntityNotFoundException(Advert.class, "id", id.toString());
         }
@@ -352,7 +352,7 @@ public class GenericServiceImpl implements GenericService {
     public List<Advert> getAdvertsByHotelId(Long id) throws EntityNotFoundException {
 
         List<Hotel> hotel = new ArrayList<>();
-        hotel.add(hotelRepository.findById(id));
+        hotel.add(hotelRepository.getById(id));
         List<Advert> adverts = advertRepository
                 .findAllByHotelsAndAdvertStatusIsNot(hotel, AdvertStatus.ACCEPTED);
         final Date now = DateUtils.addMinutes(Date.from(Instant.now()), 15);
@@ -364,12 +364,12 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public List<Advert> getAdvertsByUserId(Long id) throws EntityNotFoundException {
-        User user = userRepository.findById(id);
+        User user = userRepository.getById(id);
         if (user == null) {
             throw new EntityNotFoundException(User.class, "id", id.toString());
         }
 
-        return advertRepository.findAllByUser(userRepository.findById(user.getId()));
+        return advertRepository.findAllByUser(userRepository.getById(user.getId()));
     }
 
     @Override
@@ -380,7 +380,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void updateAdvert(Advert advert) throws EntityNotFoundException {
         Long id = advert.getId();
-        Advert findAdvert = advertRepository.findById(id);
+        Advert findAdvert = advertRepository.getById(id);
         if (findAdvert == null) {
             throw new EntityNotFoundException(Advert.class, "id", id.toString());
         }
@@ -390,7 +390,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void deleteAdvert(Advert advert) throws EntityNotFoundException {
         Long id = advert.getId();
-        Advert findAdvert = advertRepository.findById(id);
+        Advert findAdvert = advertRepository.getById(id);
         if (findAdvert == null) {
             throw new EntityNotFoundException(Advert.class, "id", id.toString());
         }
@@ -410,7 +410,7 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public Response getResponseById(Long id) throws EntityNotFoundException {
-        Response response = responseRepository.findById(id);
+        Response response = responseRepository.getById(id);
         if (response == null) {
             throw new EntityNotFoundException(Response.class, "id", id.toString());
         }
@@ -425,7 +425,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public List<Response> getResponsesByUserId(Long id) throws EntityNotFoundException {
 
-        User user = userRepository.findById(id);
+        User user = userRepository.getById(id);
         if (user == null) {
             throw new EntityNotFoundException(User.class, "id", id.toString());
         }
@@ -447,7 +447,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void updateResponse(Response response) throws EntityNotFoundException {
         Long id = response.getId();
-        Response findResponse = responseRepository.findById(id);
+        Response findResponse = responseRepository.getById(id);
         if (findResponse == null) {
             throw new EntityNotFoundException(Response.class, "id", id.toString());
         }
@@ -457,7 +457,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public void deleteResponse(Response response) throws EntityNotFoundException {
         Long id = response.getId();
-        Response findResponse = responseRepository.findById(id);
+        Response findResponse = responseRepository.getById(id);
         if (findResponse == null) {
             throw new EntityNotFoundException(Response.class, "id", id.toString());
         }

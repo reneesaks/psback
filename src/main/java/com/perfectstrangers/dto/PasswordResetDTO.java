@@ -2,6 +2,7 @@ package com.perfectstrangers.dto;
 
 import com.perfectstrangers.validation.ValidPassword;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class PasswordResetDTO {
 
@@ -13,6 +14,7 @@ public class PasswordResetDTO {
     private String password;
 
     @NotNull
+    @Size(max = 240)
     private String token;
 
     public Long getId() {

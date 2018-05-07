@@ -18,7 +18,7 @@ public interface AdvertRepository extends PagingAndSortingRepository<Advert, Lon
 
     Page<Advert> findAllByAdvertStatusIsNot(Pageable pageable, AdvertStatus advertStatus);
 
-    Advert findById(Long id);
+    Advert getById(Long id);
 
     List<Advert> findAllByHotelsAndAdvertStatusIsNot(List<Hotel> hotels, AdvertStatus advertStatus);
 

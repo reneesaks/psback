@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 
 public class UpdateUserDTO {
 
+    @Size(max = 60)
     private String alias;
 
     private Gender gender;

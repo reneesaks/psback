@@ -42,6 +42,7 @@ public class PasswordResetController {
     @Value("{$client.passwordResetUrl}")
     private String clientPasswordResetUrl;
 
+
     @Autowired
     public PasswordResetController(
             GenericService genericService,

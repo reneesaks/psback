@@ -11,6 +11,7 @@ public class ResponseDTO {
     private String responseText;
 
     @NotNull
+    @Size(max = 50)
     private String proposedTime;
 
     private ResponseStatus responseStatus;

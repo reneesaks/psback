@@ -17,5 +17,5 @@ public interface HotelRepository extends PagingAndSortingRepository<Hotel, Long>
 
     Hotel findByName(String name);
 
-    Hotel findById(Long id);
+    Hotel getById(Long id);
 }

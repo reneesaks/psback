@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -27,6 +28,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private TokenStore tokenStore;
     private JwtAccessTokenConverter accessTokenConverter;
     private AuthenticationManager authenticationManager;
+    private PasswordEncoder passwordEncoder;
 
     @Value("${security.jwt.client-id}")
     private String clientId;
@@ -51,10 +53,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public AuthorizationServerConfig(
             TokenStore tokenStore,
             JwtAccessTokenConverter accessTokenConverter,
-            AuthenticationManager authenticationManager) {
+            AuthenticationManager authenticationManager,
+            PasswordEncoder passwordEncoder) {
         this.tokenStore = tokenStore;
         this.accessTokenConverter = accessTokenConverter;
         this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -62,10 +66,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         configurer
                 .inMemory()
                 .withClient(clientId)
-                .secret(clientSecret)
+                .secret(passwordEncoder.encode(clientSecret))
                 .authorizedGrantTypes(grantType)
                 .scopes(scopeRead, scopeWrite)
-                .resourceIds(resourceIds);
+                .resourceIds(resourceIds)
+                .accessTokenValiditySeconds(14400);
     }
 
     @Override

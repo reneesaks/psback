@@ -3,28 +3,36 @@ package com.perfectstrangers.dto;
 import com.perfectstrangers.domain.Resto;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class HotelDTO {
 
     @NotNull
+    @Size(max = 120)
     private String name;
 
     @NotNull
+    @Size(max = 120)
     private String webpage;
 
     @NotNull
+    @Size(max = 240)
     private String country;
 
     @NotNull
+    @Size(max = 240)
     private String state;
 
     @NotNull
+    @Size(max = 240)
     private String city;
 
     @NotNull
+    @Size(max = 240)
     private String address;
 
     @NotNull
+    @Size(max = 100)
     private String zipCode;
 
     private List<Resto> restos;

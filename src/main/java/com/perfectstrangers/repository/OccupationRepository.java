@@ -13,5 +13,5 @@ public interface OccupationRepository extends CrudRepository<Occupation, Long> {
 
     Occupation findByName(String name);
 
-    Occupation findById(Long id);
+    Occupation getById(Long id);
 }

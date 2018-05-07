@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailSendException;
@@ -53,7 +52,6 @@ public class RegistrationController {
 
     private RegistrationService registrationService;
     private GenericService genericService;
-    private ApplicationEventPublisher eventPublisher;
     private MailSender mailSender;
     private EmailConstructor emailConstructor;
 
@@ -64,12 +62,10 @@ public class RegistrationController {
     public RegistrationController(
             RegistrationService registrationService,
             GenericService genericService,
-            ApplicationEventPublisher eventPublisher,
             MailSender mailSender,
             EmailConstructor emailConstructor) {
         this.registrationService = registrationService;
         this.genericService = genericService;
-        this.eventPublisher = eventPublisher;
         this.mailSender = mailSender;
         this.emailConstructor = emailConstructor;
     }
@@ -135,6 +131,7 @@ public class RegistrationController {
         } catch (IOException | IllegalStateException e) {
             LOGGER.error("Problem redirecting to login URL. " + e);
         }
+        LOGGER.info("User with email " + user.getEmail() + " is activated.");
         return null;
     }
 
@@ -166,6 +163,7 @@ public class RegistrationController {
         } else {
             throw new UsernameIsActivatedException();
         }
+        LOGGER.info("User with email " + user.getEmail() + " asked to resend registration confirmation.");
         return usernameDTO;
     }
 }

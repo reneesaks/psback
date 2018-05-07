@@ -34,7 +34,6 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 - [Resetting password](#resetting-password)
 - [Using Postman for testing](#using-postman-for-testing)
 - [Integration with Angular](#integration-with-angular)
-- [TODO](#todo)
 - [Known issues](#known-issues)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgments)
@@ -43,13 +42,14 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 # Prerequisites
 
 This project requires the following prerequisites:
+* [Java 8 JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * Maven - dependency management and build automation tool. Install [Maven](https://maven.apache.org/install.html).
 * Git - version control. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 * MySQL - production database. Install [XAMPP](https://www.apachefriends.org/download.html) for Windows. For other systems visit MySQL official [installing guide](https://dev.mysql.com/doc/refman/5.6/en/installing.html).
 * SMTP server - production mail service. Registering a new user requires SMTP server as it sends an activation link. Use [MailSlurper](http://mailslurper.com/) in Windows.
 
 # Main building blocks
-* Spring Boot 1.5.3.RELEASE - go to http://docs.spring.io/spring-boot/docs/1.5.3.RELEASE/reference/htmlsingle/ to learn more about Spring Boot.
+* Spring Boot 2.0.1.RELEASE - go [here](https://docs.spring.io/spring-boot/docs/2.0.1.RELEASE/reference/htmlsingle/) to learn more about Spring Boot.
 * JSON Web Token - go to https://jwt.io/ to decode your generated token and learn more.
 * H2 Database Engine in development environment - used for rapid prototyping and development, but not suitable for production at least in most cases. Go to http://www.h2database.com/ to learn more.
 * MySQL Database in production environment - MySQL is an open-source relational database management system. Go to https://www.mysql.com/ to learn more.
@@ -86,7 +86,7 @@ Linux based systems commands should be somewhat similar if not the same. The dev
 
 ## Properties encryptor/decryptor
 
-All `.properties` files are encrypted using custom encryption utility. Before encrypting or decrypting you need to install [JCE (Java Cryptography Extension)](https://github.com/nydiarra/springboot-jwt). Unpack the content in your `${java.home}/jre/lib/security/` folder. Make sure you use the right folder. Otherwise you will get `java.security.InvalidKeyException: Illegal key size or default parameters`. Encrypted files have `.pf` (Protected File) exentsion. To decrypt them, run `util/PropertiesEncryptor.java` main method with arguments `decrypt` AND `password` AND `salt`. For encryption, run it with arguments `encrypt` AND `password` AND `salt`. For example, in IntelliJ, you can edit the configuration and add program parameters (i.e `decrypt supersecretpassword supersecretsalt`).
+All `.properties` files are encrypted using custom encryption utility. Before encrypting or decrypting you need to install [JCE (Java Cryptography Extension)](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html). Unpack the content in your `${java.home}/jre/lib/security/` folder. Make sure you use the right folder. Otherwise you will get `java.security.InvalidKeyException: Illegal key size or default parameters`. Encrypted files have `.pf` (Protected File) exentsion. To decrypt them, run `util/PropertiesEncryptor.java` main method with arguments `decrypt` AND `password` AND `salt`. For encryption, run it with arguments `encrypt` AND `password` AND `salt`. For example, in IntelliJ, you can edit the configuration and add program parameters (i.e `decrypt supersecretpassword supersecretsalt`).
 
 ## Running as a packaged application
 
@@ -113,7 +113,7 @@ Use `mvn clean package -P deployment -DskipTests` to create a deployable `.war` 
 
 # API Documentation (Swagger)
 
-* To see API documentation with Swagger UI visit `<your-base-bath>/swagger-ui.html`. Use username `developer@user.com` and password `password`. 
+* To see API documentation with Swagger UI visit `<your-base-bath>/swagger-ui.html`. 
 * On the upper left corner you can select a spec. Endpoints are divided into two categories - public and private.
 * Public endpoints are accessible to everyone.
 * Private endpoints are accessible only to registered users.
@@ -162,18 +162,15 @@ Testing endpoints with JWT can only be done in production environment. Authentic
 
 ## Basic information
 
-* client_id: testjwtclientid
-* client_secret: XY7kmzoNzl100
-* Standard user username and password: `standard@user.com` and `password`
-* Admin user: `admin@user.com` and `password`
-* Example of resource accessible to all authenticated users:  http://localhost:8080/api/private/hotels
-* Example of resource accessible to only an admin user:  http://localhost:8080/api/private/users
-* Example of resource accesible publicly: http://localhost:8080/api/public/hello
+* client_id: <client_id>
+* client_secret: <client_secret>
+* Resources that need authentication:  http://localhost:8080/api/private/*
+* Resources that do not require authentication:  http://localhost:8080/api/public/*
 
 ### 1. Generate an access token for testing purposes
 
 Use the following generic command to generate an access token for the non-admin user `user`:
-`$ curl testjwtclientid:XY7kmzoNzl100@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=password`
+`$ curl <client_id>:<client_secret>@localhost:8080/oauth/token -d grant_type=password -d username=user -d password=password`
 
 You'll receive a response similar to below
 
@@ -196,7 +193,7 @@ curl -X POST \
    http://localhost:8080/oauth/token \
    -H 'authorization: Basic dGVzdGp3dGNsaWVudGlkOlhZN2ttem9OemwxMDA=' \
    -H 'content-type: application/x-www-form-urlencoded' \
-   -d 'grant_type=password&username=admin@user.com&password=password'
+   -d 'grant_type=password&username=user@user.com&password=password'
 ```
 
 ### 3. Use the token to access resources through your RESTful API
@@ -280,7 +277,7 @@ curl -X POST \
   http://localhost:8080/api/public/password-reset/request-password-reset \
   -H 'content-type: application/json' \
   -d '{
-	"email": "standard@user.com"
+	"email": "user@user.com"
 }'
 ```
 
@@ -300,24 +297,11 @@ Activation link(token) stays active for 15 minutes.
 
 # Using Postman for testing
 
-You can also use Postman for endpoint testing. Import endpoints using this link: https://www.getpostman.com/collections/67dd25c1fbcf149438c3
+You can also use Postman for endpoint testing. Ask for Postman collection.
 
 # Integration with Angular
 
 [This code](https://github.com/nydiarra/springboot-jwt) was used as a seed for this application. For an example integration with Angular (version 2+) go to https://github.com/ipassynk/angular-springboot-jwt
-
-# TODO
-
-* ~~Deployment configuration~~
-* ~~Testing configuration~~
-* Disallow all origins, headers and methods in AdditionalWebConfig class later on (CSRF).
-* Change DEVELOPER username and password for API documentation for production (ResourceServerConfig).
-* Change security settings in `application-production.properties` for production.
-* Change to a real database in `application-production.properties` and establish connection with it.
-* Remove `import.sql` from production environment or change it.
-* Generate database schema from `resources/create.sql` when initial database model is ready in JPA (new database changes will be handled with Flyway from this point on).
-* ~~Field injections should be replaced for constructor based dependency injections in the future.~~
-* ~~Error handling~~
 
 # Known issues
 

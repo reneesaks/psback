@@ -44,7 +44,7 @@ public class EmailConstructor {
      */
     public SimpleMailMessage constructConfirmationEmail(String token, User user) {
         String confirmationUrl = this.hostServerAddress
-                + "/api/public/register/registration-confirm.html?token="
+                + "/api/public/register/registration-confirm?token="
                 + token;
         String message = "Here is your activation URL: ";
         return constructEmail("Registration Confirmation", message + confirmationUrl, user);
@@ -66,7 +66,6 @@ public class EmailConstructor {
     }
 
     /**
-     *
      * @param token Token that will be put in the request parameter.
      * @param user User who will receive the email.
      * @return SimpleMailMessage.

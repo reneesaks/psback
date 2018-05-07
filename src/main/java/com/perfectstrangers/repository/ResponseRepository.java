@@ -13,7 +13,7 @@ public interface ResponseRepository extends PagingAndSortingRepository<Response,
 
     Page<Response> findAll(Pageable pageable);
 
-    Response findById(Long id);
+    Response getById(Long id);
 
     List<Response> findAllByUser(User user);
 }
