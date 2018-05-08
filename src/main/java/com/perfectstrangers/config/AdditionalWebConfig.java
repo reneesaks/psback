@@ -28,9 +28,10 @@ public class AdditionalWebConfig {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("https://199.247.13.206");
         config.addAllowedOrigin("https://144.202.77.179 ");
+        config.addAllowedOrigin("https://localhost:4200 ");
         config.addAllowedOrigin("127.0.0.1");
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(0);
