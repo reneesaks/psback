@@ -9,7 +9,8 @@
  #                                                           |___/                   #
  #                                                                                   #
  # Back end for Perfect Strangers project.                                           #
- # Author: Renee Säks                                                                #
+ # Author: Renee Saks                                                                #
+ # Back end: https://github.com/reneesaks/psback                                     #
  # Front end: https://github.com/kasparsuvi1/psfront                                 #
  # Collaborators: Kaspar Suvi, Kristo Lall                                           #
  #                                                                                   #

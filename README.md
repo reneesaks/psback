@@ -121,7 +121,7 @@ Use `mvn clean package -P production -DskipTests` to create a deployable `.war` 
 
 # Java Documentation
 
-Documentation is available at the project root(live version). Use the same credentials as for Swagger UI login. To create Java documentation with Javadoc run the following maven command `mvn javadoc:javadoc`. Documentation will be created in `/target/site/apidocs/index.html`.
+Documentation is available at the project root(live version). Use the same credentials as for Swagger UI login. To create Java documentation with Javadoc run the following maven command `mvn javadoc:javadoc -D-html5`. Documentation will be created in `/target/site/apidocs/index.html`.
 
 # Accessing H2 database
 
