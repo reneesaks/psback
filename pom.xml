@@ -128,20 +128,6 @@
             <version>2.1.0.RELEASE</version>
         </dependency>
 
-        <!-- High-performance JSON processor for Java -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.8.9</version> <!-- Higher than 2.8.9 will throw an error -->
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.9.4</version>
-        </dependency>
-
         <!-- Database version control -->
         <dependency>
             <groupId>org.flywaydb</groupId>
@@ -183,11 +169,11 @@
             </properties>
         </profile>
 
-        <!-- Production profile (activated by default) -->
+        <!-- Staging profile (activated by default) -->
         <profile>
-            <id>production</id>
+            <id>staging</id>
             <properties>
-                <activatedProperties>production</activatedProperties>
+                <activatedProperties>staging</activatedProperties>
                 <start-class>com.perfectstrangers.PerfectStrangersApplication</start-class>
             </properties>
             <activation>
@@ -195,11 +181,11 @@
             </activation>
         </profile>
 
-        <!-- Deployment profile -->
+        <!-- Production profile -->
         <profile>
-            <id>deployment</id>
+            <id>production</id>
             <properties>
-                <activatedProperties>deployment</activatedProperties>
+                <activatedProperties>production</activatedProperties>
                 <start-class>com.perfectstrangers.PerfectStrangersApplicationWAR</start-class>
             </properties>
             <dependencies>

@@ -7,10 +7,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Profile;
 
 /**
- * Main entry point for deployment builds.
+ * Main entry point for production builds.
  */
 @SpringBootApplication
-@Profile("deployment")
+@Profile("production")
 public class PerfectStrangersApplicationWAR extends SpringBootServletInitializer {
 
     @Override

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/public/password-reset/")
-@Profile({"production", "deployment"})
+@Profile({"staging", "production"})
 public class PasswordResetController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PasswordResetController.class);
@@ -110,7 +110,6 @@ public class PasswordResetController {
             LOGGER.info(passwordResetDTO.getId() + " id provided for password change does not exist.");
             return HttpStatus.OK;
         }
-
 
         if (validation != null) {
             throw new BadCredentialsException(validation);
