@@ -2,7 +2,7 @@
 
 Back end for Perfect Strangers project. For front end go to https://github.com/kasparsuvi1/psfront
 
-* Live version of this project: http://138.68.71.15:8080/
+* Live version of this project: https://144.202.77.179/
 
 **[Table of Contents]**
 - [Prerequisites](#prerequisites)
@@ -42,8 +42,8 @@ Back end for Perfect Strangers project. For front end go to https://github.com/k
 # Prerequisites
 
 This project requires the following prerequisites:
-* [Java 8 JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* Maven - dependency management and build automation tool. Install [Maven](https://maven.apache.org/install.html).
+* [Java 10 JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
+* Maven 3.* - dependency management and build automation tool. Install [Maven](https://maven.apache.org/install.html).
 * Git - version control. Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 * MySQL - production database. Install [XAMPP](https://www.apachefriends.org/download.html) for Windows. For other systems visit MySQL official [installing guide](https://dev.mysql.com/doc/refman/5.6/en/installing.html).
 * SMTP server - production mail service. Registering a new user requires SMTP server as it sends an activation link. Use [MailSlurper](http://mailslurper.com/) in Windows.
