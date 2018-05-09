@@ -1,4 +1,4 @@
-package com.perfectstrangers.examples;
+package com.perfectstrangers.controller.priv;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -8,10 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.perfectstrangers.PerfectStrangersApplication;
-import com.perfectstrangers.controller.priv.HotelController;
 import com.perfectstrangers.domain.Hotel;
 import com.perfectstrangers.service.GenericService;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +31,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = PerfectStrangersApplication.class)
 @WebMvcTest(HotelController.class)
-public class GenericRestControllerTest {
+public class HotelControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -42,16 +41,16 @@ public class GenericRestControllerTest {
 
     // Write test cases here
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username="admin@user.com",roles={"USER","ADMIN"})
     public void givenHotels_whenGetHotels_thenReturnJsonArray() throws Exception {
 
         Hotel glamourHotel = new Hotel("Glamour Hotel");
 
-        List<Hotel> allHotels = Arrays.asList(glamourHotel);
+        List<Hotel> allHotels = Collections.singletonList(glamourHotel);
 
         given(genericService.getAllHotels()).willReturn(allHotels);
 
-        mvc.perform(get("/api/private/hotels")
+        mvc.perform(get("/api/private/hotel")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))

@@ -1,4 +1,4 @@
-package com.perfectstrangers.examples;
+package com.perfectstrangers.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,7 +6,6 @@ import com.perfectstrangers.PerfectStrangersApplication;
 import com.perfectstrangers.domain.Hotel;
 import com.perfectstrangers.error.EntityNotFoundException;
 import com.perfectstrangers.repository.HotelRepository;
-import com.perfectstrangers.service.GenericService;
 import com.perfectstrangers.service.impl.GenericServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PerfectStrangersApplication.class)
-public class HotelRepositoryImplTest {
+public class GenericServiceImplTest {
 
     @Autowired
     private GenericService genericService;
