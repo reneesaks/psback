@@ -5,6 +5,7 @@ import com.perfectstrangers.domain.Hotel;
 import com.perfectstrangers.domain.Resto;
 import java.util.Collections;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +13,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PerfectStrangersApplication.class)
 @DataJpaTest
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class HotelRepositoryTest {
 
     @Autowired
@@ -44,16 +48,18 @@ public class HotelRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void whenFindAll_thenReturnHotelList() {
 
         // When
-        List<Hotel> found = hotelRepository.findAll();
+        List<Hotel> hotels = hotelRepository.findAll();
 
         // Then
-        Assert.assertEquals(2, found.size());
+        Assert.assertEquals(2, hotels.size());
     }
 
     @Test
+    @Transactional
     public void whenFindByName_thenReturnHotel() {
 
         // When
@@ -66,7 +72,8 @@ public class HotelRepositoryTest {
     }
 
     @Test
-    public void whenFindById_thenReturnHotel() {
+    @Transactional
+    public void whenGetById_thenReturnHotel() {
 
         // When
         Hotel firstHotel = hotelRepository.getById(1L);
