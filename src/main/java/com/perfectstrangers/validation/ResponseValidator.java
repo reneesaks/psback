@@ -3,18 +3,23 @@ package com.perfectstrangers.validation;
 import com.perfectstrangers.domain.Advert;
 import com.perfectstrangers.domain.Response;
 import com.perfectstrangers.domain.User;
+import com.perfectstrangers.error.InvalidDateException;
 import com.perfectstrangers.error.ResponseLimitException;
 import com.perfectstrangers.error.ResponseTimeException;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Checks if a response is valid.
  */
 public class ResponseValidator {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResponseValidator.class);
     private static User user;
     private static Advert advert;
     private static Date preferredStart;
@@ -62,11 +67,18 @@ public class ResponseValidator {
      */
     public static void validate(User user, Advert advert, Response response) throws
             ResponseLimitException, ResponseTimeException {
+
         ResponseValidator.user = user;
         ResponseValidator.advert = advert;
-        ResponseValidator.preferredStart = Date.from(Instant.parse(advert.getPreferredStart()));
-        ResponseValidator.preferredEnd = Date.from(Instant.parse(advert.getPreferredEnd()));
-        ResponseValidator.proposedTime = Date.from(Instant.parse(response.getProposedTime()));
+
+        try {
+            ResponseValidator.preferredStart = Date.from(Instant.parse(advert.getPreferredStart()));
+            ResponseValidator.preferredEnd = Date.from(Instant.parse(advert.getPreferredEnd()));
+            ResponseValidator.proposedTime = Date.from(Instant.parse(response.getProposedTime()));
+        } catch (DateTimeParseException e) {
+            LOGGER.error(e.getMessage());
+            throw new InvalidDateException(e.getMessage());
+        }
 
         if (isResponseLimitExceeded()) {
             throw new ResponseLimitException();

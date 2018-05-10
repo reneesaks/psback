@@ -3,10 +3,14 @@ package com.perfectstrangers.validation;
 import com.perfectstrangers.domain.Advert;
 import com.perfectstrangers.error.AdvertTimeException;
 import com.perfectstrangers.error.DailyAdvertLimitException;
+import com.perfectstrangers.error.InvalidDateException;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AdvertValidator {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdvertValidator.class);
     private static List<Advert> adverts;
     private static Date preferredStart;
     private static Date preferredEnd;
@@ -49,7 +54,7 @@ public class AdvertValidator {
      * @return boolean.
      */
     private static boolean isTimeValid() {
-        return DateUtils.isSameDay(preferredStart, preferredEnd) &&
+        return DateUtils.addHours(preferredStart, 24).after(preferredEnd) &&
                 preferredEnd.after(preferredStart) &&
                 preferredStart.after(today);
     }
@@ -66,9 +71,15 @@ public class AdvertValidator {
             DailyAdvertLimitException,
             AdvertTimeException {
         AdvertValidator.adverts = adverts;
-        AdvertValidator.preferredStart = Date.from(Instant.parse(advert.getPreferredStart()));
-        AdvertValidator.preferredEnd = Date.from(Instant.parse(advert.getPreferredEnd()));
-        AdvertValidator.today = Date.from(Instant.now());
+
+        try {
+            AdvertValidator.preferredStart = Date.from(Instant.parse(advert.getPreferredStart()));
+            AdvertValidator.preferredEnd = Date.from(Instant.parse(advert.getPreferredEnd()));
+            AdvertValidator.today = Date.from(Instant.now());
+        } catch (DateTimeParseException e) {
+            LOGGER.error(e.getMessage());
+            throw new InvalidDateException(e.getMessage());
+        }
 
         if (isDailyLimitExceeded()) {
             throw new DailyAdvertLimitException();
