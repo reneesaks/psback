@@ -3,13 +3,13 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.perfectstrangers.service</groupId>
-    <artifactId>PerfectStrangers</artifactId>
+    <groupId>com.professionalstrangers.service</groupId>
+    <artifactId>ProfessionalStrangers</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>PerfectStrangers</name>
-    <description>Back end for Perfect Strangers.</description>
+    <name>ProfessionalStrangers</name>
+    <description>Back end for Professional Strangers.</description>
 
     <prerequisites>
         <maven>3.0</maven>
@@ -187,7 +187,7 @@
             <id>dev</id>
             <properties>
                 <activatedProperties>dev</activatedProperties>
-                <start-class>com.perfectstrangers.PerfectStrangersApplication</start-class>
+                <start-class>com.professionalstrangers.ProfessionalStrangersApplication</start-class>
             </properties>
         </profile>
 
@@ -196,7 +196,7 @@
             <id>staging</id>
             <properties>
                 <activatedProperties>staging</activatedProperties>
-                <start-class>com.perfectstrangers.PerfectStrangersApplication</start-class>
+                <start-class>com.professionalstrangers.ProfessionalStrangersApplication</start-class>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -208,7 +208,7 @@
             <id>production</id>
             <properties>
                 <activatedProperties>production</activatedProperties>
-                <start-class>com.perfectstrangers.PerfectStrangersApplicationWAR</start-class>
+                <start-class>com.professionalstrangers.ProfessionalStrangersApplicationWAR</start-class>
             </properties>
             <dependencies>
 
@@ -241,11 +241,11 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>5.0.7</version>
                 <configuration>
-                    <url>jdbc:mysql://localhost:3306/perfectstrangers</url>
+                    <url>jdbc:mysql://localhost:3306/professionalstrangers</url>
                     <user>root</user>
                     <password></password>
                     <schemas>
-                        <schema>perfectstrangers</schema>
+                        <schema>professionalstrangers</schema>
                     </schemas>
                 </configuration>
             </plugin>

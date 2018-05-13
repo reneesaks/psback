@@ -1,6 +1,6 @@
-# Perfect Strangers
+# Professional Strangers
 
-Back end for Perfect Strangers project. For front end go to https://github.com/kasparsuvi1/psfront
+Back end for Professional Strangers project. For front end go to https://github.com/kasparsuvi1/psfront
 
 * Live version of this project: https://144.202.77.179/
 
@@ -78,9 +78,9 @@ By default development environment is used in packaged application build process
 
 ## Before running
 
-Before running in production environment make sure you have your MySQL server up and running on port 3306 and a database named `perfectstrangers`. Your database username should be `root` and password empty. To create a database on Windows, open Shell in XAMPP and execute the following commands:
+Before running in production environment make sure you have your MySQL server up and running on port 3306 and a database named `professionalstrangers`. Your database username should be `root` and password empty. To create a database on Windows, open Shell in XAMPP and execute the following commands:
 * `mysql -u root -p`
-* `create database perfectstrangers`
+* `create database professionalstrangers`
 
 Linux based systems commands should be somewhat similar if not the same. The development environment uses H2 database and does not require any manual configuration prior to running.
 
@@ -105,7 +105,7 @@ mvn spring-boot:run -Drun.jvmArguments="-Dspring.profiles.active=<choose-your-en
 
 ## Running with IntellJ IDEA 2017
 
-Open your Run/Debug Configurations and add a new Spring Boot configuration by clicking `+`. Main class is `com.perfectstrangers.PerfectStrangersApplication`, specify the Active Profile you want to use and name it conveniently. You can have as many configurations as you want. When you run the program you can choose which one to use.
+Open your Run/Debug Configurations and add a new Spring Boot configuration by clicking `+`. Main class is `com.professionalstrangers.ProfessionalStrangersApplication`, specify the Active Profile you want to use and name it conveniently. You can have as many configurations as you want. When you run the program you can choose which one to use.
 
 # Deployment
 
@@ -127,7 +127,7 @@ Documentation is available at the project root(live version). Use the same crede
 
 To access to H2 database in development environment visit `http://localhost:8080/console`. For logging in use the following information:
 * Driver Class - `org.h2.Driver`
-* JDBC URL - `jdbc:h2:file:~/perfectstrangers`
+* JDBC URL - `jdbc:h2:file:~/professionalstrangers`
 * User Name - `sa`
 * Password - leave empty
 
