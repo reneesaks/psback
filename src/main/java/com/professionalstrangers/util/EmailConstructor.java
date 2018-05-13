@@ -44,7 +44,7 @@ public class EmailConstructor {
      */
     public SimpleMailMessage constructConfirmationEmail(String token, User user) {
         String confirmationUrl = this.hostServerAddress
-                + "/api/public/register/registration-confirm?token="
+                + "/registration-confirm?token="
                 + token;
         String message = "Here is your activation URL: ";
         return constructEmail("Registration Confirmation", message + confirmationUrl, user);
@@ -59,7 +59,7 @@ public class EmailConstructor {
      */
     public SimpleMailMessage constructResendConfirmationEmail(String newToken, User user) {
         String confirmationUrl = this.hostServerAddress
-                + "/api/public/register/registration-confirm.html?token="
+                + "/registration-confirm?token="
                 + newToken;
         String message = "Here is your new activation URL: ";
         return constructEmail("Resend Registration Confirmation", message + confirmationUrl, user);

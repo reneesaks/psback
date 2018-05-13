@@ -5,7 +5,6 @@ import com.professionalstrangers.domain.Hotel;
 import com.professionalstrangers.domain.Resto;
 import java.util.Collections;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +47,6 @@ public class HotelRepositoryTest {
     }
 
     @Test
-    @Transactional
     public void whenFindAll_thenReturnHotelList() {
 
         // When
@@ -59,7 +57,6 @@ public class HotelRepositoryTest {
     }
 
     @Test
-    @Transactional
     public void whenFindByName_thenReturnHotel() {
 
         // When
@@ -72,7 +69,6 @@ public class HotelRepositoryTest {
     }
 
     @Test
-    @Transactional
     public void whenGetById_thenReturnHotel() {
 
         // When

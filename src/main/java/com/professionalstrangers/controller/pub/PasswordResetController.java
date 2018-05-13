@@ -59,13 +59,12 @@ public class PasswordResetController {
      * Handles requests to reset password. Sends an email to user with a password reset URL.
      *
      * @param usernameDTO UsernameDTO
-     * @throws EntityNotFoundException when the username is not found.
      * @throws MailServiceNoConnectionException when email service is not available.
      */
     @PostMapping(value = "request-password-reset")
     @ResponseStatus(HttpStatus.OK)
     public HttpStatus resetPassword(@RequestBody @Valid UsernameDTO usernameDTO)
-            throws EntityNotFoundException, MailServiceNoConnectionException {
+            throws MailServiceNoConnectionException {
 
         User user;
         String token;

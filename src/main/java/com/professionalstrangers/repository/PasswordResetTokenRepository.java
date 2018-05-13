@@ -3,7 +3,6 @@ package com.professionalstrangers.repository;
 import com.professionalstrangers.domain.PasswordResetToken;
 import com.professionalstrangers.domain.User;
 import java.util.Date;
-import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -17,10 +16,6 @@ public interface PasswordResetTokenRepository extends CrudRepository<PasswordRes
     PasswordResetToken findByToken(String token);
 
     PasswordResetToken findByUser(User user);
-
-    Stream<PasswordResetToken> findAllByExpiryDateLessThan(Date now);
-
-    void deleteByExpiryDateLessThan(Date now);
 
     @Modifying
     @Query("delete from PasswordResetToken t where t.expiryDate <= ?1")

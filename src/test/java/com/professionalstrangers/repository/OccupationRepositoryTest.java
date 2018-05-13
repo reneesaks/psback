@@ -2,14 +2,11 @@ package com.professionalstrangers.repository;
 
 import com.professionalstrangers.ProfessionalStrangersApplication;
 import com.professionalstrangers.domain.Occupation;
-import com.professionalstrangers.validation.AdvertValidator;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,8 +22,6 @@ public class OccupationRepositoryTest {
 
     @Autowired
     OccupationRepository occupationRepository;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AdvertValidator.class);
 
     @Before
     public void setUpOccupations() {
@@ -69,8 +64,6 @@ public class OccupationRepositoryTest {
         // When
         Occupation firstOccupation = occupationRepository.getById(1L);
         Occupation secondOccupation = occupationRepository.getById(2L);
-
-        LOGGER.error(occupationRepository.findAll().get(0).getId().toString());
 
         // Then
         Assert.assertEquals("First Occupation", firstOccupation.getName());
