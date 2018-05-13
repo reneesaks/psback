@@ -18,9 +18,13 @@ import org.springframework.web.filter.CorsFilter;
 public class AdditionalWebConfig {
 
     private static List<String> allowedOrigins = Arrays.asList(
-            "https://199.247.13.206",   // Front end HTTPS
-            "https://144.202.77.179",   // Back end HTTPS
-            "http://localhost:4200"     // Localhost HTTP
+            "https://199.247.13.206",           // Front end IP HTTPS
+            "https://pstrangers.com",           // Domain 1 HTTPS
+            "https://www.pstrangers.com",       // Domain 1 www HTTPS
+            "https://profstrangers.com",        // Domain 2 HTTPS
+            "https://www.profstrangers.com",    // Domain 2 www HTTPS
+            "https://144.202.77.179",           // Back end IP HTTPS
+            "http://localhost:4200"             // Localhost HTTP
     );
 
     private static List<String> allowedHeaders = Arrays.asList(
