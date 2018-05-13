@@ -18,13 +18,27 @@ import org.springframework.web.filter.CorsFilter;
 public class AdditionalWebConfig {
 
     private static List<String> allowedOrigins = Arrays.asList(
-            "https://199.247.13.206",           // Front end IP HTTPS
-            "https://pstrangers.com",           // Domain 1 HTTPS
-            "https://www.pstrangers.com",       // Domain 1 www HTTPS
-            "https://profstrangers.com",        // Domain 2 HTTPS
-            "https://www.profstrangers.com",    // Domain 2 www HTTPS
-            "https://144.202.77.179",           // Back end IP HTTPS
-            "http://localhost:4200"             // Localhost HTTP
+            "https://199.247.13.206",                       // Front end IP HTTPS
+            "https://professionalstrangers.com",            // Main domain HTTPS
+            "https://www.professionalstrangers.com",        // Main domain www HTTPS
+            "https://pstrangers.com",                       // Domain 1 HTTPS
+            "https://www.pstrangers.com",                   // Domain 1 www HTTPS
+            "https://profstrangers.com",                    // Domain 2 HTTPS
+            "https://www.profstrangers.com",                // Domain 2 www HTTPS
+            "https://profstrangersclub.com",                // Domain 3 HTTPS
+            "https://www.profstrangersclub.com",            // Domain 3 www HTTPS
+            "https://professionalstrangersclub.com",        // Domain 4 HTTPS
+            "https://www.professionalstrangersclub.com",    // Domain 4 www HTTPS
+            "https://profmeetingclub.com",                  // Domain 5 HTTPS
+            "https://www.profmeetingclub.com",              // Domain 5 www HTTPS
+            "https://profmeetclub.com",                     // Domain 6 HTTPS
+            "https://www.profmeetclub.com",                 // Domain 6 www HTTPS
+            "https://professionalsdinnerclub.com",          // Domain 7 HTTPS
+            "https://www.professionalsdinnerclub.com",      // Domain 7 www HTTPS
+            "https://144.202.77.179",                       // Back end IP HTTPS
+            "https://profstrangers-api.eu",                 // Back end domain HTTPS
+            "https://www.profstrangers-api.eu",             // Back end domain www HTTPS
+            "http://localhost:4200"                         // Localhost HTTP
     );
 
     private static List<String> allowedHeaders = Arrays.asList(
