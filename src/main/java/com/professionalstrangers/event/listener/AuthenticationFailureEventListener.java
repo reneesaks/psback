@@ -40,9 +40,8 @@ public class AuthenticationFailureEventListener {
     public void handleBadCredentialsEvent(
             AuthenticationFailureBadCredentialsEvent authenticationFailureBadCredentialsEvent) {
         String username = authenticationFailureBadCredentialsEvent.getAuthentication().getName();
-        String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
+        String remoteAddress = HttpServletRequestUtil.getRemoteAddress(httpServletRequest);
         authenticationAttemptServiceImpl.authenticationFailed(username, remoteAddress);
-
     }
 
     /**
@@ -54,7 +53,7 @@ public class AuthenticationFailureEventListener {
     @EventListener
     public void handleUsernameLockedEvent(UsernameLockedEvent usernameLockedEvent) {
         String username = usernameLockedEvent.getUsername();
-        String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
+        String remoteAddress = HttpServletRequestUtil.getRemoteAddress(httpServletRequest);
         authenticationAttemptServiceImpl.authenticationFailed(username, remoteAddress);
     }
 }

@@ -18,7 +18,7 @@ public class ProfessionalStrangersApplicationWAR extends SpringBootServletInitia
         return application.sources(ProfessionalStrangersApplicationWAR.class);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         SpringApplication.run(ProfessionalStrangersApplicationWAR.class, args);
     }
 }

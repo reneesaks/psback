@@ -46,21 +46,18 @@ public class RegistrationController {
     private RegistrationService registrationService;
     private GenericService genericService;
     private MailSender mailSender;
-    private EmailConstructor emailConstructor;
 
-    @Value("${client.loginUrl}")
-    String clientLoginUrl;
+    @Value("${client.serverAddress}")
+    String serverAddress;
 
     @Autowired
     public RegistrationController(
             RegistrationService registrationService,
             GenericService genericService,
-            MailSender mailSender,
-            EmailConstructor emailConstructor) {
+            MailSender mailSender) {
         this.registrationService = registrationService;
         this.genericService = genericService;
         this.mailSender = mailSender;
-        this.emailConstructor = emailConstructor;
     }
 
     /**
@@ -92,9 +89,9 @@ public class RegistrationController {
             return HttpStatus.OK;
         }
 
-
         try {
-            mailSender.send(emailConstructor.constructConfirmationEmail(token, registeredUser));
+            mailSender.send(EmailConstructor.constructConfirmationEmail(
+                    this.serverAddress, token, registeredUser));
         } catch (MailSendException e) {
             LOGGER.error("Failed email to: " + user.getEmail() + ". " + e.getFailedMessages());
             throw new MailServiceNoConnectionException();
@@ -128,7 +125,7 @@ public class RegistrationController {
         registrationService.saveRegisteredUser(user);
 
         try {
-            httpServletResponse.sendRedirect(this.clientLoginUrl);
+            httpServletResponse.sendRedirect(serverAddress + "/login");
         } catch (IOException | IllegalStateException e) {
             LOGGER.error("Problem redirecting to login URL. " + e);
         }
@@ -155,7 +152,8 @@ public class RegistrationController {
             VerificationToken newToken = registrationService.createNewVerificationToken(user);
 
             try {
-                mailSender.send(emailConstructor.constructResendConfirmationEmail(newToken.getToken(), user));
+                mailSender.send(EmailConstructor.constructResendConfirmationEmail(
+                        this.serverAddress, newToken.getToken(), user));
             } catch (MailSendException e) {
                 LOGGER.error("Failed creating user: " + user.getEmail() + "." + e.getFailedMessages());
                 throw new MailServiceNoConnectionException();

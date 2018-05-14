@@ -37,22 +37,19 @@ public class PasswordResetController {
     private GenericService genericService;
     private UserService userService;
     private MailSender mailSender;
-    private EmailConstructor emailConstructor;
 
-    @Value("{$client.passwordResetUrl}")
-    private String clientPasswordResetUrl;
+    @Value("${client.serverAddress}")
+    String serverAddress;
 
 
     @Autowired
     public PasswordResetController(
             GenericService genericService,
             UserService userService,
-            MailSender mailSender,
-            EmailConstructor emailConstructor) {
+            MailSender mailSender) {
         this.genericService = genericService;
         this.userService = userService;
         this.mailSender = mailSender;
-        this.emailConstructor = emailConstructor;
     }
 
     /**
@@ -79,7 +76,7 @@ public class PasswordResetController {
         }
 
         try {
-            mailSender.send(emailConstructor.constructPasswordResetEmail(token, user));
+            mailSender.send(EmailConstructor.constructPasswordResetEmail(this.serverAddress, token, user));
         } catch (MailSendException e) {
             LOGGER.error("Failed email to: " + user.getEmail() + ". " + e.getFailedMessages());
             throw new MailServiceNoConnectionException();

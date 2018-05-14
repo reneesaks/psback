@@ -48,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        String remoteAddress = new HttpServletRequestUtil().getRemoteAddress(httpServletRequest);
+        String remoteAddress = HttpServletRequestUtil.getRemoteAddress(httpServletRequest);
         if (authenticationAttemptServiceImpl.isRemoteAddressBlocked(remoteAddress)) {
             throw new InvalidGrantException("This IP address has been blocked for " +
                     authenticationAttemptServiceImpl.getREMOTE_ADDRESS_BLOCK()
