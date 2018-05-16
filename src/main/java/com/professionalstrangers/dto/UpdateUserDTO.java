@@ -2,8 +2,8 @@ package com.professionalstrangers.dto;
 
 import com.professionalstrangers.domain.Degree;
 import com.professionalstrangers.domain.Occupation;
+import com.professionalstrangers.domain.enums.AgeGroup;
 import com.professionalstrangers.domain.enums.Gender;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UpdateUserDTO {
@@ -13,9 +13,7 @@ public class UpdateUserDTO {
 
     private Gender gender;
 
-    @Size(max = 2)
-    @Pattern(regexp="[1-9][0-9]")
-    private String age;
+    private AgeGroup age;
 
     private Degree degree;
 
@@ -37,11 +35,11 @@ public class UpdateUserDTO {
         this.gender = gender;
     }
 
-    public String getAge() {
+    public AgeGroup getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(AgeGroup age) {
         this.age = age;
     }
 

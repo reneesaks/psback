@@ -36,7 +36,8 @@ public class ResponseValidator {
      * @return boolean.
      */
     private static boolean isProposedTimeValid() {
-        return proposedTime.after(preferredStart) && proposedTime.before(preferredEnd);
+        return (proposedTime.after(preferredStart) && proposedTime.before(preferredEnd)) ||
+                proposedTime.equals(preferredStart) || proposedTime.equals(preferredEnd);
     }
 
     /**

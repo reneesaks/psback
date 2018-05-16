@@ -1,7 +1,7 @@
 package com.professionalstrangers.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.professionalstrangers.domain.enums.AgeGroup;
 import com.professionalstrangers.domain.enums.Gender;
 import java.util.Collection;
 import java.util.List;
@@ -21,11 +21,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-/**
- * JsonIgnore must be set on the password and getter. Setter must have JsonProperty in order to ignore it only
- * on get methods.
- */
 
 @Entity
 @Table(name = "user")
@@ -61,8 +56,9 @@ public class User {
     @Column(name = "gender")
     private Gender gender;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "age")
-    private String age;
+    private AgeGroup age;
 
     @Column(name = "reg_date")
     private String regDate;
@@ -146,12 +142,10 @@ public class User {
         this.totalResponses = totalResponses;
     }
 
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
-    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
@@ -172,11 +166,11 @@ public class User {
         this.gender = gender;
     }
 
-    public String getAge() {
+    public AgeGroup getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(AgeGroup age) {
         this.age = age;
     }
 
