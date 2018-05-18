@@ -7,7 +7,7 @@ INSERT INTO role (id, role_name, description) VALUES (1, 'STANDARD_USER', 'Stand
 INSERT INTO role (id, role_name, description) VALUES (2, 'ADMIN_USER', 'Admin User - Has permission to perform admin tasks');
 INSERT INTO role (id, role_name, description) VALUES (3, 'DEVELOPER', 'Developer user - Has access to documentation, server etc.');
 
--- USER (non-encrypted password: password)
+-- Populate users
 INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender) VALUES (1, 'developer@user.com', 'DevUser', 0, 0, '$2a$10$JFu6.76i5KHshJKr8cdt9uqFcfyo1dshgA6fEeEbRf0.I34RlIkLy', 1, 'MALE');
 INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender) VALUES (2, 'standard@user.com', 'StandUser', 0, 0, '$2a$10$rLL0wiUFMwhtcKltmKpxZOsfJDHdGTGu0AWKQjzXkOEQ7U3oyrlny', 1, 'MALE');
 INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender) VALUES (3, 'admin@user.com', 'AdminUser', 0, 0, '$2a$10$E50EU4f6.Vzrcw60eLnICOJ2J1emrGNsrDaJTYqlrQMy/.4HJERem', 1, 'FEMALE');

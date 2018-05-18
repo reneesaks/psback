@@ -41,7 +41,6 @@ public class PasswordResetController {
     @Value("${client.serverAddress}")
     String serverAddress;
 
-
     @Autowired
     public PasswordResetController(
             GenericService genericService,

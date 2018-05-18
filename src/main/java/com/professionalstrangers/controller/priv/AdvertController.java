@@ -202,6 +202,34 @@ public class AdvertController {
     }
 
     /**
+     * Decline a response.
+     *
+     * @param advertId id of an existing advert.
+     * @param responseId id of an existing response.
+     * @throws EntityNotFoundException when advert or response with given id is not found.
+     */
+    @PutMapping(value = "{advertId}/decline/{responseId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void declineResponse(
+            @PathVariable("advertId") Long advertId,
+            @PathVariable("responseId") Long responseId) throws EntityNotFoundException {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long id = Long.valueOf(auth.getPrincipal().toString());
+        Boolean isAdmin = auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN_USER"));
+        String email = genericService.getUserById(id).getEmail();
+        Advert advert = genericService.getAdvertById(advertId);
+        Response response = genericService.getResponseById(responseId);
+
+        if (advert.getUser().getEmail().equals(email) || isAdmin) {
+            response.setResponseStatus(com.professionalstrangers.domain.enums.ResponseStatus.DECLINED);
+            genericService.saveResponse(response);
+        } else {
+            throw new BadCredentialsException("Only the advert owner or admin can edit this advert");
+        }
+    }
+
+    /**
      * Delete an existing advert.
      *
      * @param advertId id of an existing advert.

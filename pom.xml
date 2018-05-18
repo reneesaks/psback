@@ -201,6 +201,39 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <!-- Build settings -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>true</executable>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-maven-plugin</artifactId>
+                        <version>5.0.7</version>
+                        <configuration>
+                            <url>jdbc:mysql://localhost:3306/professionalstrangers</url>
+                            <user>root</user>
+                            <password></password>
+                            <schemas>
+                                <schema>professionalstrangers</schema>
+                            </schemas>
+                        </configuration>
+                    </plugin>
+                </plugins>
+
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
         </profile>
 
         <!-- Production profile -->
@@ -210,55 +243,59 @@
                 <activatedProperties>production</activatedProperties>
                 <start-class>com.professionalstrangers.ProfessionalStrangersApplicationWAR</start-class>
             </properties>
-            <dependencies>
 
+            <dependencies>
                 <!-- Specifies that the Tomcat server is provided with this profile -->
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                     <scope>provided</scope>
                 </dependency>
-
             </dependencies>
+
+            <!-- Build settings -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>true</executable>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-maven-plugin</artifactId>
+                        <version>5.0.7</version>
+                        <configuration>
+                            <url>jdbc:mysql://localhost:3306/professionalstrangers</url>
+                            <user>root</user>
+                            <password></password>
+                            <schemas>
+                                <schema>professionalstrangers</schema>
+                            </schemas>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                        <excludes>
+                            <exclude>import.sql</exclude>
+                            <exclude>ProfessionalStrangersApplication.sql</exclude>
+                            <exclude>application.properties.pf</exclude>
+                            <exclude>application-dev.properties</exclude>
+                            <exclude>application-dev.properties.pf</exclude>
+                            <exclude>application-staging.properties</exclude>
+                            <exclude>application-staging.properties.pf</exclude>
+                            <exclude>application-production.properties.pf</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+            </build>
         </profile>
-
     </profiles>
-
-    <!-- Build settings -->
-    <build>
-        <plugins>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <executable>true</executable>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>5.0.7</version>
-                <configuration>
-                    <url>jdbc:mysql://localhost:3306/professionalstrangers</url>
-                    <user>root</user>
-                    <password></password>
-                    <schemas>
-                        <schema>professionalstrangers</schema>
-                    </schemas>
-                </configuration>
-            </plugin>
-
-        </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-
-    </build>
 
 </project>
