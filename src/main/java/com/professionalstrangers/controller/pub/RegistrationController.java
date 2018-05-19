@@ -65,13 +65,12 @@ public class RegistrationController {
      *
      * @param newUserDTO User object for validation.
      * @throws MailServiceNoConnectionException when email service is not available.
-     * @throws UsernameExistsException when the username already exists.
      */
     @PostMapping(value = "/new-user")
     @ResponseStatus(HttpStatus.OK)
     @Transactional(rollbackFor = Exception.class)
     public HttpStatus registerNewUser(@RequestBody @Valid NewUserDTO newUserDTO)
-            throws MailServiceNoConnectionException, UsernameExistsException {
+            throws MailServiceNoConnectionException {
 
         String token;
         User user = new User();

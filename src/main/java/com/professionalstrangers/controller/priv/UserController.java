@@ -1,8 +1,6 @@
 package com.professionalstrangers.controller.priv;
 
 import com.professionalstrangers.domain.Advert;
-import com.professionalstrangers.domain.Degree;
-import com.professionalstrangers.domain.Occupation;
 import com.professionalstrangers.domain.Response;
 import com.professionalstrangers.domain.User;
 import com.professionalstrangers.dto.PasswordChangeDTO;
@@ -15,6 +13,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -75,9 +74,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public User getCurrentUser() throws EntityNotFoundException {
 
-        Long id = Long.valueOf(
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
-        );
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = Long.valueOf(authentication.getPrincipal().toString());
 
         return genericService.getUserById(id);
     }
@@ -92,9 +90,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public List<Advert> getCurrentUserAdverts() throws EntityNotFoundException {
 
-        Long id = Long.valueOf(
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
-        );
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = Long.valueOf(authentication.getPrincipal().toString());
 
         return genericService.getAdvertsByUserId(id);
     }
@@ -109,9 +106,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public List<Response> getCurrentUserResponses() throws EntityNotFoundException {
 
-        Long id = Long.valueOf(
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
-        );
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = Long.valueOf(authentication.getPrincipal().toString());
         List<Response> responses = genericService.getResponsesByUserId(id);
 
         for (Response response : responses) {
@@ -132,18 +128,29 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public User updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) throws EntityNotFoundException {
 
-        Long id = Long.valueOf(
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
-        );
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = Long.valueOf(authentication.getPrincipal().toString());
         User user = genericService.getUserById(id);
-        Degree degree = genericService.getDegreeById(updateUserDTO.getDegree().getId());
-        Occupation occupation = genericService.getOccupationById(updateUserDTO.getOccupation().getId());
 
-        user.setAlias(updateUserDTO.getAlias());
-        user.setGender(updateUserDTO.getGender());
-        user.setAge(updateUserDTO.getAge());
-        user.setDegree(degree);
-        user.setOccupation(occupation);
+        if (updateUserDTO.getAlias() != null) {
+            user.setAlias(updateUserDTO.getAlias());
+        }
+
+        if (updateUserDTO.getGender() != null) {
+            user.setGender(updateUserDTO.getGender());
+        }
+
+        if (updateUserDTO.getAge() != null) {
+            user.setAge(updateUserDTO.getAge());
+        }
+
+        if (updateUserDTO.getDegree() != null) {
+            user.setDegree(genericService.getDegreeById(updateUserDTO.getDegree().getId()));
+        }
+
+        if (updateUserDTO.getOccupation() != null) {
+            user.setOccupation(genericService.getOccupationById(updateUserDTO.getOccupation().getId()));
+        }
 
         genericService.saveUser(user);
         return user;
@@ -160,13 +167,12 @@ public class UserController {
     public void changePassword(@RequestBody @Valid PasswordChangeDTO passwordChangeDTO)
             throws EntityNotFoundException {
 
-        Long id = Long.valueOf(
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
-        );
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = Long.valueOf(authentication.getPrincipal().toString());
         User user = genericService.getUserById(id);
         String password = passwordEncoder.encode(passwordChangeDTO.getPassword());
-        user.setPassword(password);
 
+        user.setPassword(password);
         genericService.saveUser(user);
     }
 
@@ -179,8 +185,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser() throws EntityNotFoundException {
         String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        User user = genericService.getUserByEmail(email);
-        genericService.deleteUser(user);
+        genericService.deleteUser(genericService.getUserByEmail(email));
     }
 
     /**
@@ -193,7 +198,6 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN_USER')")
     @ApiOperation(value = "ADMIN_ONLY")
     public void deleteSpecificUser(@PathVariable("userId") Long userId) throws EntityNotFoundException {
-        User user = genericService.getUserById(userId);
-        genericService.deleteUser(user);
+        genericService.deleteUser(genericService.getUserById(userId));
     }
 }

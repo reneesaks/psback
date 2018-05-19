@@ -109,7 +109,7 @@ Open your Run/Debug Configurations and add a new Spring Boot configuration by cl
 
 # Deployment
 
-Use `mvn clean package -P production -DskipTests` to create a deployable `.war` file in `/target` directory for Tomcat server. To skip tests specify `-DskipTests` in command line.
+Use `mvn clean package -P production -DskipTests` to create a deployable `.war` file in `/target` directory for Tomcat server. To skip tests specify `-DskipTests` in command line. **NB! Clear out target folder after you are done because IntelliJ will use the cache and won't find properties for other environments.**
 
 # API Documentation (Swagger)
 
