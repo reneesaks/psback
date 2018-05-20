@@ -38,8 +38,8 @@ public class User {
     @Column(name = "alias")
     private String alias;
 
-    @Column(name = "total_adverts")
-    private Long totalAdverts;
+    @Column(name = "total_invitations")
+    private Long totalInvitations;
 
     @Column(name = "total_responses")
     private Long totalResponses;
@@ -100,7 +100,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Collection<Advert> adverts;
+    private Collection<Invitation> invitations;
 
     public Long getId() {
         return id;
@@ -126,12 +126,12 @@ public class User {
         this.alias = alias;
     }
 
-    public Long getTotalAdverts() {
-        return totalAdverts;
+    public Long getTotalInvitations() {
+        return totalInvitations;
     }
 
-    public void setTotalAdverts(Long totalAdverts) {
-        this.totalAdverts = totalAdverts;
+    public void setTotalInvitations(Long totalInvitations) {
+        this.totalInvitations = totalInvitations;
     }
 
     public Long getTotalResponses() {

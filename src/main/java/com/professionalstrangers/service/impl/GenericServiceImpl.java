@@ -1,15 +1,15 @@
 package com.professionalstrangers.service.impl;
 
-import com.professionalstrangers.domain.Advert;
+import com.professionalstrangers.domain.Invitation;
 import com.professionalstrangers.domain.Degree;
 import com.professionalstrangers.domain.Hotel;
 import com.professionalstrangers.domain.Occupation;
 import com.professionalstrangers.domain.Response;
 import com.professionalstrangers.domain.Resto;
 import com.professionalstrangers.domain.User;
-import com.professionalstrangers.domain.enums.AdvertStatus;
+import com.professionalstrangers.domain.enums.InvitationStatus;
 import com.professionalstrangers.error.EntityNotFoundException;
-import com.professionalstrangers.repository.AdvertRepository;
+import com.professionalstrangers.repository.InvitationRepository;
 import com.professionalstrangers.repository.DegreeRepository;
 import com.professionalstrangers.repository.HotelRepository;
 import com.professionalstrangers.repository.OccupationRepository;
@@ -39,7 +39,7 @@ public class GenericServiceImpl implements GenericService {
     private DegreeRepository degreeRepository;
     private HotelRepository hotelRepository;
     private RestoRepository restoRepository;
-    private AdvertRepository advertRepository;
+    private InvitationRepository invitationRepository;
     private ResponseRepository responseRepository;
 
     @Autowired
@@ -48,14 +48,14 @@ public class GenericServiceImpl implements GenericService {
             DegreeRepository degreeRepository,
             HotelRepository hotelRepository,
             RestoRepository restoRepository,
-            AdvertRepository advertRepository,
+            InvitationRepository invitationRepository,
             ResponseRepository responseRepository) {
         this.userRepository = userRepository;
         this.occupationRepository = occupationRepository;
         this.degreeRepository = degreeRepository;
         this.hotelRepository = hotelRepository;
         this.restoRepository = restoRepository;
-        this.advertRepository = advertRepository;
+        this.invitationRepository = invitationRepository;
         this.responseRepository = responseRepository;
     }
 
@@ -322,79 +322,79 @@ public class GenericServiceImpl implements GenericService {
         restoRepository.delete(resto);
     }
 
-    // ============== ADVERTS ============
+    // ============== INVITATIONS ============
     @Override
-    public List<Advert> getAllAdverts() {
+    public List<Invitation> getAllInvitations() {
 
-        List<Advert> adverts = advertRepository.findAllByAdvertStatusIsNot(AdvertStatus.ACCEPTED);
+        List<Invitation> invitations = invitationRepository.findAllByInvitationStatusIsNot(InvitationStatus.ACCEPTED);
         final Date now = DateUtils.addMinutes(Date.from(Instant.now()), 15);
 
-        adverts.removeIf(advert -> Date.from(Instant.parse(advert.getPreferredStart())).before(now));
+        invitations.removeIf(invitation -> Date.from(Instant.parse(invitation.getPreferredStart())).before(now));
 
-        return adverts;
+        return invitations;
     }
 
     @Override
-    public Page<Advert> getAllAdvertsByPage(Pageable pageable) {
-        return advertRepository.findAllByAdvertStatusIsNot(pageable, AdvertStatus.ACCEPTED);
+    public Page<Invitation> getAllInvitationsByPage(Pageable pageable) {
+        return invitationRepository.findAllByInvitationStatusIsNot(pageable, InvitationStatus.ACCEPTED);
     }
 
     @Override
-    public Advert getAdvertById(Long id) throws EntityNotFoundException {
-        Advert advert = advertRepository.getById(id);
-        if (advert == null) {
-            throw new EntityNotFoundException(Advert.class, "id", id.toString());
+    public Invitation getInvitationById(Long id) throws EntityNotFoundException {
+        Invitation invitation = invitationRepository.getById(id);
+        if (invitation == null) {
+            throw new EntityNotFoundException(Invitation.class, "id", id.toString());
         }
-        return advert;
+        return invitation;
     }
 
     @Override
-    public List<Advert> getAdvertsByHotelId(Long id) throws EntityNotFoundException {
+    public List<Invitation> getInvitationsByHotelId(Long id) throws EntityNotFoundException {
 
         List<Hotel> hotel = new ArrayList<>();
         hotel.add(hotelRepository.getById(id));
-        List<Advert> adverts = advertRepository
-                .findAllByHotelsAndAdvertStatusIsNot(hotel, AdvertStatus.ACCEPTED);
+        List<Invitation> invitations = invitationRepository
+                .findAllByHotelsAndInvitationStatusIsNot(hotel, InvitationStatus.ACCEPTED);
         final Date now = DateUtils.addMinutes(Date.from(Instant.now()), 15);
 
-        adverts.removeIf(advert -> Date.from(Instant.parse(advert.getPreferredStart())).before(now));
+        invitations.removeIf(invitation -> Date.from(Instant.parse(invitation.getPreferredStart())).before(now));
 
-        return adverts;
+        return invitations;
     }
 
     @Override
-    public List<Advert> getAdvertsByUserId(Long id) throws EntityNotFoundException {
+    public List<Invitation> getInvitationsByUserId(Long id) throws EntityNotFoundException {
         User user = userRepository.getById(id);
         if (user == null) {
             throw new EntityNotFoundException(User.class, "id", id.toString());
         }
 
-        return advertRepository.findAllByUser(userRepository.getById(user.getId()));
+        return invitationRepository.findAllByUser(userRepository.getById(user.getId()));
     }
 
     @Override
-    public void saveAdvert(Advert advert) {
-        advertRepository.save(advert);
+    public void saveInvitation(Invitation invitation) {
+        invitationRepository.save(invitation);
     }
 
     @Override
-    public void updateAdvert(Advert advert) throws EntityNotFoundException {
-        Long id = advert.getId();
-        Advert findAdvert = advertRepository.getById(id);
-        if (findAdvert == null) {
-            throw new EntityNotFoundException(Advert.class, "id", id.toString());
+    public void updateInvitation(Invitation invitation) throws EntityNotFoundException {
+        Long id = invitation.getId();
+        Invitation findInvitation = invitationRepository.getById(id);
+        if (findInvitation == null) {
+            throw new EntityNotFoundException(Invitation.class, "id", id.toString());
         }
-        advertRepository.save(advert);
+        invitationRepository.save(invitation);
     }
 
     @Override
-    public void deleteAdvert(Advert advert) throws EntityNotFoundException {
-        Long id = advert.getId();
-        Advert findAdvert = advertRepository.getById(id);
-        if (findAdvert == null) {
-            throw new EntityNotFoundException(Advert.class, "id", id.toString());
+    public void deleteInvitation(Invitation invitation) throws EntityNotFoundException {
+        Long id = invitation.getId();
+        Invitation findInvitation = invitationRepository.getById(id);
+        if (findInvitation == null) {
+            throw new EntityNotFoundException(Invitation.class, "id", id.toString());
         }
-        advertRepository.delete(advert);
+        invitationRepository.delete(invitation);
     }
 
     // ============== RESPONSES ============
@@ -418,8 +418,8 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public List<Response> getResponsesByAdvert(Advert advert) throws EntityNotFoundException {
-        return advert.getResponses();
+    public List<Response> getResponsesByInvitation(Invitation invitation) throws EntityNotFoundException {
+        return invitation.getResponses();
     }
 
     @Override
@@ -434,7 +434,7 @@ public class GenericServiceImpl implements GenericService {
         final Date now = DateUtils.addMinutes(Date.from(Instant.now()), 15);
 
         responses.removeIf(
-                response -> Date.from(Instant.parse(response.getAdvert().getPreferredStart())).before(now));
+                response -> Date.from(Instant.parse(response.getInvitation().getPreferredStart())).before(now));
 
         return responses;
     }

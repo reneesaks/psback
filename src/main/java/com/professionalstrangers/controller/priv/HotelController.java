@@ -36,7 +36,7 @@ public class HotelController {
     /**
      * Get all hotels as a list.
      *
-     * @return advert list.
+     * @return invitation list.
      */
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -133,7 +133,7 @@ public class HotelController {
     /**
      * Delete an existing hotel.
      *
-     * @param hotelId id of an existing advert.
+     * @param hotelId id of an existing invitation.
      * @throws EntityNotFoundException when hotel with given id is not found.
      */
     @DeleteMapping("delete/{hotelId}")

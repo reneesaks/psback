@@ -48,7 +48,7 @@ public class Hotel {
     private List<Resto> restos;
 
     @ManyToMany(mappedBy = "hotels", cascade = CascadeType.ALL)
-    private List<Advert> adverts;
+    private List<Invitation> invitations;
 
     public Hotel() {
     }

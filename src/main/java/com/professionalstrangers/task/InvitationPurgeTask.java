@@ -1,6 +1,6 @@
 package com.professionalstrangers.task;
 
-import com.professionalstrangers.repository.AdvertRepository;
+import com.professionalstrangers.repository.InvitationRepository;
 import java.time.Instant;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,22 +9,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Scheduled check for any advers that are old. Deletes old adverts.
+ * Scheduled check for any invitations that are old. Deletes old invitations.
  */
 @Service
 @Transactional
-public class AdvertPurgeTask {
+public class InvitationPurgeTask {
 
-    private AdvertRepository advertRepository;
+    private InvitationRepository invitationRepository;
 
     @Autowired
-    public AdvertPurgeTask(AdvertRepository advertRepository) {
-        this.advertRepository = advertRepository;
+    public InvitationPurgeTask(InvitationRepository invitationRepository) {
+        this.invitationRepository = invitationRepository;
     }
 
     @Scheduled(cron = "${purge.everyDay}")
     public void purgeExpired() {
         Date now = Date.from(Instant.now());
-        advertRepository.deleteAllExpiredSince(now);
+        invitationRepository.deleteAllExpiredSince(now);
     }
 }

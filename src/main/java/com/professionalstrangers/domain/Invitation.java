@@ -1,7 +1,7 @@
 package com.professionalstrangers.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.professionalstrangers.domain.enums.AdvertStatus;
+import com.professionalstrangers.domain.enums.InvitationStatus;
 import com.professionalstrangers.domain.enums.MealType;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -21,8 +21,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "advert")
-public class Advert {
+@Table(name = "invitation")
+public class Invitation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +30,15 @@ public class Advert {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "advert_status")
-    private AdvertStatus advertStatus;
+    @Column(name = "invitation_status")
+    private InvitationStatus invitationStatus;
 
     @Column(name = "created_date")
     private String createdDate;
 
     @Lob
-    @Column(name = "advert_text")
-    private String advertText;
+    @Column(name = "invitation_text")
+    private String invitationText;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "meal_type")
@@ -55,8 +55,8 @@ public class Advert {
 
     @ManyToMany
     @JoinTable(
-            name = "advert_resto",
-            joinColumns = @JoinColumn(name = "advert_id"),
+            name = "invitation_resto",
+            joinColumns = @JoinColumn(name = "invitation_id"),
             inverseJoinColumns = @JoinColumn(name = "resto_id")
     )
     @JsonIgnoreProperties({"hotel"})
@@ -64,27 +64,27 @@ public class Advert {
 
     @ManyToMany
     @JoinTable(
-            name = "advert_hotel",
-            joinColumns = @JoinColumn(name = "advert_id"),
+            name = "invitation_hotel",
+            joinColumns = @JoinColumn(name = "invitation_id"),
             inverseJoinColumns = @JoinColumn(name = "hotel_id")
     )
     @JsonIgnoreProperties({ "restos" })
     private List<Hotel> hotels;
 
-    @OneToMany(mappedBy = "advert", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({ "advert" })
+    @OneToMany(mappedBy = "invitation", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({ "invitation" })
     private List<Response> responses;
 
     @ManyToOne
     @JoinTable(
-            name = "advert_user",
-            joinColumns = @JoinColumn(name = "advert_id"),
+            name = "invitation_user",
+            joinColumns = @JoinColumn(name = "invitation_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     @JsonIgnoreProperties({ "email", "activated", "regDate", "lastVisit" })
     private User user;
 
-    public Advert() {
+    public Invitation() {
     }
 
     public Long getId() {
@@ -95,12 +95,12 @@ public class Advert {
         this.id = id;
     }
 
-    public AdvertStatus getAdvertStatus() {
-        return advertStatus;
+    public InvitationStatus getInvitationStatus() {
+        return invitationStatus;
     }
 
-    public void setAdvertStatus(AdvertStatus advertStatus) {
-        this.advertStatus = advertStatus;
+    public void setInvitationStatus(InvitationStatus invitationStatus) {
+        this.invitationStatus = invitationStatus;
     }
 
     public String getCreatedDate() {
@@ -111,12 +111,12 @@ public class Advert {
         this.createdDate = createdDate;
     }
 
-    public String getAdvertText() {
-        return advertText;
+    public String getInvitationText() {
+        return invitationText;
     }
 
-    public void setAdvertText(String advertText) {
-        this.advertText = advertText;
+    public void setInvitationText(String invitationText) {
+        this.invitationText = invitationText;
     }
 
     public MealType getMealType() {

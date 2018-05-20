@@ -1,6 +1,6 @@
 package com.professionalstrangers.controller.priv;
 
-import com.professionalstrangers.domain.Advert;
+import com.professionalstrangers.domain.Invitation;
 import com.professionalstrangers.domain.Response;
 import com.professionalstrangers.domain.User;
 import com.professionalstrangers.dto.ResponseDTO;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/private/advert/{advertId}/response")
+@RequestMapping("api/private/invitation/{invitationId}/response")
 public class ResponseController {
 
     private GenericService genericService;
@@ -39,24 +39,24 @@ public class ResponseController {
     }
 
     /**
-     * Get all responses related belonging to an advert.
+     * Get all responses related belonging to an invitation.
      *
-     * @param advertId advert id.
+     * @param invitationId invitation id.
      * @return list of responses.
      * @throws EntityNotFoundException when response with given id is not found.
      */
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public List<Response> getAdvertResponses(@PathVariable Long advertId) throws EntityNotFoundException {
-        Advert advert = genericService.getAdvertById(advertId);
-        return genericService.getResponsesByAdvert(advert);
+    public List<Response> getInvitationResponses(@PathVariable Long invitationId) throws EntityNotFoundException {
+        Invitation invitation = genericService.getInvitationById(invitationId);
+        return genericService.getResponsesByInvitation(invitation);
     }
 
     /**
-     * Create a new response to an advert.
+     * Create a new response to an invitation.
      *
      * @param responseDTO response object.
-     * @param advertId response id.
+     * @param invitationId response id.
      * @return created response object.
      * @throws EntityNotFoundException when response with given id is not found.
      * @throws ResponseLimitException when user has exceeded response limit.
@@ -66,13 +66,13 @@ public class ResponseController {
     @ResponseStatus(HttpStatus.OK)
     public Response newResponse(
             @RequestBody @Valid ResponseDTO responseDTO,
-            @PathVariable Long advertId
+            @PathVariable Long invitationId
     ) throws EntityNotFoundException, ResponseLimitException, ResponseTimeException {
 
         Long id = Long.valueOf(
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString()
         );
-        Advert advert = genericService.getAdvertById(advertId);
+        Invitation invitation = genericService.getInvitationById(invitationId);
         User user = genericService.getUserById(id);
         user.setTotalResponses(user.getTotalResponses() + 1);
 
@@ -81,9 +81,9 @@ public class ResponseController {
         response.setProposedTime(responseDTO.getProposedTime());
         response.setResponseStatus(com.professionalstrangers.domain.enums.ResponseStatus.NOT_ANSWERED);
         response.setUser(user);
-        response.setAdvert(advert);
+        response.setInvitation(invitation);
 
-        ResponseValidator.validate(user, advert, response);
+        ResponseValidator.validate(user, invitation, response);
 
         genericService.saveUser(user);
         genericService.saveResponse(response);
@@ -97,7 +97,7 @@ public class ResponseController {
      * @param responseDTO response.
      * @param responseId response id.
      * @return updated response object.
-     * @throws EntityNotFoundException when advert with given id is not found.
+     * @throws EntityNotFoundException when invitation with given id is not found.
      * @throws ResponseLimitException when user has exceeded response limit.
      * @throws ResponseTimeException when response time is invalid.
      */
@@ -122,7 +122,7 @@ public class ResponseController {
                 response.setResponseStatus(responseDTO.getResponseStatus());
             }
 
-            ResponseValidator.validate(user, response.getAdvert(), response);
+            ResponseValidator.validate(user, response.getInvitation(), response);
 
             genericService.saveResponse(response);
 

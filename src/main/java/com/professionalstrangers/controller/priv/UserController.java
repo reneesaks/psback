@@ -1,6 +1,6 @@
 package com.professionalstrangers.controller.priv;
 
-import com.professionalstrangers.domain.Advert;
+import com.professionalstrangers.domain.Invitation;
 import com.professionalstrangers.domain.Response;
 import com.professionalstrangers.domain.User;
 import com.professionalstrangers.dto.PasswordChangeDTO;
@@ -55,7 +55,7 @@ public class UserController {
      * Get one user by id.
      *
      * @param userId id of an existing user.
-     * @return advert object.
+     * @return invitation object.
      * @throws EntityNotFoundException when user with given id is not found.
      */
     @GetMapping(value = "{userId}")
@@ -81,19 +81,19 @@ public class UserController {
     }
 
     /**
-     * Get logged in user adverts.
+     * Get logged in user invitations.
      *
-     * @return list of adverts.
+     * @return list of invitation.
      * @throws EntityNotFoundException when user with given id is not found.
      */
-    @GetMapping(value = "adverts")
+    @GetMapping(value = "invitations")
     @ResponseStatus(HttpStatus.OK)
-    public List<Advert> getCurrentUserAdverts() throws EntityNotFoundException {
+    public List<Invitation> getCurrentUserInvitations() throws EntityNotFoundException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long id = Long.valueOf(authentication.getPrincipal().toString());
 
-        return genericService.getAdvertsByUserId(id);
+        return genericService.getInvitationsByUserId(id);
     }
 
     /**

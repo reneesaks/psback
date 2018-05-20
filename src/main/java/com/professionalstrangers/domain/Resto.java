@@ -56,7 +56,7 @@ public class Resto {
 
     @ManyToMany(mappedBy = "restos", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Advert> adverts;
+    private List<Invitation> invitations;
 
     public Resto() {
     }

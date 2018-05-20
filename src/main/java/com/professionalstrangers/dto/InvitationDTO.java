@@ -2,19 +2,19 @@ package com.professionalstrangers.dto;
 
 import com.professionalstrangers.domain.Hotel;
 import com.professionalstrangers.domain.Resto;
-import com.professionalstrangers.domain.enums.AdvertStatus;
+import com.professionalstrangers.domain.enums.InvitationStatus;
 import com.professionalstrangers.domain.enums.MealType;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class AdvertDTO {
+public class InvitationDTO {
 
-    private AdvertStatus advertStatus;
+    private InvitationStatus invitationStatus;
 
     @NotNull
     @Size(max = 140)
-    private String advertText;
+    private String invitationText;
 
     @NotNull
     private MealType mealType;
@@ -33,20 +33,20 @@ public class AdvertDTO {
     @NotNull
     private List<Hotel> hotels;
 
-    public AdvertStatus getAdvertStatus() {
-        return advertStatus;
+    public InvitationStatus getInvitationStatus() {
+        return invitationStatus;
     }
 
-    public void setAdvertStatus(AdvertStatus advertStatus) {
-        this.advertStatus = advertStatus;
+    public void setInvitationStatus(InvitationStatus invitationStatus) {
+        this.invitationStatus = invitationStatus;
     }
 
-    public String getAdvertText() {
-        return advertText;
+    public String getInvitationText() {
+        return invitationText;
     }
 
-    public void setAdvertText(String advertText) {
-        this.advertText = advertText;
+    public void setInvitationText(String invitationText) {
+        this.invitationText = invitationText;
     }
 
     public MealType getMealType() {

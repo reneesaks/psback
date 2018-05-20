@@ -1,6 +1,6 @@
 package com.professionalstrangers.validation;
 
-import com.professionalstrangers.domain.Advert;
+import com.professionalstrangers.domain.Invitation;
 import com.professionalstrangers.domain.Response;
 import com.professionalstrangers.domain.User;
 import com.professionalstrangers.error.InvalidDateException;
@@ -21,7 +21,7 @@ public class ResponseValidator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResponseValidator.class);
     private static User user;
-    private static Advert advert;
+    private static Invitation invitation;
     private static Date preferredStart;
     private static Date preferredEnd;
     private static Date proposedTime;
@@ -47,9 +47,9 @@ public class ResponseValidator {
      */
     private static boolean isResponseLimitExceeded() {
 
-        List<Response> advertResponses = advert.getResponses();
+        List<Response> invitationResponses = invitation.getResponses();
 
-        for (Response response : advertResponses) {
+        for (Response response : invitationResponses) {
             if (Objects.equals(response.getUser().getId(), user.getId())) {
                 return true;
             }
@@ -61,20 +61,20 @@ public class ResponseValidator {
      * Validate response time.
      *
      * @param user user of the response.
-     * @param advert existing advert.
-     * @param response new response to that advert.
+     * @param invitation existing invitation.
+     * @param response new response to that invitation.
      * @throws ResponseLimitException when user has exceeded response limit.
      * @throws ResponseTimeException when response time is invalid.
      */
-    public static void validate(User user, Advert advert, Response response) throws
+    public static void validate(User user, Invitation invitation, Response response) throws
             ResponseLimitException, ResponseTimeException {
 
         ResponseValidator.user = user;
-        ResponseValidator.advert = advert;
+        ResponseValidator.invitation = invitation;
 
         try {
-            ResponseValidator.preferredStart = Date.from(Instant.parse(advert.getPreferredStart()));
-            ResponseValidator.preferredEnd = Date.from(Instant.parse(advert.getPreferredEnd()));
+            ResponseValidator.preferredStart = Date.from(Instant.parse(invitation.getPreferredStart()));
+            ResponseValidator.preferredEnd = Date.from(Instant.parse(invitation.getPreferredEnd()));
             ResponseValidator.proposedTime = Date.from(Instant.parse(response.getProposedTime()));
         } catch (DateTimeParseException e) {
             LOGGER.error(e.getMessage());

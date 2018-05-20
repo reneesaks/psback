@@ -1,6 +1,6 @@
 package com.professionalstrangers.service;
 
-import com.professionalstrangers.domain.Advert;
+import com.professionalstrangers.domain.Invitation;
 import com.professionalstrangers.domain.Degree;
 import com.professionalstrangers.domain.Hotel;
 import com.professionalstrangers.domain.Occupation;
@@ -86,22 +86,22 @@ public interface GenericService {
 
     void deleteResto(Resto resto) throws EntityNotFoundException;
 
-    // ============== ADVERTS ============
-    List<Advert> getAllAdverts();
+    // ============== INVITATIONS ============
+    List<Invitation> getAllInvitations();
 
-    Page<Advert> getAllAdvertsByPage(Pageable pageable);
+    Page<Invitation> getAllInvitationsByPage(Pageable pageable);
 
-    Advert getAdvertById(Long id) throws EntityNotFoundException;
+    Invitation getInvitationById(Long id) throws EntityNotFoundException;
 
-    List<Advert> getAdvertsByHotelId(Long id) throws EntityNotFoundException;
+    List<Invitation> getInvitationsByHotelId(Long id) throws EntityNotFoundException;
 
-    List<Advert> getAdvertsByUserId(Long id) throws EntityNotFoundException;
+    List<Invitation> getInvitationsByUserId(Long id) throws EntityNotFoundException;
 
-    void saveAdvert(Advert advert);
+    void saveInvitation(Invitation invitation);
 
-    void updateAdvert(Advert advert) throws EntityNotFoundException;
+    void updateInvitation(Invitation invitation) throws EntityNotFoundException;
 
-    void deleteAdvert(Advert advert) throws EntityNotFoundException;
+    void deleteInvitation(Invitation invitation) throws EntityNotFoundException;
 
     // ============== RESPONSES ============
     List<Response> getAllResponses();
@@ -110,7 +110,7 @@ public interface GenericService {
 
     Response getResponseById(Long id) throws EntityNotFoundException;
 
-    List<Response> getResponsesByAdvert(Advert advert) throws EntityNotFoundException;
+    List<Response> getResponsesByInvitation(Invitation invitation) throws EntityNotFoundException;
 
     List<Response> getResponsesByUserId(Long id) throws EntityNotFoundException;
 

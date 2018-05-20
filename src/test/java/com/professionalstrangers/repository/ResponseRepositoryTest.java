@@ -1,10 +1,10 @@
 package com.professionalstrangers.repository;
 
 import com.professionalstrangers.ProfessionalStrangersApplication;
-import com.professionalstrangers.domain.Advert;
+import com.professionalstrangers.domain.Invitation;
 import com.professionalstrangers.domain.Response;
 import com.professionalstrangers.domain.User;
-import com.professionalstrangers.domain.enums.AdvertStatus;
+import com.professionalstrangers.domain.enums.InvitationStatus;
 import com.professionalstrangers.domain.enums.ResponseStatus;
 import java.util.List;
 import org.junit.Assert;
@@ -28,7 +28,7 @@ public class ResponseRepositoryTest {
     private ResponseRepository responseRepository;
 
     @Autowired
-    private AdvertRepository advertRepository;
+    private InvitationRepository invitationRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -51,29 +51,29 @@ public class ResponseRepositoryTest {
         userRepository.save(firstUser);
         userRepository.save(secondUser);
 
-        Advert firstAdvert = new Advert();
-        firstAdvert.setAdvertText("First Advert");
-        firstAdvert.setAdvertStatus(AdvertStatus.NOT_ACCEPTED);
-        firstAdvert.setUser(firstUser);
+        Invitation firstInvitation = new Invitation();
+        firstInvitation.setInvitationText("First Invitation");
+        firstInvitation.setInvitationStatus(InvitationStatus.NOT_ACCEPTED);
+        firstInvitation.setUser(firstUser);
 
-        Advert secondAdvert = new Advert();
-        secondAdvert.setAdvertText("Second Advert");
-        secondAdvert.setAdvertStatus(AdvertStatus.NOT_ACCEPTED);
-        secondAdvert.setUser(secondUser);
+        Invitation secondInvitation = new Invitation();
+        secondInvitation.setInvitationText("Second Invitation");
+        secondInvitation.setInvitationStatus(InvitationStatus.NOT_ACCEPTED);
+        secondInvitation.setUser(secondUser);
 
-        advertRepository.save(firstAdvert);
-        advertRepository.save(secondAdvert);
+        invitationRepository.save(firstInvitation);
+        invitationRepository.save(secondInvitation);
 
         Response firstResponse = new Response();
         firstResponse.setResponseStatus(ResponseStatus.NOT_ANSWERED);
         firstResponse.setUser(secondUser);
-        firstResponse.setAdvert(firstAdvert);
+        firstResponse.setInvitation(firstInvitation);
         firstResponse.setResponseText("First Response");
 
         Response secondResponse = new Response();
         secondResponse.setResponseStatus(ResponseStatus.NOT_ANSWERED);
         secondResponse.setUser(firstUser);
-        secondResponse.setAdvert(secondAdvert);
+        secondResponse.setInvitation(secondInvitation);
         secondResponse.setResponseText("Second Response");
 
         responseRepository.save(firstResponse);
@@ -116,7 +116,7 @@ public class ResponseRepositoryTest {
         //Then
         Assert.assertEquals(1, firstUserResponses.size());
         Assert.assertEquals(1, secondUserResponses.size());
-        Assert.assertEquals(secondUser, firstUserResponses.get(0).getAdvert().getUser());
-        Assert.assertEquals(firstUser, secondUserResponses.get(0).getAdvert().getUser());
+        Assert.assertEquals(secondUser, firstUserResponses.get(0).getInvitation().getUser());
+        Assert.assertEquals(firstUser, secondUserResponses.get(0).getInvitation().getUser());
     }
 }

@@ -41,17 +41,17 @@ public class Response {
             joinColumns = @JoinColumn(name = "response_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonIgnoreProperties({ "totalAdverts", "totalResponses" , "email", "activated", "regDate", "lastVisit" })
+    @JsonIgnoreProperties({ "totalInvitations", "totalResponses" , "email", "activated", "regDate", "lastVisit" })
     private User user;
 
     @ManyToOne
     @JoinTable(
-            name = "response_advert",
+            name = "response_invitation",
             joinColumns = @JoinColumn(name = "response_id"),
-            inverseJoinColumns = @JoinColumn(name = "advert_id")
+            inverseJoinColumns = @JoinColumn(name = "invitation_id")
     )
     @JsonIgnoreProperties({ "responses" })
-    private Advert advert;
+    private Invitation invitation;
 
     public Long getId() {
         return id;
@@ -93,11 +93,11 @@ public class Response {
         this.user = user;
     }
 
-    public Advert getAdvert() {
-        return advert;
+    public Invitation getInvitation() {
+        return invitation;
     }
 
-    public void setAdvert(Advert advert) {
-        this.advert = advert;
+    public void setInvitation(Invitation invitation) {
+        this.invitation = invitation;
     }
 }

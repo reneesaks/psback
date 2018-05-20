@@ -8,10 +8,10 @@ INSERT INTO role (id, role_name, description) VALUES (2, 'ADMIN_USER', 'Admin Us
 INSERT INTO role (id, role_name, description) VALUES (3, 'DEVELOPER', 'Developer user - Has access to documentation, server etc.');
 
 -- Populate users
-INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender, reg_date, age) VALUES (1, 'developer@user.com', 'DevUser', 0, 0, '$2a$10$JFu6.76i5KHshJKr8cdt9uqFcfyo1dshgA6fEeEbRf0.I34RlIkLy', 1, 'MALE', '2018-04-17T10:20:47.720Z', 'YOUNG');
-INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender, reg_date, age) VALUES (2, 'standard@user.com', 'StandUser', 0, 0, '$2a$10$rLL0wiUFMwhtcKltmKpxZOsfJDHdGTGu0AWKQjzXkOEQ7U3oyrlny', 1, 'MALE', '2018-04-17T10:20:47.720Z', 'ADULT');
-INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender, reg_date, age) VALUES (3, 'admin@user.com', 'AdminUser', 0, 0, '$2a$10$E50EU4f6.Vzrcw60eLnICOJ2J1emrGNsrDaJTYqlrQMy/.4HJERem', 1, 'FEMALE', '2018-04-17T10:20:47.720Z', 'YOUNG');
-INSERT INTO user (id, email, alias, total_adverts, total_responses, password, activated, gender, reg_date, age) VALUES (4, 'random@user.com', 'RandUser', 0, 0, '$2a$10$tqdxg8iYUDp5zpBnVaCA1ebVstxVoZduokL5hP.nwRs1itKehDzMS', 1, 'MALE', '2018-04-17T10:20:47.720Z', 'SENIOR');
+INSERT INTO user (id, email, alias, total_invitations, total_responses, password, activated, gender, reg_date, age) VALUES (1, 'developer@user.com', 'DevUser', 0, 0, '$2a$10$JFu6.76i5KHshJKr8cdt9uqFcfyo1dshgA6fEeEbRf0.I34RlIkLy', 1, 'MALE', '2018-04-17T10:20:47.720Z', 'YOUNG');
+INSERT INTO user (id, email, alias, total_invitations, total_responses, password, activated, gender, reg_date, age) VALUES (2, 'standard@user.com', 'StandUser', 0, 0, '$2a$10$rLL0wiUFMwhtcKltmKpxZOsfJDHdGTGu0AWKQjzXkOEQ7U3oyrlny', 1, 'MALE', '2018-04-17T10:20:47.720Z', 'ADULT');
+INSERT INTO user (id, email, alias, total_invitations, total_responses, password, activated, gender, reg_date, age) VALUES (3, 'admin@user.com', 'AdminUser', 0, 0, '$2a$10$E50EU4f6.Vzrcw60eLnICOJ2J1emrGNsrDaJTYqlrQMy/.4HJERem', 1, 'FEMALE', '2018-04-17T10:20:47.720Z', 'YOUNG');
+INSERT INTO user (id, email, alias, total_invitations, total_responses, password, activated, gender, reg_date, age) VALUES (4, 'random@user.com', 'RandUser', 0, 0, '$2a$10$tqdxg8iYUDp5zpBnVaCA1ebVstxVoZduokL5hP.nwRs1itKehDzMS', 1, 'MALE', '2018-04-17T10:20:47.720Z', 'SENIOR');
 
 -- Populate the user_role join table
 INSERT INTO user_role (user_id, role_id) VALUES (1, 3);
@@ -58,9 +58,9 @@ INSERT INTO occupation (id, name, description) VALUES (2, 'Teacher', 'Some descr
 INSERT INTO user_occupation (user_id, occupation_id) VALUES (1, 2);
 INSERT INTO user_occupation (user_id, occupation_id) VALUES (2, 1);
 
--- Populate advert table
-INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (1, 'NOT_ACCEPTED', '2018-08-14T12:17:47.720Z', 'Programmer looking for a dinner companion.', 'DINNER', '2018-08-14T12:17:47.720Z', '2018-08-14T12:17:47.720Z', '2018-08-14T12:17:47.720Z');
-INSERT INTO advert (id, advert_status, created_date, advert_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (2, 'ACCEPTED', '2018-08-14T12:17:47.720Z', 'Is there somebody who wants to have a meaningful conversation over breakfast?.', 'BREAKFAST', '2018-08-14T12:17:47.720Z', '2018-08-14T12:17:47.720Z', '2018-08-14T12:17:47.720Z');
+-- Populate invitation table
+INSERT INTO invitation (id, invitation_status, created_date, invitation_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (1, 'NOT_ACCEPTED', '2018-08-14T12:17:47.720Z', 'Programmer looking for a dinner companion.', 'DINNER', '2018-08-14T12:17:47.720Z', '2018-08-14T12:17:47.720Z', '2018-08-14T12:17:47.720Z');
+INSERT INTO invitation (id, invitation_status, created_date, invitation_text, meal_type, preferred_start, preferred_end, accepted_time) VALUES (2, 'ACCEPTED', '2018-08-14T12:17:47.720Z', 'Is there somebody who wants to have a meaningful conversation over breakfast?.', 'BREAKFAST', '2018-08-14T12:17:47.720Z', '2018-08-14T12:17:47.720Z', '2018-08-14T12:17:47.720Z');
 
 -- Populate response table
 INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (1, 'That is a great idea! I would love to have a meaningful conversation over breakfast.', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
@@ -68,15 +68,15 @@ INSERT INTO response (id, response_text, proposed_time, response_status) VALUES 
 INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (3, 'YES! This is absolutely what I need!', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
 INSERT INTO response (id, response_text, proposed_time, response_status) VALUES (4, 'I do not care. Pffff...', '2017-08-14T12:17:47.720Z', 'NOT_ANSWERED');
 
--- Populate response_advert table
-INSERT INTO response_advert (response_id, advert_id) VALUES (1, 2);
-INSERT INTO response_advert (response_id, advert_id) VALUES (2, 2);
-INSERT INTO response_advert (response_id, advert_id) VALUES (3, 1);
-INSERT INTO response_advert (response_id, advert_id) VALUES (4, 1);
+-- Populate response_invitation table
+INSERT INTO response_invitation (response_id, invitation_id) VALUES (1, 2);
+INSERT INTO response_invitation (response_id, invitation_id) VALUES (2, 2);
+INSERT INTO response_invitation (response_id, invitation_id) VALUES (3, 1);
+INSERT INTO response_invitation (response_id, invitation_id) VALUES (4, 1);
 
--- Populate advert_user table
-INSERT INTO advert_user (advert_id, user_id) VALUES (1, 2);
-INSERT INTO advert_user (advert_id, user_id) VALUES (2, 3);
+-- Populate invitation_user table
+INSERT INTO invitation_user (invitation_id, user_id) VALUES (1, 2);
+INSERT INTO invitation_user (invitation_id, user_id) VALUES (2, 3);
 
 -- Populate response_user table
 INSERT INTO response_user (response_id, user_id) VALUES (1, 2);
@@ -84,11 +84,11 @@ INSERT INTO response_user (response_id, user_id) VALUES (2, 3);
 INSERT INTO response_user (response_id, user_id) VALUES (3, 2);
 INSERT INTO response_user (response_id, user_id) VALUES (4, 1);
 
--- Populate advert_resto table
-INSERT INTO advert_resto (advert_id, resto_id) VALUES (1, 2);
-INSERT INTO advert_resto (advert_id, resto_id) VALUES (2, 2);
+-- Populate invitation_resto table
+INSERT INTO invitation_resto (invitation_id, resto_id) VALUES (1, 2);
+INSERT INTO invitation_resto (invitation_id, resto_id) VALUES (2, 2);
 
--- Populate advert_hotel table
-INSERT INTO advert_hotel (advert_id, hotel_id) VALUES (1, 2);
-INSERT INTO advert_hotel (advert_id, hotel_id) VALUES (2, 2);
+-- Populate invitation_hotel table
+INSERT INTO invitation_hotel (invitation_id, hotel_id) VALUES (1, 2);
+INSERT INTO invitation_hotel (invitation_id, hotel_id) VALUES (2, 2);
 

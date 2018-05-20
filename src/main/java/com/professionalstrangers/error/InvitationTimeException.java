@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
         reason = "Start and end times must be on the same date, "
                 + "end time must be greater than start time "
                 + "and they can not be in the past")
-public class AdvertTimeException extends Exception {
+public class InvitationTimeException extends Exception {
 
 }

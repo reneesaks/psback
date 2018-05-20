@@ -1,13 +1,13 @@
 package com.professionalstrangers.domain.enums;
 
-public enum AdvertStatus {
+public enum InvitationStatus {
 
     ACCEPTED("Accepted"),
     NOT_ACCEPTED("NotAccepted");
 
     private String value;
 
-    AdvertStatus(String value) {
+    InvitationStatus(String value) {
         this.value = value;
     }
 
@@ -19,11 +19,11 @@ public enum AdvertStatus {
         this.value = value;
     }
 
-    public static AdvertStatus fromValue(String value) {
+    public static InvitationStatus fromValue(String value) {
 
-        for (AdvertStatus advertStatus : AdvertStatus.values()) {
-            if (advertStatus.getValue().equals(value)) {
-                return advertStatus;
+        for (InvitationStatus invitationStatus : InvitationStatus.values()) {
+            if (invitationStatus.getValue().equals(value)) {
+                return invitationStatus;
             }
         }
         throw new UnsupportedOperationException("Value " + value + " is not supported!");
