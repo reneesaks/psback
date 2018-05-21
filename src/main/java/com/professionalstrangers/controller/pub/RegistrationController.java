@@ -79,6 +79,8 @@ public class RegistrationController {
             user.setPassword(newUserDTO.getPassword());
             user.setEmail(newUserDTO.getEmail());
             user.setRegDate(Instant.now().toString());
+            user.setTotalInvitations(0L);
+            user.setTotalResponses(0L);
             registeredUser = registrationService.registerNewUserAccount(user);
             registrationService.createVerificationToken(registeredUser);
             token = registrationService.getVerificationTokenByUser(registeredUser).getToken();
