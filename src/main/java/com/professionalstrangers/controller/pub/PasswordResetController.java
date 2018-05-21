@@ -56,10 +56,11 @@ public class PasswordResetController {
      *
      * @param usernameDTO UsernameDTO
      * @throws MailServiceNoConnectionException when email service is not available.
+     * @return null if OK
      */
     @PostMapping(value = "request-password-reset")
     @ResponseStatus(HttpStatus.OK)
-    public HttpStatus resetPassword(@RequestBody @Valid UsernameDTO usernameDTO)
+    public String resetPassword(@RequestBody @Valid UsernameDTO usernameDTO)
             throws MailServiceNoConnectionException {
 
         User user;
@@ -71,7 +72,7 @@ public class PasswordResetController {
             token = userService.getPasswordTokenByUser(user);
         } catch (EntityNotFoundException e) {
             LOGGER.info(usernameDTO.getEmail() + " email provided for password reset does not exist.");
-            return HttpStatus.OK;
+            return null;
         }
 
         try {
@@ -81,7 +82,7 @@ public class PasswordResetController {
             throw new MailServiceNoConnectionException();
         }
 
-        return HttpStatus.OK;
+        return null;
     }
 
     /**
@@ -89,10 +90,11 @@ public class PasswordResetController {
      *
      * @param passwordResetDTO PasswordResetDTO that contains the user id, token and new password.
      * @throws EntityNotFoundException when user is not found.
+     * @return null if OK
      */
     @PostMapping(value = "change-password")
     @ResponseStatus(HttpStatus.OK)
-    public HttpStatus changePassword(@RequestBody @Valid PasswordResetDTO passwordResetDTO)
+    public String changePassword(@RequestBody @Valid PasswordResetDTO passwordResetDTO)
             throws EntityNotFoundException {
 
         User user;
@@ -103,7 +105,7 @@ public class PasswordResetController {
             validation = userService.validatePasswordResetToken(user.getId(), passwordResetDTO.getToken());
         } catch (EntityNotFoundException e) {
             LOGGER.info(passwordResetDTO.getId() + " id provided for password change does not exist.");
-            return HttpStatus.OK;
+            return null;
         }
 
         if (validation != null) {
@@ -111,6 +113,6 @@ public class PasswordResetController {
         }
         userService.updatePassword(user, passwordResetDTO.getPassword());
 
-        return HttpStatus.OK;
+        return null;
     }
 }

@@ -11,9 +11,7 @@ import com.professionalstrangers.error.UsernameIsActivatedException;
 import com.professionalstrangers.service.GenericService;
 import com.professionalstrangers.service.RegistrationService;
 import com.professionalstrangers.util.EmailConstructor;
-import java.io.IOException;
 import java.time.Instant;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,11 +63,12 @@ public class RegistrationController {
      *
      * @param newUserDTO User object for validation.
      * @throws MailServiceNoConnectionException when email service is not available.
+     * @return null if OK
      */
     @PostMapping(value = "/new-user")
     @ResponseStatus(HttpStatus.OK)
     @Transactional(rollbackFor = Exception.class)
-    public HttpStatus registerNewUser(@RequestBody @Valid NewUserDTO newUserDTO)
+    public String registerNewUser(@RequestBody @Valid NewUserDTO newUserDTO)
             throws MailServiceNoConnectionException {
 
         String token;
@@ -85,7 +84,7 @@ public class RegistrationController {
             token = registrationService.getVerificationTokenByUser(registeredUser).getToken();
         } catch (UsernameExistsException e) {
             LOGGER.info("User with email " + user.getEmail() + " already exists.");
-            return HttpStatus.OK;
+            return null;
         }
 
         try {
@@ -97,7 +96,7 @@ public class RegistrationController {
         }
 
         LOGGER.info("User with email " + user.getEmail() + " is registered. Waiting for activation.");
-        return HttpStatus.OK;
+        return null;
     }
 
     /**
@@ -105,13 +104,11 @@ public class RegistrationController {
      * redirects the user to an URL.
      *
      * @param token The token that was generated for the activation link.
-     * @param httpServletResponse HttpServletResponse
-     * @return Redirects the user to a specified URL.
+     * @return null if OK
      */
     @GetMapping(value = "/registration-confirm")
     @ResponseStatus(HttpStatus.OK)
-    public String confirmRegistration(@RequestParam("token") String token,
-            HttpServletResponse httpServletResponse) {
+    public String confirmRegistration(@RequestParam("token") String token) {
 
         String validation = registrationService.validateVerificationToken(token);
         if (validation != null) {
@@ -122,13 +119,8 @@ public class RegistrationController {
         User user = registrationService.getVerificationToken(token).getUser();
         user.setActivated(true);
         registrationService.saveRegisteredUser(user);
-
-        try {
-            httpServletResponse.sendRedirect(serverAddress + "/login");
-        } catch (IOException | IllegalStateException e) {
-            LOGGER.error("Problem redirecting to login URL. " + e);
-        }
         LOGGER.info("User with email " + user.getEmail() + " is activated.");
+
         return null;
     }
 
