@@ -16,7 +16,9 @@ public class HttpServletRequestUtil {
      * @return IP address
      */
     public static String getRemoteAddress(HttpServletRequest httpServletRequest) {
+
         String xfHeader = httpServletRequest.getHeader("X-Forwarded-For");
+
         if (xfHeader == null) {
             return httpServletRequest.getRemoteAddr();
         } else {

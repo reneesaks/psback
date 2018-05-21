@@ -43,7 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     /**
      * @param username Username in our case is always email.
      * @throws UsernameNotFoundException Gives the same message as if the password was wrong. This will not
-     * give away which one was wrong.
+     * give away which one was wrong. If username doesn't exists, it will still block the username.
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -56,7 +56,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         if (authenticationAttemptServiceImpl.isUsernameBlocked(username)) {
-            throw new InvalidGrantException("This username has been blocked for " +
+            throw new InvalidGrantException("If this username exists then it has been blocked for " +
                     authenticationAttemptServiceImpl.getUSERNAME_BLOCK()
                     + " minutes because it exceeded the maximum allowed attempts.");
         }
@@ -64,6 +64,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(username);
 
         if (user == null) {
+            // Doesn't give away username
+            authenticationAttemptServiceImpl.authenticationFailed(username, remoteAddress);
             throw new InvalidGrantException("Bad credentials");
         }
 

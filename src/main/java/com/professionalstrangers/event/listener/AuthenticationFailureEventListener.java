@@ -3,12 +3,11 @@ package com.professionalstrangers.event.listener;
 import com.professionalstrangers.event.UsernameLockedEvent;
 import com.professionalstrangers.service.impl.AuthenticationAttemptServiceImpl;
 import com.professionalstrangers.util.HttpServletRequestUtil;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Listens on any authentication events that results in a failure. Such events are sent by Spring Security and
